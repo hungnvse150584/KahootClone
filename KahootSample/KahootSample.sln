@@ -1,0 +1,48 @@
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.13.35913.81
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DAO", "DAO\DAO.csproj", "{B92D791A-926E-472F-A615-B5BB43EE10E6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Repositories", "Repositories\Repositories.csproj", "{17194A67-01BC-42AA-AFFF-B210AAD39391}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Services", "Services\Services.csproj", "{FCF6F00C-019E-4E12-A667-DC60CD734FD1}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kahoot", "Kahoot\Kahoot.csproj", "{452B7F39-93D1-46AA-8803-A4AC14FFD997}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BOs", "BOs\BOs.csproj", "{586905F3-F392-41A1-A04D-133FC6976D69}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{B92D791A-926E-472F-A615-B5BB43EE10E6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B92D791A-926E-472F-A615-B5BB43EE10E6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B92D791A-926E-472F-A615-B5BB43EE10E6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B92D791A-926E-472F-A615-B5BB43EE10E6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{17194A67-01BC-42AA-AFFF-B210AAD39391}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{17194A67-01BC-42AA-AFFF-B210AAD39391}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{17194A67-01BC-42AA-AFFF-B210AAD39391}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{17194A67-01BC-42AA-AFFF-B210AAD39391}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FCF6F00C-019E-4E12-A667-DC60CD734FD1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FCF6F00C-019E-4E12-A667-DC60CD734FD1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FCF6F00C-019E-4E12-A667-DC60CD734FD1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FCF6F00C-019E-4E12-A667-DC60CD734FD1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{452B7F39-93D1-46AA-8803-A4AC14FFD997}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{452B7F39-93D1-46AA-8803-A4AC14FFD997}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{452B7F39-93D1-46AA-8803-A4AC14FFD997}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{452B7F39-93D1-46AA-8803-A4AC14FFD997}.Release|Any CPU.Build.0 = Release|Any CPU
+		{586905F3-F392-41A1-A04D-133FC6976D69}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{586905F3-F392-41A1-A04D-133FC6976D69}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{586905F3-F392-41A1-A04D-133FC6976D69}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{586905F3-F392-41A1-A04D-133FC6976D69}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {3763D942-7B25-49D4-9D18-8772444DCFF7}
+	EndGlobalSection
+EndGlobal
