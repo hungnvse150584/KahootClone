@@ -9,11 +9,8 @@ namespace Services.RequestAndResponse.Request
 {
     public class UpdateTeamRequest
     {
-<<<<<<< HEAD
         //[Key]
-=======
         [Key]
->>>>>>> main
         public int TeamId { get; set; }
 
         [Required]

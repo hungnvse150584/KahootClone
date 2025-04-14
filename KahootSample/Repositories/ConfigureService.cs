@@ -20,11 +20,8 @@ namespace Repositories
             
             services.AddScoped<ITeamRepository, TeamRepository>();
 
-<<<<<<< HEAD
             services.AddScoped<IQuestionRepository, QuestionRepository>();
-=======
             services.AddScoped<IUserRepository, UserRepository>();
->>>>>>> main
 
 
             //============================================================//
