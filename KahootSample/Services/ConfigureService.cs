@@ -20,6 +20,8 @@ namespace Services
 
             services.AddScoped<ITeamService, TeamService>();
 
+            services.AddScoped<IUserService, UserService>();
+
 
             return services;
         }

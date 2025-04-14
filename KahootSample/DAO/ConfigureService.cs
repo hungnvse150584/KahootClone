@@ -19,6 +19,8 @@ namespace DAO
         {
 
             services.AddScoped<Team>();
+
+            services.AddScoped<User>();
             return services;
         }
     }
