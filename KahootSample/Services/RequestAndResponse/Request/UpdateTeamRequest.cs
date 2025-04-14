@@ -9,6 +9,7 @@ namespace Services.RequestAndResponse.Request
 {
     public class UpdateTeamRequest
     {
+        //[Key]
         [Key]
         public int TeamId { get; set; }
 
