@@ -20,12 +20,18 @@ namespace Repositories
             
             services.AddScoped<ITeamRepository, TeamRepository>();
 
+<<<<<<< HEAD
             services.AddScoped<IQuestionRepository, QuestionRepository>();
+=======
+            services.AddScoped<IUserRepository, UserRepository>();
+>>>>>>> main
 
 
             //============================================================//
             services.AddScoped<TeamDAO>();
             services.AddScoped<QuestionDAO>();
+
+            services.AddScoped<UserDAO>();
 
             return services;
         }
