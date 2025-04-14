@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using BOs.Model;
 using Services.RequestAndResponse.Request;
+using Services.RequestAndResponse.Request.QuestionRequest;
 using Services.RequestAndResponse.Response;
 using Services.RequestAndResponse.TeamResponse;
 using System;
@@ -29,6 +30,12 @@ namespace Services.Mapping
 
             // Player mappings
             CreateMap<Player, PlayerResponse>();
+
+            //Question mappings
+            CreateMap<CreateQuestionRequest, Question>();
+
+            CreateMap<UpdateQuestionRequest, Question>(); 
+            CreateMap<Question, QuestionResponse>(); 
         }
     }
 }

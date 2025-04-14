@@ -10,7 +10,7 @@ namespace Services.RequestAndResponse.Request
     public class UpdateTeamRequest
     {
         //[Key]
-        //public int TeamId { get; set; }
+        public int TeamId { get; set; }
 
         [Required]
         public int SessionId { get; set; }
