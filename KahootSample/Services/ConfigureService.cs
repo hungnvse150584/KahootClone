@@ -19,11 +19,19 @@ namespace Services
             services.AddAutoMapper(typeof(MappingProfile));
 
             services.AddScoped<ITeamService, TeamService>();
+
             services.AddScoped<IQuestionService, QuestionService>();
 
             services.AddScoped<IUserService, UserService>();
 
             services.AddScoped<IAnswerService, AnswerService>();
+            services.AddScoped<IQuizService, QuizService>();
+
+            services.AddScoped<IGameSessionService, GameSessionService>();
+
+            services.AddScoped<IResponseService, ResponseService>();
+
+            services.AddScoped<ITeamMemberService, TeamMemberService>();
 
             services.AddScoped<IScoreService, ScoreService>();
             return services;
