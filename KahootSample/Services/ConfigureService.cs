@@ -19,10 +19,12 @@ namespace Services
             services.AddAutoMapper(typeof(MappingProfile));
 
             services.AddScoped<ITeamService, TeamService>();
+
             services.AddScoped<IQuestionService, QuestionService>();
 
             services.AddScoped<IUserService, UserService>();
 
+            services.AddScoped<IQuizService, QuizService>();
 
             return services;
         }
