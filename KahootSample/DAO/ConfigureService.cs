@@ -17,7 +17,9 @@ namespace DAO
     {
         public static IServiceCollection ConfigureDataAccessObjectService(this IServiceCollection services, IConfiguration configuration)
         {
-
+            services.AddScoped<Player>();
+            services.AddScoped<GameSession>();
+            services.AddScoped<Answer>();
             services.AddScoped<Team>();
 
             services.AddScoped<User>();
@@ -25,6 +27,9 @@ namespace DAO
             services.AddScoped<Quiz>();
 
             services.AddScoped<Question>();
+            services.AddScoped<Score>();
+            services.AddScoped<TeamMember>();
+            services.AddScoped<Response>();
             return services;
         }
     }
