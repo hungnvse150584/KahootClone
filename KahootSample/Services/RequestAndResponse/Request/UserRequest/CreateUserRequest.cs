@@ -1,7 +1,7 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
 
-namespace Services.RequestAndResponse.Request
+namespace Services.RequestAndResponse.Request.UserRequest
 {
     public class CreateUserRequest
     {

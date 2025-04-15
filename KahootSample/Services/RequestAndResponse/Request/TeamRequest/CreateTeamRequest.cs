@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Services.RequestAndResponse.Request
+namespace Services.RequestAndResponse.Request.TeamRequest
 {
     public class CreateTeamRequest
     {

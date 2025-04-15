@@ -4,7 +4,7 @@ using Repositories.IRepository;
 using Services.IService;
 using Services.RequestAndResponse.BaseResponse;
 using Services.RequestAndResponse.Enum;
-using Services.RequestAndResponse.Request;
+using Services.RequestAndResponse.Request.TeamRequest;
 using Services.RequestAndResponse.Response;
 using Services.RequestAndResponse.TeamResponse;
 using System;

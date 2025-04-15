@@ -21,6 +21,10 @@ namespace DAO
             services.AddScoped<Team>();
 
             services.AddScoped<User>();
+
+            services.AddScoped<Quiz>();
+
+            services.AddScoped<Question>();
             return services;
         }
     }
