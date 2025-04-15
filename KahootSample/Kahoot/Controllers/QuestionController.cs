@@ -54,10 +54,18 @@ namespace Kahoot.Controllers
             var result = await _questionService.UpdateQuestionAsync(request);
             return StatusCode((int)result.StatusCode, result);
         }
-        //[HttpGet]
-        //[Route("GetQuestions")]
-        //[ProducesResponseType(StatusCode)]
+        [HttpGet]
+        [Route("GetQuestions")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<BaseResponse<QuestionResponse>> GetQuestions()
+        {
+            var result = await _questionService.GetQuestionsAsync();
+            return result;
 
+        }
 
         [HttpGet]
         [Route("GetQuestionById/{questionId}")]

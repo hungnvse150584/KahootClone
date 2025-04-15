@@ -2,8 +2,12 @@ using DAO;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 using Repositories;
+using Repositories.IRepository;
+using Repositories.Repository;
 using Services;
+using Services.IService;
 using Services.Mapping;
+using Services.Service;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -24,6 +28,8 @@ builder.Services.ConfigureDataAccessObjectService(builder.Configuration);
 builder.Services.ConfigureRepositoryService(builder.Configuration);
 builder.Services.ConfigureServiceService(builder.Configuration);
 
+builder.Services.AddScoped<IScoreRepository, ScoreRepository>();
+builder.Services.AddScoped<IScoreService, ScoreService>();
 // Add SwaggerGen for Authentication
 builder.Services.AddSwaggerGen(option =>
 {

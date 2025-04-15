@@ -1,7 +1,9 @@
 ﻿using AutoMapper;
 using BOs.Model;
-using Services.RequestAndResponse.Request;
+using Services.RequestAndResponse.Request.AnswerRequest;
 using Services.RequestAndResponse.Request.QuestionRequest;
+using Services.RequestAndResponse.Request.ScoreRequest;
+using Services.RequestAndResponse.Request.TeamRequest;
 using Services.RequestAndResponse.Response;
 using Services.RequestAndResponse.TeamResponse;
 using System;
@@ -33,9 +35,18 @@ namespace Services.Mapping
 
             //Question mappings
             CreateMap<CreateQuestionRequest, Question>();
-
             CreateMap<UpdateQuestionRequest, Question>(); 
             CreateMap<Question, QuestionResponse>(); 
+
+            //Answer mappings
+            CreateMap<CreateAnswerRequest, Answer>();
+            CreateMap<UpdateAnswerRequest, Answer>();
+            CreateMap<Answer, AnswerResponse>();
+
+            //Score mappings
+            CreateMap<CreateScoreRequest, Score>();
+            CreateMap<UpdateScoreRequest, Score>();
+            CreateMap<Score, ScoreResponse>();
         }
     }
 }

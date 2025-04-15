@@ -1,6 +1,6 @@
 ﻿using BOs.Model;
 using Services.RequestAndResponse.BaseResponse;
-using Services.RequestAndResponse.Request;
+using Services.RequestAndResponse.Request.UserRequest;
 using Services.RequestAndResponse.Response;
 using System;
 using System.Collections.Generic;

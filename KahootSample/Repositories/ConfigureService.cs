@@ -22,7 +22,7 @@ namespace Repositories
 
             services.AddScoped<IQuestionRepository, QuestionRepository>();
             services.AddScoped<IUserRepository, UserRepository>();
-
+            services.AddScoped<IAnswerRepository, AnswerRepository>();
 
             //============================================================//
             services.AddScoped<TeamDAO>();
@@ -30,6 +30,9 @@ namespace Repositories
 
             services.AddScoped<UserDAO>();
 
+            services.AddScoped<AnswerDAO>();
+
+            services.AddScoped<ScoreDAO>();
             return services;
         }
     }

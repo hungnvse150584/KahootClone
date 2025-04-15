@@ -23,7 +23,9 @@ namespace Services
 
             services.AddScoped<IUserService, UserService>();
 
+            services.AddScoped<IAnswerService, AnswerService>();
 
+            services.AddScoped<IScoreService, ScoreService>();
             return services;
         }
     }
