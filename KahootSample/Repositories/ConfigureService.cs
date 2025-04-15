@@ -33,6 +33,8 @@ namespace Repositories
 
             services.AddScoped<ITeamMemberRepository, TeamMemberRepository>();
 
+            services.AddScoped<IPlayerRepository, PlayerRepository>();
+
             //============================================================//
             services.AddScoped<TeamDAO>();
 
@@ -47,6 +49,8 @@ namespace Repositories
             services.AddScoped<ResponseDAO>();
 
             services.AddScoped<TeamMemberDAO>();
+
+            services.AddScoped<PlayerDAO>();
             return services;
         }
     }

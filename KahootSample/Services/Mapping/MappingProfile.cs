@@ -46,7 +46,7 @@ namespace Services.Mapping
             CreateMap<TeamMember, TeamMemberResponse>().ReverseMap();
 
             // Player mappings
-            CreateMap<Player, PlayerResponse>().ReverseMap();
+            
 
             //Question mappings
             CreateMap<CreateQuestionRequest, Question>().ReverseMap();

@@ -32,6 +32,8 @@ namespace Services
 
             services.AddScoped<ITeamMemberService, TeamMemberService>();
 
+            services.AddScoped<IPlayerService, PlayerService>();
+
             return services;
         }
     }
