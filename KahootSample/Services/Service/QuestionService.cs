@@ -66,7 +66,23 @@ namespace Services.Service
                 return new BaseResponse<QuestionResponse>($"An error occurred: {ex.Message}", StatusCodeEnum.InternalServerError_500, null);
             }
         }
-
+        public async Task<BaseResponse<QuestionResponse>> GetQuestionsAsync()
+        {
+            try
+            {
+                var questions = await _questionRepository.GetAllAsync();
+                if (questions == null)
+                {
+                    return new BaseResponse<QuestionResponse>("Questions List not found", StatusCodeEnum.NotFound_404, null);
+                }
+                var response = _mapper.Map<QuestionResponse>(questions);
+                return new BaseResponse<QuestionResponse>("Successfully retrieved questions list", StatusCodeEnum.OK_200, response);
+            }
+            catch(Exception ex)
+            {
+                return new BaseResponse<QuestionResponse>($"An error occured: {ex.Message}", StatusCodeEnum.InternalServerError_500, null);
+            }
+        }
         public async Task<BaseResponse<QuestionResponse>> GetQuestionByIdAsync(int questionId)
         {
             try
