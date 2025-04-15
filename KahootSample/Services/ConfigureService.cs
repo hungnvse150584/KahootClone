@@ -26,6 +26,12 @@ namespace Services
 
             services.AddScoped<IQuizService, QuizService>();
 
+            services.AddScoped<IGameSessionService, GameSessionService>();
+
+            services.AddScoped<IResponseService, ResponseService>();
+
+            services.AddScoped<ITeamMemberService, TeamMemberService>();
+
             return services;
         }
     }

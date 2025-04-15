@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Services.RequestAndResponse.Response
+namespace Services.RequestAndResponse.Response.TeamMemberResponses
 {
     public class TeamMemberResponse
     {
@@ -12,6 +12,5 @@ namespace Services.RequestAndResponse.Response
         public int TeamId { get; set; }
         public int PlayerId { get; set; }
         public int Score { get; set; }
-        public PlayerResponse Player { get; set; }
     }
 }

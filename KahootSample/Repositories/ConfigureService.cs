@@ -1,4 +1,5 @@
 ﻿using DAO;
+using DAOs;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Repositories.BaseRepository;
@@ -26,6 +27,11 @@ namespace Repositories
 
             services.AddScoped<IQuizRepository, QuizRepository>();
 
+            services.AddScoped<IGameSessionRepository, GameSessionRepository>();
+
+            services.AddScoped<IResponseRepository, ResponseRepository>();
+
+            services.AddScoped<ITeamMemberRepository, TeamMemberRepository>();
 
             //============================================================//
             services.AddScoped<TeamDAO>();
@@ -36,6 +42,11 @@ namespace Repositories
 
             services.AddScoped<QuizDAO>();
 
+            services.AddScoped<GameSessionDAO>();
+
+            services.AddScoped<ResponseDAO>();
+
+            services.AddScoped<TeamMemberDAO>();
             return services;
         }
     }
