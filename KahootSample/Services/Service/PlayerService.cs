@@ -5,7 +5,7 @@ using Services.IService;
 using Services.RequestAndResponse.BaseResponse;
 using Services.RequestAndResponse.Enum;
 using Services.RequestAndResponse.PlayerRequest;
-using Services.RequestAndResponse.PlayerResponse;
+using Services.RequestAndResponse.Response.PlayerResponse;
 using System;
 using System.Collections.Generic;
 using System.Linq;

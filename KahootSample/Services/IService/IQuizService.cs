@@ -1,7 +1,7 @@
 ﻿using BOs.Model;
 using Services.RequestAndResponse.BaseResponse;
 using Services.RequestAndResponse.Request;
-using Services.RequestAndResponse.Response;
+using Services.RequestAndResponse.Response.QuizResponses;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 

@@ -1,4 +1,4 @@
-﻿namespace Services.RequestAndResponse.PlayerResponse
+﻿namespace Services.RequestAndResponse.Response.PlayerResponse
 {
     public class PlayerResponse
     {

@@ -1,4 +1,4 @@
-﻿namespace Services.RequestAndResponse.Response
+﻿namespace Services.RequestAndResponse.Response.QuestionResponses
 {
     public class QuestionResponse
     {
