@@ -1,4 +1,5 @@
-using DAO;
+﻿using DAO;
+using Kahoot.Hubs;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 using Repositories;
@@ -23,13 +24,13 @@ builder.Services.AddDbContext<KahootDbContext>(options =>
 // Configure AutoMapper
 builder.Services.AddAutoMapper(typeof(MappingProfile));
 
+builder.Services.AddSignalR();
+
 // Configure Services using extension methods
 builder.Services.ConfigureDataAccessObjectService(builder.Configuration);
 builder.Services.ConfigureRepositoryService(builder.Configuration);
 builder.Services.ConfigureServiceService(builder.Configuration);
 
-builder.Services.AddScoped<IScoreRepository, ScoreRepository>();
-builder.Services.AddScoped<IScoreService, ScoreService>();
 // Add SwaggerGen for Authentication
 builder.Services.AddSwaggerGen(option =>
 {
@@ -72,9 +73,16 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+app.UseRouting();
 
 app.UseAuthorization();
 
 app.MapControllers();
+
+app.UseEndpoints(endpoints =>
+{
+    endpoints.MapControllers();
+    endpoints.MapHub<GameSessionHub>("/gameSessionHub"); // Đăng ký SignalR Hub với endpoint /gameSessionHub
+});
 
 app.Run();
