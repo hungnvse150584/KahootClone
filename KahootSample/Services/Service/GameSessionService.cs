@@ -55,6 +55,7 @@ namespace Services.Service
                 gameSession.StartedAt = request.StartedAt;
                 gameSession.EndedAt = request.EndedAt;
                 gameSession.Status = request.Status;
+                gameSession.Pin = request.Pin;
                 gameSession.EnableSpeedBonus = request.EnableSpeedBonus;
                 gameSession.EnableStreak = request.EnableStreak;
                 gameSession.GameMode = request.GameMode;

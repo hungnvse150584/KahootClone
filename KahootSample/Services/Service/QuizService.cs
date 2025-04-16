@@ -50,9 +50,7 @@ namespace Services.Service
                     return new BaseResponse<QuizResponse>("Quiz not found", StatusCodeEnum.NotFound_404, null);
                 }
 
-                existingQuiz.Title = request.Title;
-                existingQuiz.Pin = request.Pin;
-                existingQuiz.QrCode = request.QrCode;
+                existingQuiz.Title = request.Title;    
 
                 var updatedQuiz = await _quizRepository.UpdateQuizAsync(existingQuiz);
                 var response = _mapper.Map<QuizResponse>(updatedQuiz);

@@ -4,6 +4,7 @@ using DAO;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DAO.Migrations
 {
     [DbContext(typeof(KahootDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250416015536_FixPin")]
+    partial class FixPin
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -76,11 +79,6 @@ namespace DAO.Migrations
                     b.Property<int>("MaxPlayers")
                         .HasColumnType("int");
 
-                    b.Property<string>("Pin")
-                        .IsRequired()
-                        .HasMaxLength(10)
-                        .HasColumnType("nvarchar(10)");
-
                     b.Property<int>("QuizId")
                         .HasColumnType("int");
 
@@ -96,9 +94,6 @@ namespace DAO.Migrations
                         .HasColumnType("nvarchar(50)");
 
                     b.HasKey("SessionId");
-
-                    b.HasIndex("Pin")
-                        .IsUnique();
 
                     b.HasIndex("QuizId");
 
@@ -178,6 +173,16 @@ namespace DAO.Migrations
                     b.Property<int>("CreatedBy")
                         .HasColumnType("int");
 
+                    b.Property<string>("Pin")
+                        .IsRequired()
+                        .HasMaxLength(10)
+                        .HasColumnType("nvarchar(10)");
+
+                    b.Property<string>("QrCode")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
                     b.Property<string>("Title")
                         .IsRequired()
                         .HasMaxLength(100)
@@ -186,6 +191,9 @@ namespace DAO.Migrations
                     b.HasKey("QuizId");
 
                     b.HasIndex("CreatedBy");
+
+                    b.HasIndex("Pin")
+                        .IsUnique();
 
                     b.ToTable("Quizzes");
                 });
@@ -347,7 +355,7 @@ namespace DAO.Migrations
                         new
                         {
                             UserId = 1,
-                            CreatedAt = new DateTime(2025, 4, 16, 2, 0, 21, 578, DateTimeKind.Utc).AddTicks(3430),
+                            CreatedAt = new DateTime(2025, 4, 16, 1, 55, 36, 123, DateTimeKind.Utc).AddTicks(5642),
                             Email = "admin@example.com",
                             Password = "hashedpassword",
                             Role = 0,
@@ -356,7 +364,7 @@ namespace DAO.Migrations
                         new
                         {
                             UserId = 2,
-                            CreatedAt = new DateTime(2025, 4, 16, 2, 0, 21, 578, DateTimeKind.Utc).AddTicks(3433),
+                            CreatedAt = new DateTime(2025, 4, 16, 1, 55, 36, 123, DateTimeKind.Utc).AddTicks(5645),
                             Email = "teacher1@example.com",
                             Password = "hashedpassword",
                             Role = 1,
@@ -365,7 +373,7 @@ namespace DAO.Migrations
                         new
                         {
                             UserId = 3,
-                            CreatedAt = new DateTime(2025, 4, 16, 2, 0, 21, 578, DateTimeKind.Utc).AddTicks(3434),
+                            CreatedAt = new DateTime(2025, 4, 16, 1, 55, 36, 123, DateTimeKind.Utc).AddTicks(5647),
                             Email = "student1@example.com",
                             Password = "hashedpassword",
                             Role = 2,
