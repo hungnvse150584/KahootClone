@@ -14,6 +14,9 @@ namespace Services.RequestAndResponse.Request.GameSessionRequest
 
         public DateTime? StartedAt { get; set; }
         public DateTime? EndedAt { get; set; }
+        [MaxLength(10)]
+        //[Index(IsUnique = true)]
+        public string Pin { get; set; }
 
         [Required(ErrorMessage = "Status is required")]
         public string Status { get; set; }

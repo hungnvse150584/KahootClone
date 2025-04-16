@@ -18,6 +18,9 @@ namespace BOs.Model
         public DateTime? StartedAt { get; set; }
 
         public DateTime? EndedAt { get; set; }
+        [MaxLength(10)]
+        //[Index(IsUnique = true)]
+        public string Pin { get; set; }
 
         [Required, MaxLength(50)]
         public string Status { get; set; } = "Pending";

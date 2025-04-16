@@ -6,6 +6,8 @@ namespace DAO
 {
     public class KahootDbContext : DbContext
     {
+        public KahootDbContext() : base() { }
+        public KahootDbContext(DbContextOptions<KahootDbContext> options) : base(options) { }
         public DbSet<User> Users { get; set; }
         public DbSet<Quiz> Quizzes { get; set; }
         public DbSet<Question> Questions { get; set; }
@@ -29,8 +31,8 @@ namespace DAO
                 .Property(u => u.Role)
                 .HasDefaultValue(UserRoles.Player); // Giá trị mặc định là Player (2)
 
-            // Quizzes
-            modelBuilder.Entity<Quiz>()
+            // GameSession
+            modelBuilder.Entity<GameSession>()
                 .HasIndex(q => q.Pin)
                 .IsUnique();
 

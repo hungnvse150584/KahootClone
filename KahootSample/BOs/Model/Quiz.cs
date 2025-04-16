@@ -20,13 +20,6 @@ namespace BOs.Model
 
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 
-        [MaxLength(10)]
-        //[Index(IsUnique = true)]
-        public string Pin { get; set; }
-
-        [MaxLength(200)]
-        public string QrCode { get; set; }
-
         // Quan hệ
         [ForeignKey("CreatedBy")]
         public User CreatedByUser { get; set; }

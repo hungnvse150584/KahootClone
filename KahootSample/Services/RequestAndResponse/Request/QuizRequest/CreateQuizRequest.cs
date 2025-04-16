@@ -11,10 +11,5 @@ namespace Services.RequestAndResponse.Request
         [Required]
         public int CreatedBy { get; set; }
 
-        [MaxLength(10)]
-        public string Pin { get; set; }
-
-        [MaxLength(200)]
-        public string QrCode { get; set; }
     }
 }
