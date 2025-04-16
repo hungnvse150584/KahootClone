@@ -21,6 +21,8 @@ using Services.RequestAndResponse.Response.AnswerResponse;
 using Services.RequestAndResponse.Response.QuestionResponses;
 using Services.RequestAndResponse.Response.ScoreResponse;
 using Services.RequestAndResponse.Response.TeamResponse;
+using Services.RequestAndResponse.PlayerRequest;
+using Services.RequestAndResponse.Response.PlayerResponse;
 
 namespace Services.Mapping
 {
@@ -51,7 +53,8 @@ namespace Services.Mapping
             CreateMap<TeamMember, TeamMemberResponse>().ReverseMap();
 
             // Player mappings
-            
+            CreateMap<CreatePlayerRequest, Player>().ReverseMap();
+            CreateMap<Player, PlayerResponse>().ReverseMap();
 
             //Question mappings
             CreateMap<CreateQuestionRequest, Question>();
