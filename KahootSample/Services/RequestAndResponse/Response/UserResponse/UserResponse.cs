@@ -1,11 +1,10 @@
-﻿using Services.RequestAndResponse.Response;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Services.RequestAndResponse.Response
+namespace Services.RequestAndResponse.Response.UserResponse
 {
     public class UserResponse
     {

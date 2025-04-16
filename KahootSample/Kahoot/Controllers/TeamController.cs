@@ -5,7 +5,7 @@ using Services.RequestAndResponse.Enum;
 using Services.RequestAndResponse.Request.TeamRequest;
 using Services.RequestAndResponse.Response;
 using Services.RequestAndResponse.Response.TeamMemberResponses;
-using Services.RequestAndResponse.TeamResponse;
+using Services.RequestAndResponse.Response.TeamResponse;
 using System.Threading.Tasks;
 
 namespace Kahoot.Controllers

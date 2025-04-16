@@ -3,8 +3,7 @@ using Services.IService;
 using Services.RequestAndResponse.BaseResponse;
 using Services.RequestAndResponse.Enum;
 using Services.RequestAndResponse.Request;
-using Services.RequestAndResponse.Response;
-using System;
+using Services.RequestAndResponse.Response.QuizResponses;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 

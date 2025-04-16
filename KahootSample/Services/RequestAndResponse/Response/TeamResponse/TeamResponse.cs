@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Services.RequestAndResponse.TeamResponse
+namespace Services.RequestAndResponse.Response.TeamResponse
 {
     public class TeamResponse
     {

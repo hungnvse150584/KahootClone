@@ -10,7 +10,7 @@ using Services.IService;
 using Services.RequestAndResponse.BaseResponse;
 using Services.RequestAndResponse.Enum;
 using Services.RequestAndResponse.Request.ScoreRequest;
-using Services.RequestAndResponse.Response;
+using Services.RequestAndResponse.Response.ScoreResponse;
 
 namespace Services.Service
 {

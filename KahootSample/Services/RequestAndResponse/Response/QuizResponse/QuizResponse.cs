@@ -1,7 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using Services.RequestAndResponse.Response.QuestionResponses;
 
-namespace Services.RequestAndResponse.Response
+namespace Services.RequestAndResponse.Response.QuizResponses
 {
     public class QuizResponse
     {
@@ -13,7 +14,7 @@ namespace Services.RequestAndResponse.Response
         public DateTime CreatedAt { get; set; }
 
         // Optional: Include related data
-        public List<QuestionResponse> Questions { get; set; } = new();
+        public List<QuestionResponse> Questions { get; set; }
         
     }
 }
