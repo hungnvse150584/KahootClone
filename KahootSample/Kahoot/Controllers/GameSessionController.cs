@@ -13,10 +13,57 @@ namespace Kahoot.Controllers
     public class GameSessionController : ControllerBase
     {
         private readonly IGameSessionService _gameSessionService;
+        private readonly IQuestionService _questionService;
 
-        public GameSessionController(IGameSessionService gameSessionService)
+        public GameSessionController(IGameSessionService gameSessionService, IQuestionService questionService)
         {
             _gameSessionService = gameSessionService;
+            _questionService = questionService;
+        }
+
+        [HttpPost]
+        [Route("Start/{sessionId}")]
+        public async Task<ActionResult<BaseResponse<string>>> StartGameSession(int sessionId)
+        {
+            if (sessionId <= 0)
+            {
+                return BadRequest(new BaseResponse<string>("Invalid Session ID", StatusCodeEnum.BadRequest_400, null));
+            }
+
+            var session = await _gameSessionService.GetGameSessionByIdAsync(sessionId);
+            if (session == null)
+            {
+                return NotFound(new BaseResponse<string>("GameSession not found", StatusCodeEnum.NotFound_404, null));
+            }
+
+            // Kiểm tra quyền của host (có thể thêm logic xác thực tại đây)
+
+            return Ok(new BaseResponse<string>("GameSession started", StatusCodeEnum.OK_200, "Started"));
+        }
+
+        [HttpPost]
+        [Route("NextQuestion/{sessionId}/{questionId}")]
+        public async Task<ActionResult<BaseResponse<string>>> NextQuestion(int sessionId, int questionId)
+        {
+            if (sessionId <= 0 || questionId <= 0)
+            {
+                return BadRequest(new BaseResponse<string>("Invalid Session ID or Question ID", StatusCodeEnum.BadRequest_400, null));
+            }
+
+            var session = await _gameSessionService.GetGameSessionByIdAsync(sessionId);
+            if (session == null)
+            {
+                return NotFound(new BaseResponse<string>("GameSession not found", StatusCodeEnum.NotFound_404, null));
+            }
+
+            var question = await _questionService.GetQuestionByIdAsync(questionId);
+            if (question.StatusCode != StatusCodeEnum.OK_200 || question.Data == null)
+            {
+                return NotFound(new BaseResponse<string>("Question not found", StatusCodeEnum.NotFound_404, null));
+            }
+
+            // Gửi câu hỏi qua SignalR Hub (sẽ được xử lý trong Hub)
+            return Ok(new BaseResponse<string>("Question sent", StatusCodeEnum.OK_200, "Sent"));
         }
 
         [HttpPost]
@@ -83,7 +130,7 @@ namespace Kahoot.Controllers
         }
 
         [HttpPut]
-        [Route("UpdateGameSession/{sessionId}")] // Thêm sessionId vào route
+        [Route("UpdateGameSession/{sessionId}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
