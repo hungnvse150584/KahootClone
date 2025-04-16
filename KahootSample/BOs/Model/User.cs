@@ -23,9 +23,18 @@ namespace BOs.Model
         public string Email { get; set; }
 
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+        [Required]
+        public UserRoles Role { get; set; } 
 
         // Quan hệ
         public ICollection<Quiz> Quizzes { get; set; } = new List<Quiz>();
         public ICollection<Player> Players { get; set; } = new List<Player>();
+    }
+    public enum UserRoles
+    {
+        Admin = 0,
+        Host = 1,
+        Player = 2,
+        Team = 3,
     }
 }

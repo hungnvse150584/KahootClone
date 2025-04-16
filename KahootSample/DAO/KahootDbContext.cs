@@ -6,9 +6,6 @@ namespace DAO
 {
     public class KahootDbContext : DbContext
     {
-        public KahootDbContext() : base() { }
-        public KahootDbContext(DbContextOptions<KahootDbContext> options) : base(options) { }
-
         public DbSet<User> Users { get; set; }
         public DbSet<Quiz> Quizzes { get; set; }
         public DbSet<Question> Questions { get; set; }
@@ -26,6 +23,11 @@ namespace DAO
             modelBuilder.Entity<User>()
                 .HasIndex(u => u.Username)
                 .IsUnique();
+
+            // Cấu hình Role với giá trị mặc định
+            modelBuilder.Entity<User>()
+                .Property(u => u.Role)
+                .HasDefaultValue(UserRoles.Player); // Giá trị mặc định là Player (2)
 
             // Quizzes
             modelBuilder.Entity<Quiz>()
@@ -117,13 +119,20 @@ namespace DAO
                 .HasOne(s => s.Player)
                 .WithMany(p => p.Scores)
                 .HasForeignKey(s => s.PlayerId)
-                .OnDelete(DeleteBehavior.NoAction); // Sửa để tránh lỗi cascade
+                .OnDelete(DeleteBehavior.NoAction);
 
             modelBuilder.Entity<Score>()
                 .HasOne(s => s.Session)
                 .WithMany(gs => gs.Scores)
                 .HasForeignKey(s => s.SessionId)
                 .OnDelete(DeleteBehavior.Cascade);
+
+            // Seed dữ liệu mẫu cho Users (bao gồm Role)
+            modelBuilder.Entity<User>().HasData(
+                new User { UserId = 1, Username = "admin", Password = "hashedpassword", Email = "admin@example.com", CreatedAt = DateTime.UtcNow, Role = UserRoles.Admin },
+                new User { UserId = 2, Username = "teacher1", Password = "hashedpassword", Email = "teacher1@example.com", CreatedAt = DateTime.UtcNow, Role = UserRoles.Host },
+                new User { UserId = 3, Username = "student1", Password = "hashedpassword", Email = "student1@example.com", CreatedAt = DateTime.UtcNow, Role = UserRoles.Player }
+            );
         }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)

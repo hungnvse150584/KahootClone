@@ -34,7 +34,11 @@ namespace Repositories
 
             services.AddScoped<ITeamMemberRepository, TeamMemberRepository>();
 
+
             services.AddScoped<IPlayerRepository, PlayerRepository>();
+
+            services.AddScoped<IScoreRepository, ScoreRepository>();
+
 
             //============================================================//
             services.AddScoped<TeamDAO>();
