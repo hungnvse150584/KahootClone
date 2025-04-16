@@ -1,5 +1,8 @@
 ﻿using AutoMapper;
 using BOs.Model;
+using Services.RequestAndResponse.Request.AnswerRequest;
+using Services.RequestAndResponse.Request.QuestionRequest;
+using Services.RequestAndResponse.Request.ScoreRequest;
 using Services.RequestAndResponse.Request.GameSessionRequest;
 using Services.RequestAndResponse.Request.QuestionRequest;
 using Services.RequestAndResponse.Request.ResponseRequest;
@@ -49,6 +52,19 @@ namespace Services.Mapping
             
 
             //Question mappings
+            CreateMap<CreateQuestionRequest, Question>();
+            CreateMap<UpdateQuestionRequest, Question>(); 
+            CreateMap<Question, QuestionResponse>(); 
+
+            //Answer mappings
+            CreateMap<CreateAnswerRequest, Answer>();
+            CreateMap<UpdateAnswerRequest, Answer>();
+            CreateMap<Answer, AnswerResponse>();
+
+            //Score mappings
+            CreateMap<CreateScoreRequest, Score>();
+            CreateMap<UpdateScoreRequest, Score>();
+            CreateMap<Score, ScoreResponse>();
             CreateMap<CreateQuestionRequest, Question>().ReverseMap();
 
             CreateMap<UpdateQuestionRequest, Question>().ReverseMap(); 

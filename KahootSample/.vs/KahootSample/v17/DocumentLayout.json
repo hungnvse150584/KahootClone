@@ -3,6 +3,10 @@
   "WorkspaceRootPath": "D:\\SWP-BE\\KahootClone\\KahootSample\\",
   "Documents": [
     {
+      "AbsoluteMoniker": "D:0:0:{FCF6F00C-019E-4E12-A667-DC60CD734FD1}|Services\\Services.csproj|d:\\swp-be\\kahootclone\\kahootsample\\services\\configureservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{FCF6F00C-019E-4E12-A667-DC60CD734FD1}|Services\\Services.csproj|solutionrelative:services\\configureservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
       "AbsoluteMoniker": "D:0:0:{FCF6F00C-019E-4E12-A667-DC60CD734FD1}|Services\\Services.csproj|d:\\swp-be\\kahootclone\\kahootsample\\services\\requestandresponse\\request\\teammemberrequest\\createteammemberrequest.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{FCF6F00C-019E-4E12-A667-DC60CD734FD1}|Services\\Services.csproj|solutionrelative:services\\requestandresponse\\request\\teammemberrequest\\createteammemberrequest.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
@@ -131,6 +135,19 @@
             {
               "$type": "Document",
               "DocumentIndex": 0,
+              "Title": "ConfigureService.cs",
+              "DocumentMoniker": "D:\\SWP-BE\\KahootClone\\KahootSample\\Services\\ConfigureService.cs",
+              "RelativeDocumentMoniker": "Services\\ConfigureService.cs",
+              "ToolTip": "D:\\SWP-BE\\KahootClone\\KahootSample\\Services\\ConfigureService.cs",
+              "RelativeToolTip": "Services\\ConfigureService.cs",
+              "ViewState": "AgIAABUAAAAAAAAAAAAAACgAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-04-16T01:20:50.143Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
               "Title": "CreateTeamMemberRequest.cs",
               "DocumentMoniker": "D:\\SWP-BE\\KahootClone\\KahootSample\\Services\\RequestAndResponse\\Request\\TeamMemberRequest\\CreateTeamMemberRequest.cs",
               "RelativeDocumentMoniker": "Services\\RequestAndResponse\\Request\\TeamMemberRequest\\CreateTeamMemberRequest.cs",
@@ -143,7 +160,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 3,
+              "DocumentIndex": 4,
               "Title": "ResponseService.cs",
               "DocumentMoniker": "D:\\SWP-BE\\KahootClone\\KahootSample\\Services\\Service\\ResponseService.cs",
               "RelativeDocumentMoniker": "Services\\Service\\ResponseService.cs",
@@ -155,7 +172,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 3,
               "Title": "ResponseController.cs",
               "DocumentMoniker": "D:\\SWP-BE\\KahootClone\\KahootSample\\Kahoot\\Controllers\\ResponseController.cs",
               "RelativeDocumentMoniker": "Kahoot\\Controllers\\ResponseController.cs",
@@ -167,7 +184,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 2,
               "Title": "TeamMember.cs",
               "DocumentMoniker": "D:\\SWP-BE\\KahootClone\\KahootSample\\BOs\\Model\\TeamMember.cs",
               "RelativeDocumentMoniker": "BOs\\Model\\TeamMember.cs",
@@ -179,7 +196,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 4,
+              "DocumentIndex": 5,
               "Title": "ResponseResponse.cs",
               "DocumentMoniker": "D:\\SWP-BE\\KahootClone\\KahootSample\\Services\\RequestAndResponse\\Response\\ResponseResponses\\ResponseResponse.cs",
               "RelativeDocumentMoniker": "Services\\RequestAndResponse\\Response\\ResponseResponses\\ResponseResponse.cs",
@@ -191,7 +208,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 5,
+              "DocumentIndex": 6,
               "Title": "ResponseRepository.cs",
               "DocumentMoniker": "D:\\SWP-BE\\KahootClone\\KahootSample\\Repositories\\Repository\\ResponseRepository.cs",
               "RelativeDocumentMoniker": "Repositories\\Repository\\ResponseRepository.cs",
@@ -203,7 +220,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 6,
+              "DocumentIndex": 7,
               "Title": "IResponseRepository.cs",
               "DocumentMoniker": "D:\\SWP-BE\\KahootClone\\KahootSample\\Repositories\\IRepository\\IResponseRepository.cs",
               "RelativeDocumentMoniker": "Repositories\\IRepository\\IResponseRepository.cs",
@@ -215,7 +232,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 7,
+              "DocumentIndex": 8,
               "Title": "IQuizRepository.cs",
               "DocumentMoniker": "D:\\SWP-BE\\KahootClone\\KahootSample\\Repositories\\IRepository\\IQuizRepository.cs",
               "RelativeDocumentMoniker": "Repositories\\IRepository\\IQuizRepository.cs",
@@ -227,7 +244,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 8,
+              "DocumentIndex": 9,
               "Title": "UpdateResponseRequest.cs",
               "DocumentMoniker": "D:\\SWP-BE\\KahootClone\\KahootSample\\Services\\RequestAndResponse\\Request\\ResponseRequest\\UpdateResponseRequest.cs",
               "RelativeDocumentMoniker": "Services\\RequestAndResponse\\Request\\ResponseRequest\\UpdateResponseRequest.cs",
@@ -239,7 +256,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 9,
+              "DocumentIndex": 10,
               "Title": "CreateResponseRequest.cs",
               "DocumentMoniker": "D:\\SWP-BE\\KahootClone\\KahootSample\\Services\\RequestAndResponse\\Request\\ResponseRequest\\CreateResponseRequest.cs",
               "RelativeDocumentMoniker": "Services\\RequestAndResponse\\Request\\ResponseRequest\\CreateResponseRequest.cs",
@@ -251,7 +268,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 11,
+              "DocumentIndex": 12,
               "Title": "ResponseDAO.cs",
               "DocumentMoniker": "D:\\SWP-BE\\KahootClone\\KahootSample\\DAO\\ResponseDAO.cs",
               "RelativeDocumentMoniker": "DAO\\ResponseDAO.cs",
@@ -263,7 +280,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 10,
+              "DocumentIndex": 11,
               "Title": "IGameSessionRepository.cs",
               "DocumentMoniker": "D:\\SWP-BE\\KahootClone\\KahootSample\\Repositories\\IRepository\\IGameSessionRepository.cs",
               "RelativeDocumentMoniker": "Repositories\\IRepository\\IGameSessionRepository.cs",
@@ -275,7 +292,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 12,
+              "DocumentIndex": 13,
               "Title": "Response.cs",
               "DocumentMoniker": "D:\\SWP-BE\\KahootClone\\KahootSample\\BOs\\Model\\Response.cs",
               "RelativeDocumentMoniker": "BOs\\Model\\Response.cs",
@@ -287,7 +304,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 15,
+              "DocumentIndex": 16,
               "Title": "GameSessionService.cs",
               "DocumentMoniker": "D:\\SWP-BE\\KahootClone\\KahootSample\\Services\\Service\\GameSessionService.cs",
               "RelativeDocumentMoniker": "Services\\Service\\GameSessionService.cs",
@@ -299,7 +316,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 16,
+              "DocumentIndex": 17,
               "Title": "CreateGameSessionRequest.cs",
               "DocumentMoniker": "D:\\SWP-BE\\KahootClone\\KahootSample\\Services\\RequestAndResponse\\Request\\GameSessionRequest\\CreateGameSessionRequest.cs",
               "RelativeDocumentMoniker": "Services\\RequestAndResponse\\Request\\GameSessionRequest\\CreateGameSessionRequest.cs",
@@ -311,7 +328,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 14,
+              "DocumentIndex": 15,
               "Title": "UpdateGameSessionRequest.cs",
               "DocumentMoniker": "D:\\SWP-BE\\KahootClone\\KahootSample\\Services\\RequestAndResponse\\Request\\GameSessionRequest\\UpdateGameSessionRequest.cs",
               "RelativeDocumentMoniker": "Services\\RequestAndResponse\\Request\\GameSessionRequest\\UpdateGameSessionRequest.cs",
@@ -323,7 +340,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 13,
+              "DocumentIndex": 14,
               "Title": "IGameSessionService.cs",
               "DocumentMoniker": "D:\\SWP-BE\\KahootClone\\KahootSample\\Services\\IService\\IGameSessionService.cs",
               "RelativeDocumentMoniker": "Services\\IService\\IGameSessionService.cs",
@@ -335,7 +352,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 17,
+              "DocumentIndex": 18,
               "Title": "appsettings.json",
               "DocumentMoniker": "D:\\SWP-BE\\KahootClone\\KahootSample\\Kahoot\\appsettings.json",
               "RelativeDocumentMoniker": "Kahoot\\appsettings.json",
@@ -347,7 +364,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 19,
+              "DocumentIndex": 20,
               "Title": "GameSessionDAO.cs",
               "DocumentMoniker": "D:\\SWP-BE\\KahootClone\\KahootSample\\DAO\\GameSessionDAO.cs",
               "RelativeDocumentMoniker": "DAO\\GameSessionDAO.cs",
@@ -359,7 +376,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 18,
+              "DocumentIndex": 19,
               "Title": "GameSessionRepository.cs",
               "DocumentMoniker": "D:\\SWP-BE\\KahootClone\\KahootSample\\Repositories\\Repository\\GameSessionRepository.cs",
               "RelativeDocumentMoniker": "Repositories\\Repository\\GameSessionRepository.cs",
@@ -371,7 +388,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 20,
+              "DocumentIndex": 21,
               "Title": "QuizDAO.cs",
               "DocumentMoniker": "D:\\SWP-BE\\KahootClone\\KahootSample\\DAO\\QuizDAO.cs",
               "RelativeDocumentMoniker": "DAO\\QuizDAO.cs",
@@ -383,7 +400,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 22,
+              "DocumentIndex": 23,
               "Title": "QuestionDAO.cs",
               "DocumentMoniker": "D:\\SWP-BE\\KahootClone\\KahootSample\\DAO\\QuestionDAO.cs",
               "RelativeDocumentMoniker": "DAO\\QuestionDAO.cs",
@@ -395,7 +412,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 23,
+              "DocumentIndex": 24,
               "Title": "UserDAO.cs",
               "DocumentMoniker": "D:\\SWP-BE\\KahootClone\\KahootSample\\DAO\\UserDAO.cs",
               "RelativeDocumentMoniker": "DAO\\UserDAO.cs",
@@ -407,7 +424,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 21,
+              "DocumentIndex": 22,
               "Title": "GameSession.cs",
               "DocumentMoniker": "D:\\SWP-BE\\KahootClone\\KahootSample\\BOs\\Model\\GameSession.cs",
               "RelativeDocumentMoniker": "BOs\\Model\\GameSession.cs",
