@@ -1,7 +1,7 @@
 ﻿using BOs.Model;
 using Services.RequestAndResponse.BaseResponse;
 using Services.RequestAndResponse.Request.UserRequest;
-using Services.RequestAndResponse.Response;
+using Services.RequestAndResponse.Response.UserResponse;
 using System;
 using System.Collections.Generic;
 using System.Linq;

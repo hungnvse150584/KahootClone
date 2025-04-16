@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Services.RequestAndResponse.BaseResponse;
 using Services.RequestAndResponse.Request.ScoreRequest;
-using Services.RequestAndResponse.Response;
+using Services.RequestAndResponse.Response.ScoreResponse;
 
 namespace Services.IService
 {

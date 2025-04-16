@@ -1,6 +1,6 @@
 ﻿using Services.RequestAndResponse.BaseResponse;
 using Services.RequestAndResponse.Request.QuestionRequest;
-using Services.RequestAndResponse.Response;
+using Services.RequestAndResponse.Response.QuestionResponses;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 

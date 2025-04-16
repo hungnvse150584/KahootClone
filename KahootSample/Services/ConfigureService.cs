@@ -33,6 +33,10 @@ namespace Services
 
             services.AddScoped<ITeamMemberService, TeamMemberService>();
 
+
+            services.AddScoped<IPlayerService, PlayerService>();
+
+
             services.AddScoped<IScoreService, ScoreService>();
 
             return services;

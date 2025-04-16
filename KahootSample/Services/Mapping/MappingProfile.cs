@@ -8,17 +8,19 @@ using Services.RequestAndResponse.Request.QuestionRequest;
 using Services.RequestAndResponse.Request.ResponseRequest;
 using Services.RequestAndResponse.Request.TeamMemberRequest;
 using Services.RequestAndResponse.Request.TeamRequest;
-using Services.RequestAndResponse.Response;
 using Services.RequestAndResponse.Response.GameSessionResponses;
 using Services.RequestAndResponse.Response.ResponseResponses;
 using Services.RequestAndResponse.Response.TeamMemberResponses;
-using Services.RequestAndResponse.TeamResponse;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using static System.Runtime.InteropServices.JavaScript.JSType;
+using Services.RequestAndResponse.Response.AnswerResponse;
+using Services.RequestAndResponse.Response.QuestionResponses;
+using Services.RequestAndResponse.Response.ScoreResponse;
+using Services.RequestAndResponse.Response.TeamResponse;
 
 namespace Services.Mapping
 {
@@ -49,7 +51,7 @@ namespace Services.Mapping
             CreateMap<TeamMember, TeamMemberResponse>().ReverseMap();
 
             // Player mappings
-            CreateMap<Player, PlayerResponse>().ReverseMap();
+            
 
             //Question mappings
             CreateMap<CreateQuestionRequest, Question>();
