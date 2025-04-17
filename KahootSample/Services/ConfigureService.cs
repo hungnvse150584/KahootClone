@@ -13,7 +13,7 @@ namespace Services
 {
     public static class ConfigureService
     {
-        public static IServiceCollection ConfigureServiceService(this IServiceCollection services, IConfiguration configuration)
+        public static async Task<IServiceCollection> ConfigureServiceService(this IServiceCollection services, IConfiguration configuration)
         {
 
             services.AddAutoMapper(typeof(MappingProfile));
@@ -31,7 +31,7 @@ namespace Services
 
             services.AddScoped<IResponseService, ResponseService>();
 
-
+            services.AddScoped<ITeamResultInGameService, TeamResultInGameService>();
 
             services.AddScoped<IPlayerService, PlayerService>();
 

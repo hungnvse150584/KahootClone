@@ -30,9 +30,8 @@ namespace Repositories
             services.AddScoped<IGameSessionRepository, GameSessionRepository>();
 
             services.AddScoped<IResponseRepository, ResponseRepository>();
-
  
-
+            services.AddScoped<ITeamResultInGameRepository, TeamResultInGameRepository>();  
 
             services.AddScoped<IPlayerRepository, PlayerRepository>();
 
@@ -46,7 +45,7 @@ namespace Repositories
 
             services.AddScoped<UserDAO>();
 
-          
+            services.AddScoped<TeamResultInGameDAO>();
 
             services.AddScoped<ScoreDAO>();
             services.AddScoped<QuizDAO>();

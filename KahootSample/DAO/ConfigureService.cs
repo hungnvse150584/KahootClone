@@ -34,6 +34,9 @@ namespace DAO
             services.AddScoped<Score>();
 
             services.AddScoped<Response>();
+
+            services.AddScoped<TeamResultInGame>();
+
             return services;
         }
     }
