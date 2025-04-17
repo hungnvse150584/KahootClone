@@ -38,6 +38,8 @@ namespace Services
 
             services.AddScoped<IScoreService, ScoreService>();
 
+            services.AddScoped<IQuestionInGameService, QuestionInGameService>();
+
             return services;
         }
     }

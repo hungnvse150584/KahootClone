@@ -114,8 +114,7 @@
               "RelativeToolTip": "Services\\Service\\TeamService.cs",
               "ViewState": "AgIAACcAAAAAAAAAAAAwwMIAAAABAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-04-17T16:08:57.345Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-04-17T16:08:57.345Z"
             },
             {
               "$type": "Document",
@@ -127,8 +126,7 @@
               "RelativeToolTip": "Services\\IService\\ITeamResultInGameService.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAIAAABEAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-04-17T16:08:00.35Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-04-17T16:08:00.35Z"
             },
             {
               "$type": "Document",
@@ -140,8 +138,7 @@
               "RelativeToolTip": "Services\\RequestAndResponse\\Response\\TeamResponse\\TeamResponse.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-04-17T16:05:59.44Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-04-17T16:05:59.44Z"
             },
             {
               "$type": "Document",
@@ -153,8 +150,7 @@
               "RelativeToolTip": "Services\\RequestAndResponse\\Response\\TeamResultInGameResponse\\TeamResultInGameResponse.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAcAAABHAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-04-17T16:02:55.225Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-04-17T16:02:55.225Z"
             },
             {
               "$type": "Document",
@@ -164,7 +160,7 @@
               "RelativeDocumentMoniker": "Services\\Service\\TeamResultInGameService.cs",
               "ToolTip": "D:\\SWP-BE\\KahootClone\\KahootSample\\Services\\Service\\TeamResultInGameService.cs",
               "RelativeToolTip": "Services\\Service\\TeamResultInGameService.cs",
-              "ViewState": "AgIAABkAAAAAAAAAAAAQwAYAAABEAAAAAAAAAA==",
+              "ViewState": "AgIAABkAAAAAAAAAAAAzwAYAAABEAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-04-17T15:56:28.351Z",
               "EditorCaption": ""
@@ -179,8 +175,7 @@
               "RelativeToolTip": "Services\\IService\\IPlayerService.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-04-17T15:55:48.525Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-04-17T15:55:48.525Z"
             },
             {
               "$type": "Document",
@@ -192,8 +187,7 @@
               "RelativeToolTip": "Repositories\\ConfigureService.cs",
               "ViewState": "AgIAAB8AAAAAAAAAAAAQwC8AAAA2AAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-04-17T15:48:12.486Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-04-17T15:48:12.486Z"
             },
             {
               "$type": "Document",
@@ -205,8 +199,7 @@
               "RelativeToolTip": "Repositories\\Repository\\TeamResultInGameRepository.cs",
               "ViewState": "AgIAABIAAAAAAAAAAAA1wCcAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-04-17T15:46:22.487Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-04-17T15:46:22.487Z"
             },
             {
               "$type": "Document",
@@ -218,8 +211,7 @@
               "RelativeToolTip": "Repositories\\IRepository\\ITeamRepository.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAwAAABBAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-04-17T15:39:57.553Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-04-17T15:39:57.553Z"
             },
             {
               "$type": "Document",
@@ -231,8 +223,7 @@
               "RelativeToolTip": "Repositories\\IRepository\\ITeamResultInGameRepository.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAkAAAA0AAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-04-17T15:39:33.732Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-04-17T15:39:33.732Z"
             },
             {
               "$type": "Document",
@@ -244,8 +235,7 @@
               "RelativeToolTip": "DAO\\ConfigureService.cs",
               "ViewState": "AgIAAA8AAAAAAAAAAAAAACYAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-04-17T15:36:45.902Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-04-17T15:36:45.902Z"
             },
             {
               "$type": "Document",
@@ -257,8 +247,7 @@
               "RelativeToolTip": "DAO\\PlayerDAO.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-04-17T15:34:35.779Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-04-17T15:34:35.779Z"
             },
             {
               "$type": "Document",
@@ -270,8 +259,7 @@
               "RelativeToolTip": "DAO\\TeamDAO.cs",
               "ViewState": "AgIAABgAAAAAAAAAAAAYwAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-04-17T15:31:56.093Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-04-17T15:31:56.093Z"
             },
             {
               "$type": "Document",
@@ -283,8 +271,7 @@
               "RelativeToolTip": "DAO\\TeamResultInGameDAO.cs",
               "ViewState": "AgIAAC8AAAAAAAAAAADwvz4AAAAtAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-04-17T13:31:11.99Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-04-17T13:31:11.99Z"
             },
             {
               "$type": "Document",
@@ -296,8 +283,7 @@
               "RelativeToolTip": "DAO\\QuestionDAO.cs",
               "ViewState": "AgIAAAsAAAAAAAAAAAAAwB0AAAANAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-04-17T15:30:17.277Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-04-17T15:30:17.277Z"
             },
             {
               "$type": "Document",
@@ -309,8 +295,7 @@
               "RelativeToolTip": "DAO\\KahootDbContext.cs",
               "ViewState": "AgIAAA4AAAAAAAAAAAAgwBUAAABAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-04-17T14:15:13.151Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-04-17T14:15:13.151Z"
             },
             {
               "$type": "Document",
@@ -322,8 +307,7 @@
               "RelativeToolTip": "BOs\\Model\\TeamResultInGame.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAUAAAAhAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-04-17T14:02:27.778Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-04-17T14:02:27.778Z"
             },
             {
               "$type": "Document",
@@ -335,8 +319,7 @@
               "RelativeToolTip": "BOs\\Model\\Team.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-04-17T13:27:13.024Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-04-17T13:27:13.024Z"
             }
           ]
         },

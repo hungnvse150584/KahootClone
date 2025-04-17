@@ -37,7 +37,7 @@ namespace Repositories
 
             services.AddScoped<IScoreRepository, ScoreRepository>();
 
-
+            services.AddScoped<IQuestionInGameRepository, QuestionInGameRepository>();
             //============================================================//
             services.AddScoped<TeamDAO>();
 
@@ -56,6 +56,8 @@ namespace Repositories
 
 
             services.AddScoped<PlayerDAO>();
+
+            services.AddScoped<QuestionInGameDAO>();
             return services;
         }
     }
