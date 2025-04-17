@@ -329,8 +329,7 @@
               "RelativeToolTip": "Repositories\\ConfigureService.cs",
               "ViewState": "AgIAABQAAAAAAAAAAAAmwCgAAABWAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-04-15T12:41:02.524Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-04-15T12:41:02.524Z"
             },
             {
               "$type": "Document",
@@ -342,8 +341,7 @@
               "RelativeToolTip": "Services\\ConfigureService.cs",
               "ViewState": "AgIAABYAAAAAAAAAAAAuwCgAAABQAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-04-15T12:41:47.715Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-04-15T12:41:47.715Z"
             },
             {
               "$type": "Document",
@@ -355,8 +353,7 @@
               "RelativeToolTip": "Kahoot\\Program.cs",
               "ViewState": "AgIAAD4AAAAAAAAAAIAwwEkAAABHAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-04-15T12:27:54.19Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-04-15T12:27:54.19Z"
             },
             {
               "$type": "Document",
@@ -368,8 +365,7 @@
               "RelativeToolTip": "BOs\\Model\\User.cs",
               "ViewState": "AgIAABoAAAAAAAAAAAAlwCAAAAAQAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-04-16T00:34:44.144Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-04-16T00:34:44.144Z"
             },
             {
               "$type": "Document",
@@ -381,8 +377,7 @@
               "RelativeToolTip": "BOs\\Model\\GameSession.cs",
               "ViewState": "AgIAABAAAAAAAAAAAAAcwBUAAAA3AAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-04-16T01:53:17.518Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-04-16T01:53:17.518Z"
             },
             {
               "$type": "Document",
@@ -394,8 +389,7 @@
               "RelativeToolTip": "Repositories\\IRepository\\IQuestionInGameRepository.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAuwA8AAABBAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-04-17T13:19:32.626Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-04-17T13:19:32.626Z"
             },
             {
               "$type": "Document",
@@ -420,8 +414,7 @@
               "RelativeToolTip": "Repositories\\Repository\\QuestionRepository.cs",
               "ViewState": "AgIAAAYAAAAAAAAAAAAAACcAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-04-15T15:59:01.743Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-04-15T15:59:01.743Z"
             },
             {
               "$type": "Document",
@@ -433,8 +426,7 @@
               "RelativeToolTip": "DAO\\QuestionInGameDAO.cs",
               "ViewState": "AgIAAA8AAAAAAAAAAAAAACEAAAAJAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-04-17T13:16:39.438Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-04-17T13:16:39.438Z"
             },
             {
               "$type": "Document",
@@ -446,8 +438,7 @@
               "RelativeToolTip": "Repositories\\Repository\\QuestionInGameRepository.cs",
               "ViewState": "AgIAAAgAAAAAAAAAAIAwwBsAAABLAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-04-17T13:21:16.559Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-04-17T13:21:16.559Z"
             },
             {
               "$type": "Document",
@@ -459,8 +450,7 @@
               "RelativeToolTip": "Services\\Service\\QuestionInGameService.cs",
               "ViewState": "AgIAAAcAAAAAAAAAAAAkwEUAAAAFAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-04-17T13:30:24.648Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-04-17T13:30:24.648Z"
             },
             {
               "$type": "Document",
@@ -472,8 +462,7 @@
               "RelativeToolTip": "Services\\IService\\IQuestionInGameService.cs",
               "ViewState": "AgIAAAMAAAAAAAAAAAAAABIAAAAFAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-04-17T13:30:01.842Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-04-17T13:30:01.842Z"
             },
             {
               "$type": "Document",
@@ -485,8 +474,7 @@
               "RelativeToolTip": "Services\\IService\\IQuestionService.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAuwA4AAAAqAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-04-15T16:11:25.016Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-04-15T16:11:25.016Z"
             },
             {
               "$type": "Document",
@@ -498,8 +486,7 @@
               "RelativeToolTip": "Services\\RequestAndResponse\\Response\\QuestionResponses\\QuestionResponse.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAABAAAAAFAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-04-17T08:11:22.22Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-04-17T08:11:22.22Z"
             },
             {
               "$type": "Document",
@@ -511,8 +498,7 @@
               "RelativeToolTip": "Services\\Service\\QuestionService.cs",
               "ViewState": "AgIAAHYAAAAAAAAAAAAewCoAAAANAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-04-14T13:16:35.028Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-04-14T13:16:35.028Z"
             },
             {
               "$type": "Document",
@@ -524,8 +510,7 @@
               "RelativeToolTip": "Services\\RequestAndResponse\\Request\\QuestionRequest\\UpdateQuestionRequest.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAsAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-04-17T07:30:29.175Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-04-17T07:30:29.175Z"
             },
             {
               "$type": "Document",
@@ -537,8 +522,7 @@
               "RelativeToolTip": "BOs\\Model\\Quiz.cs",
               "ViewState": "AgIAAAkAAAAAAAAAAAAAAB4AAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-04-16T01:53:19.348Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-04-16T01:53:19.348Z"
             },
             {
               "$type": "Document",
@@ -550,8 +534,7 @@
               "RelativeToolTip": "BOs\\Model\\QuestionInGame.cs",
               "ViewState": "AgIAAAYAAAAAAAAAAAAuwBsAAAAFAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-04-17T06:33:58.363Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-04-17T06:33:58.363Z"
             },
             {
               "$type": "Document",
@@ -563,8 +546,7 @@
               "RelativeToolTip": "Repositories\\Repository\\GameSessionRepository.cs",
               "ViewState": "AgIAAAMAAAAAAAAAAAAAABsAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-04-15T15:58:57.79Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-04-15T15:58:57.79Z"
             },
             {
               "$type": "Document",
@@ -576,8 +558,7 @@
               "RelativeToolTip": "Services\\Service\\GameSessionService.cs",
               "ViewState": "AgIAAAwAAAAAAAAAAAAAAA8AAAA5AAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-04-15T15:59:56.713Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-04-15T15:59:56.713Z"
             },
             {
               "$type": "Document",
@@ -589,8 +570,7 @@
               "RelativeToolTip": "Services\\IService\\IGameSessionService.cs",
               "ViewState": "AgIAAAMAAAAAAAAAAAAuwAkAAAAVAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-04-15T16:11:27.455Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-04-15T16:11:27.455Z"
             },
             {
               "$type": "Document",
@@ -602,8 +582,7 @@
               "RelativeToolTip": "BOs\\Model\\TeamResultInGame.cs",
               "ViewState": "AgIAAAUAAAAAAAAAAAAxwB0AAAABAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-04-17T06:42:03.417Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-04-17T06:42:03.417Z"
             },
             {
               "$type": "Document",
@@ -615,8 +594,7 @@
               "RelativeToolTip": "DAO\\ConfigureService.cs",
               "ViewState": "AgIAAA0AAAAAAAAAAAAAAB0AAAAnAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-04-15T15:57:45.844Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-04-15T15:57:45.844Z"
             },
             {
               "$type": "Document",
