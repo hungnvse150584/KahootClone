@@ -22,9 +22,10 @@ namespace DAO
             var player = await _context.Players
                 .Include(p => p.User)
                 .Include(p => p.Session)
+                .Include(p => p.Team)
                 .Include(p => p.Responses)
                 .Include(p => p.Scores)
-                .Include(p => p.TeamMembers)
+                .Include(p => p.TeamResults)
                 .FirstOrDefaultAsync(p => p.PlayerId == playerId);
 
             if (player == null)
@@ -38,9 +39,10 @@ namespace DAO
             return await _context.Players
                 .Where(p => p.SessionId == sessionId)
                 .Include(p => p.User)
+                .Include(p => p.Team)
                 .Include(p => p.Responses)
                 .Include(p => p.Scores)
-                .Include(p => p.TeamMembers)
+                .Include(p => p.TeamResults)
                 .ToListAsync();
         }
 
@@ -56,11 +58,13 @@ namespace DAO
 
         public async Task<List<Player>> GetPlayersByTeamIdAsync(int teamId)
         {
-            return await _context.TeamMembers
-                .Where(tm => tm.TeamId == teamId)
-                .Include(tm => tm.Player)
-                .ThenInclude(p => p.User)
-                .Select(tm => tm.Player)
+            return await _context.Players
+                .Where(p => p.TeamId == teamId)
+                .Include(p => p.User)
+                .Include(p => p.Team)
+                .Include(p => p.Responses)
+                .Include(p => p.Scores)
+                .Include(p => p.TeamResults)
                 .ToListAsync();
         }
 

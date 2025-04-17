@@ -20,8 +20,8 @@ namespace DAO
         public async Task<Question> GetByIdAsync(int id)
         {
             var question = await _context.Questions
-                .Include(q => q.Answers)
-                .Include(q => q.Responses)
+                .Include(q => q.Quiz)
+                .Include(q => q.QuestionsInGame)
                 .FirstOrDefaultAsync(q => q.QuestionId == id);
 
             if (question == null)
@@ -36,9 +36,9 @@ namespace DAO
         {
             return await _context.Questions
                 .Where(q => q.QuizId == quizId)
-                .Include(q => q.Answers)
-                .Include(q => q.Responses)
-                .OrderBy(q => q.Order)
+                .Include(q => q.Quiz)
+                .Include(q => q.QuestionsInGame)
+                .OrderBy(q => q.OrderIndex)
                 .ToListAsync();
         }
 

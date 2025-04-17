@@ -4,7 +4,7 @@ using Services.RequestAndResponse.BaseResponse;
 using Services.RequestAndResponse.Enum;
 using Services.RequestAndResponse.Request.TeamRequest;
 using Services.RequestAndResponse.Response;
-using Services.RequestAndResponse.Response.TeamMemberResponses;
+using Services.RequestAndResponse.Response.PlayerResponse; // Thay TeamMemberResponses bằng PlayerResponse
 using Services.RequestAndResponse.Response.TeamResponse;
 using System.Threading.Tasks;
 
@@ -128,41 +128,41 @@ namespace Kahoot.Controllers
         }
 
         [HttpPost]
-        [Route("AddTeamMember/{teamId}")]
+        [Route("AddPlayerToTeam/{teamId}")]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<ActionResult<BaseResponse<TeamMemberResponse>>> AddTeamMember(int teamId, [FromQuery] int playerId)
+        public async Task<ActionResult<BaseResponse<PlayerResponse>>> AddPlayerToTeam(int teamId, [FromQuery] int playerId)
         {
             if (teamId <= 0)
             {
-                return BadRequest(new BaseResponse<TeamMemberResponse>("Please provide a valid Team ID.", StatusCodeEnum.BadRequest_400, null));
+                return BadRequest(new BaseResponse<PlayerResponse>("Please provide a valid Team ID.", StatusCodeEnum.BadRequest_400, null));
             }
 
             if (playerId <= 0)
             {
-                return BadRequest(new BaseResponse<TeamMemberResponse>("Please provide a valid Player ID.", StatusCodeEnum.BadRequest_400, null));
+                return BadRequest(new BaseResponse<PlayerResponse>("Please provide a valid Player ID.", StatusCodeEnum.BadRequest_400, null));
             }
 
-            var result = await _teamService.AddTeamMemberAsync(teamId, playerId);
+            var result = await _teamService.AddPlayerToTeamAsync(teamId, playerId);
             return StatusCode((int)result.StatusCode, result);
         }
 
         [HttpGet]
-        [Route("GetTeamMembersByTeamId/{teamId}")]
+        [Route("GetPlayersByTeamId/{teamId}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<ActionResult<BaseResponse<IEnumerable<TeamMemberResponse>>>> GetTeamMembersByTeamId(int teamId)
+        public async Task<ActionResult<BaseResponse<IEnumerable<PlayerResponse>>>> GetPlayersByTeamId(int teamId)
         {
             if (teamId <= 0)
             {
-                return BadRequest(new BaseResponse<IEnumerable<TeamMemberResponse>>("Please provide a valid Team ID.", StatusCodeEnum.BadRequest_400, null));
+                return BadRequest(new BaseResponse<IEnumerable<PlayerResponse>>("Please provide a valid Team ID.", StatusCodeEnum.BadRequest_400, null));
             }
 
-            var result = await _teamService.GetTeamMembersByTeamIdAsync(teamId);
+            var result = await _teamService.GetPlayersByTeamIdAsync(teamId);
             return StatusCode((int)result.StatusCode, result);
         }
     }

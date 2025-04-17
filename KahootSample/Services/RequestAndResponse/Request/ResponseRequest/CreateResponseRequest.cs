@@ -12,17 +12,18 @@ namespace Services.RequestAndResponse.Request.ResponseRequest
         [Required(ErrorMessage = "PlayerId is required")]
         public int PlayerId { get; set; }
 
-        [Required(ErrorMessage = "QuestionId is required")]
-        public int QuestionId { get; set; }
+        [Required(ErrorMessage = "QuestionInGameId is required")]
+        public int QuestionInGameId { get; set; } // Sửa từ QuestionId
 
-        [Required(ErrorMessage = "AnswerId is required")]
-        public int AnswerId { get; set; }
+        [Required(ErrorMessage = "SelectedOption is required")]
+        [Range(1, 4, ErrorMessage = "SelectedOption must be between 1 and 4")]
+        public int SelectedOption { get; set; } // Sửa từ AnswerId
 
         [Range(0, int.MaxValue, ErrorMessage = "ResponseTime must be a non-negative number")]
         public int ResponseTime { get; set; }
 
-        [Range(0, int.MaxValue, ErrorMessage = "Points must be a non-negative number")]
-        public int Points { get; set; }
+        [Range(0, int.MaxValue, ErrorMessage = "Score must be a non-negative number")]
+        public int Score { get; set; } // Sửa từ Points
 
         [Range(0, int.MaxValue, ErrorMessage = "Streak must be a non-negative number")]
         public int Streak { get; set; }

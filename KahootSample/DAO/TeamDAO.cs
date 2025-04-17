@@ -4,7 +4,6 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace DAO
@@ -18,11 +17,10 @@ namespace DAO
             _context = context;
         }
 
-        public  async Task<Team> GetByIdAsync(int id)
+        public async Task<Team> GetByIdAsync(int id)
         {
             var team = await _context.Teams
-                .Include(t => t.TeamMembers)
-                .ThenInclude(tm => tm.Player)
+                .Include(t => t.Players)
                 .FirstOrDefaultAsync(t => t.TeamId == id);
 
             if (team == null)
@@ -38,29 +36,21 @@ namespace DAO
         {
             return await _context.Teams
                 .Where(t => t.SessionId == sessionId)
-                .Include(t => t.TeamMembers)
-                .ThenInclude(tm => tm.Player)
+                .Include(t => t.Players)
                 .ToListAsync();
         }
 
-        // TeamMember-specific operations
-        public async Task<TeamMember> AddTeamMemberAsync(TeamMember teamMember)
+        // Get all players in a team
+        public async Task<List<Player>> GetPlayersByTeamIdAsync(int teamId)
         {
-            if (teamMember == null)
-            {
-                throw new ArgumentNullException(nameof(teamMember));
-            }
-
-            await _context.TeamMembers.AddAsync(teamMember);
-            await _context.SaveChangesAsync();
-            return teamMember;
-        }
-
-        public async Task<List<TeamMember>> GetTeamMembersByTeamIdAsync(int teamId)
-        {
-            return await _context.TeamMembers
-                .Where(tm => tm.TeamId == teamId)
-                .Include(tm => tm.Player)
+            return await _context.Players
+                .Where(p => p.TeamId == teamId)
+                .Include(p => p.User)
+                .Include(p => p.Session)
+                .Include(p => p.Team)
+                .Include(p => p.Responses)
+                .Include(p => p.Scores)
+                .Include(p => p.TeamResults)
                 .ToListAsync();
         }
     }

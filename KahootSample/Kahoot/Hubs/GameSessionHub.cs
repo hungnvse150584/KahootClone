@@ -4,6 +4,7 @@ using Services.RequestAndResponse.Enum;
 using Services.RequestAndResponse.Request.ResponseRequest;
 using Services.RequestAndResponse.Request.ScoreRequest;
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 
 namespace Kahoot.Hubs
 {
@@ -11,20 +12,17 @@ namespace Kahoot.Hubs
     {
         private readonly IGameSessionService _gameSessionService;
         private readonly IQuestionService _questionService;
-        private readonly IAnswerService _answerService;
         private readonly IResponseService _responseService;
         private readonly IScoreService _scoreService;
 
         public GameSessionHub(
             IGameSessionService gameSessionService,
             IQuestionService questionService,
-            IAnswerService answerService,
             IResponseService responseService,
             IScoreService scoreService)
         {
             _gameSessionService = gameSessionService;
             _questionService = questionService;
-            _answerService = answerService;
             _responseService = responseService;
             _scoreService = scoreService;
         }
@@ -49,55 +47,47 @@ namespace Kahoot.Hubs
                 return;
             }
 
-            var answers = await _answerService.GetAnswersByQuestionIdAsync(questionId);
-            if (answers.StatusCode != StatusCodeEnum.OK_200 || answers.Data == null)
-            {
-                await Clients.Group(sessionId.ToString()).SendAsync("Error", "Answers not found");
-                return;
-            }
-
-            // Gửi câu hỏi và danh sách câu trả lời đến tất cả người chơi
-            await Clients.Group(sessionId.ToString()).SendAsync("ReceiveQuestion", question.Data, answers.Data);
+            // Gửi câu hỏi đến tất cả người chơi (không cần Answers vì đã xóa bảng Answer)
+            await Clients.Group(sessionId.ToString()).SendAsync("ReceiveQuestion", question.Data);
         }
 
         // Người chơi gửi câu trả lời
-        public async Task SubmitAnswer(int sessionId, int playerId, int questionId, int answerId, int responseTime)
+        public async Task SubmitAnswer(int sessionId, int playerId, int questionInGameId, int selectedOption, int responseTime)
         {
-            // Lưu câu trả lời của người chơi
-            var answer = (await _answerService.GetAnswerByIdAsync(answerId)).Data;
-            if (answer == null)
+            // Lấy câu hỏi để tính điểm
+            var question = (await _questionService.GetQuestionByIdAsync(questionInGameId)).Data;
+            if (question == null)
             {
-                await Clients.Caller.SendAsync("Error", "Invalid answer");
+                await Clients.Caller.SendAsync("Error", "Invalid question");
                 return;
             }
 
             // Tính điểm dựa trên độ chính xác và thời gian
-            var question = (await _questionService.GetQuestionByIdAsync(questionId)).Data;
-            int points = 0;
-            if (answer.IsCorrect)
+            int score = 0;
+            if (selectedOption == question.CorrectOption)
             {
                 // Công thức tính điểm: Điểm tối đa (1000) - (Thời gian trả lời / Thời gian tối đa) * 1000
-                points = Math.Max(0, 1000 - (responseTime * 1000 / question.TimeLimit));
+                score = Math.Max(0, 1000 - (responseTime * 1000 / question.TimeLimit));
             }
 
             var responseRequest = new CreateResponseRequest
             {
                 PlayerId = playerId,
-                QuestionId = questionId,
-                AnswerId = answerId,
+                QuestionInGameId = questionInGameId, // Sửa từ QuestionId thành QuestionInGameId
+                SelectedOption = selectedOption, // Sửa từ AnswerId thành SelectedOption
                 ResponseTime = responseTime,
-                Points = points,
+                Score = score, // Sửa từ Points thành Score
                 Streak = 0 // Có thể thêm logic tính streak nếu cần
             };
 
             await _responseService.CreateResponseAsync(responseRequest);
 
             // Cập nhật điểm số của người chơi
-            var score = (await _scoreService.GetScoresByPlayerIdAsync(playerId)).Data?.FirstOrDefault(s => s.SessionId == sessionId);
-            if (score != null)
+            var existingScore = (await _scoreService.GetScoresByPlayerIdAsync(playerId)).Data?.FirstOrDefault(s => s.SessionId == sessionId);
+            if (existingScore != null)
             {
-                score.TotalPoints += points;
-                await _scoreService.UpdateScoreAsync(new UpdateScoreRequest { ScoreId = score.ScoreId, TotalPoints = score.TotalPoints });
+                existingScore.TotalPoints += score;
+                await _scoreService.UpdateScoreAsync(new UpdateScoreRequest { ScoreId = existingScore.ScoreId, TotalPoints = existingScore.TotalPoints });
             }
             else
             {
@@ -105,7 +95,7 @@ namespace Kahoot.Hubs
                 {
                     SessionId = sessionId,
                     PlayerId = playerId,
-                    TotalPoints = points
+                    TotalPoints = score
                 });
             }
 

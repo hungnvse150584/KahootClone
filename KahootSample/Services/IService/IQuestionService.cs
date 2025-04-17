@@ -1,6 +1,7 @@
 ﻿using Services.RequestAndResponse.BaseResponse;
 using Services.RequestAndResponse.Request.QuestionRequest;
 using Services.RequestAndResponse.Response.QuestionResponses;
+using Services.RequestAndResponse.Response.ResponseResponses;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -14,5 +15,6 @@ namespace Services.IService
         Task<BaseResponse<QuestionResponse>> GetQuestionByIdAsync(int questionId);
         Task<BaseResponse<IEnumerable<QuestionResponse>>> GetQuestionsByQuizIdAsync(int quizId);
         Task<BaseResponse<string>> DeleteQuestionAsync(int questionId);
+        Task<BaseResponse<IEnumerable<ResponseResponse>>> GetResponsesByQuestionInGameIdAsync(int questionInGameId);
     }
 }

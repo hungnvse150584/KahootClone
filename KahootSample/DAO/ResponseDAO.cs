@@ -4,7 +4,6 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace DAO
@@ -18,13 +17,12 @@ namespace DAO
             _context = context;
         }
 
-        // Get Response by ID with related Player, Question, and Answer
+        // Get Response by ID with related Player and QuestionInGame
         public async Task<Response> GetByIdAsync(int id)
         {
             var response = await _context.Responses
                 .Include(r => r.Player)
-                .Include(r => r.Question)
-                .Include(r => r.Answer)
+                .Include(r => r.QuestionInGame)
                 .FirstOrDefaultAsync(r => r.ResponseId == id);
 
             if (response == null)
@@ -41,19 +39,17 @@ namespace DAO
             return await _context.Responses
                 .Where(r => r.PlayerId == playerId)
                 .Include(r => r.Player)
-                .Include(r => r.Question)
-                .Include(r => r.Answer)
+                .Include(r => r.QuestionInGame)
                 .ToListAsync();
         }
 
-        // Get Responses by QuestionId
-        public async Task<List<Response>> GetResponsesByQuestionIdAsync(int questionId)
+        // Get Responses by QuestionInGameId
+        public async Task<List<Response>> GetResponsesByQuestionInGameIdAsync(int questionInGameId)
         {
             return await _context.Responses
-                .Where(r => r.QuestionId == questionId)
+                .Where(r => r.QuestionInGameId == questionInGameId)
                 .Include(r => r.Player)
-                .Include(r => r.Question)
-                .Include(r => r.Answer)
+                .Include(r => r.QuestionInGame)
                 .ToListAsync();
         }
     }

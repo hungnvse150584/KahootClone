@@ -1,11 +1,13 @@
 ﻿using AutoMapper;
 using BOs.Model;
 using Repositories.IRepository;
+using Repositories.Repository;
 using Services.IService;
 using Services.RequestAndResponse.BaseResponse;
 using Services.RequestAndResponse.Enum;
 using Services.RequestAndResponse.Request.QuestionRequest;
 using Services.RequestAndResponse.Response.QuestionResponses;
+using Services.RequestAndResponse.Response.ResponseResponses;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,13 +18,16 @@ namespace Services.Service
     public class QuestionService : IQuestionService
     {
         private readonly IQuestionRepository _questionRepository;
+        private readonly IResponseRepository _responseRepository;
         private readonly IMapper _mapper;
 
-        public QuestionService(IQuestionRepository questionRepository, IMapper mapper)
+        public QuestionService(IQuestionRepository questionRepository, IResponseRepository responseRepository, IMapper mapper)
         {
             _questionRepository = questionRepository;
+            _responseRepository = responseRepository;
             _mapper = mapper;
         }
+
 
         public async Task<BaseResponse<QuestionResponse>> CreateQuestionAsync(CreateQuestionRequest request)
         {
@@ -53,7 +58,7 @@ namespace Services.Service
                 // Cập nhật thông tin
                 existing.Text = request.Text;
                 existing.TimeLimit = request.TimeLimit;
-                existing.Order = request.Order;
+                existing.OrderIndex = request.OrderIndex; // Sửa từ Order thành OrderIndex
                 existing.QuizId = request.QuizId;
 
                 var updated = await _questionRepository.UpdateQuestionAsync(existing);
@@ -133,6 +138,25 @@ namespace Services.Service
             catch (Exception ex)
             {
                 return new BaseResponse<string>($"An error occurred: {ex.Message}", StatusCodeEnum.InternalServerError_500, null);
+            }
+        }
+
+        public async Task<BaseResponse<IEnumerable<ResponseResponse>>> GetResponsesByQuestionInGameIdAsync(int questionInGameId)
+        {
+            try
+            {
+                var responses = await _responseRepository.GetResponsesByQuestionInGameIdAsync(questionInGameId);
+                if (responses == null || !responses.Any())
+                {
+                    return new BaseResponse<IEnumerable<ResponseResponse>>("No Responses found for this question in game", StatusCodeEnum.NotFound_404, null);
+                }
+
+                var responseDtos = _mapper.Map<IEnumerable<ResponseResponse>>(responses);
+                return new BaseResponse<IEnumerable<ResponseResponse>>("Successfully retrieved Responses", StatusCodeEnum.OK_200, responseDtos);
+            }
+            catch (Exception ex)
+            {
+                return new BaseResponse<IEnumerable<ResponseResponse>>($"An error occurred: {ex.Message}", StatusCodeEnum.InternalServerError_500, null);
             }
         }
     }

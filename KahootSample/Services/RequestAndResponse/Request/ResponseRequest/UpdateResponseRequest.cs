@@ -13,16 +13,16 @@ namespace Services.RequestAndResponse.Request.ResponseRequest
         public int PlayerId { get; set; }
 
         [Required(ErrorMessage = "QuestionId is required")]
-        public int QuestionId { get; set; }
+        public int QuestionInGameId { get; set; }
 
-        [Required(ErrorMessage = "AnswerId is required")]
-        public int AnswerId { get; set; }
+        [Required(ErrorMessage = "SelectedOption is required")]
+        public int SelectedOption { get; set; }
 
         [Range(0, int.MaxValue, ErrorMessage = "ResponseTime must be a non-negative number")]
         public int ResponseTime { get; set; }
 
         [Range(0, int.MaxValue, ErrorMessage = "Points must be a non-negative number")]
-        public int Points { get; set; }
+        public int Score { get; set; }
 
         [Range(0, int.MaxValue, ErrorMessage = "Streak must be a non-negative number")]
         public int Streak { get; set; }

@@ -1,10 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace BOs.Model
 {
@@ -12,18 +9,14 @@ namespace BOs.Model
     {
         [Key]
         public int TeamId { get; set; }
-
         public int SessionId { get; set; }
-
-        [Required, MaxLength(50)]
         public string Name { get; set; }
-
         public double TotalScore { get; set; }
 
         // Quan hệ
         [ForeignKey("SessionId")]
         public GameSession Session { get; set; }
-
-        public ICollection<TeamMember> TeamMembers { get; set; } = new List<TeamMember>();
+        public ICollection<Player> Players { get; set; } = new List<Player>();
+        public ICollection<TeamResultInGame> TeamResults { get; set; } = new List<TeamResultInGame>();
     }
 }

@@ -24,7 +24,7 @@ namespace BOs.Model
 
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
         [Required]
-        public UserRoles Role { get; set; } 
+        public UserRoles? Role { get; set; } 
 
         // Quan hệ
         public ICollection<Quiz> Quizzes { get; set; } = new List<Quiz>();

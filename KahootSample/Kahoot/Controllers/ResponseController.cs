@@ -3,6 +3,7 @@ using Services.IService;
 using Services.RequestAndResponse.BaseResponse;
 using Services.RequestAndResponse.Enum;
 using Services.RequestAndResponse.Request.ResponseRequest;
+using Services.RequestAndResponse.Response;
 using Services.RequestAndResponse.Response.ResponseResponses;
 
 namespace Kahoot.Controllers
@@ -119,7 +120,7 @@ namespace Kahoot.Controllers
         {
             try
             {
-                var result = await _responseService.DeleteResponseAsync(responseId);
+                var result = await _responseService.DeleteResponseAsync(responseId); // Sửa từ Dele thành DeleteResponseAsync
                 return StatusCode((int)result.StatusCode, result);
             }
             catch (Exception ex)
@@ -153,7 +154,7 @@ namespace Kahoot.Controllers
         {
             try
             {
-                var result = await _responseService.GetResponsesByQuestionIdAsync(questionId);
+                var result = await _responseService.GetResponsesByQuestionInGameIdAsync(questionId);
                 return StatusCode((int)result.StatusCode, result);
             }
             catch (Exception ex)

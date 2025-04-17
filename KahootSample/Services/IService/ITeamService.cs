@@ -2,12 +2,10 @@
 using Services.RequestAndResponse.BaseResponse;
 using Services.RequestAndResponse.Request.TeamRequest;
 using Services.RequestAndResponse.Response;
-using Services.RequestAndResponse.Response.TeamMemberResponses;
 using Services.RequestAndResponse.Response.TeamResponse;
+using Services.RequestAndResponse.Response.PlayerResponse; // Thêm namespace cho PlayerResponse
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace Services.IService
@@ -19,7 +17,7 @@ namespace Services.IService
         Task<BaseResponse<TeamResponse>> GetTeamByIdAsync(int teamId);
         Task<BaseResponse<IEnumerable<TeamResponse>>> GetTeamsBySessionIdAsync(int sessionId);
         Task<BaseResponse<string>> DeleteTeamAsync(int teamId);
-        Task<BaseResponse<TeamMemberResponse>> AddTeamMemberAsync(int teamId, int playerId);
-        Task<BaseResponse<IEnumerable<TeamMemberResponse>>> GetTeamMembersByTeamIdAsync(int teamId);
+        Task<BaseResponse<PlayerResponse>> AddPlayerToTeamAsync(int teamId, int playerId);
+        Task<BaseResponse<IEnumerable<PlayerResponse>>> GetPlayersByTeamIdAsync(int teamId);
     }
 }

@@ -5,7 +5,6 @@ using Repositories.IRepository;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace Repositories.Repository
@@ -24,14 +23,9 @@ namespace Repositories.Repository
             return await _teamDao.GetTeamsBySessionIdAsync(sessionId);
         }
 
-        public async Task<TeamMember> AddTeamMemberAsync(TeamMember teamMember)
+        public async Task<List<Player>> GetPlayersByTeamIdAsync(int teamId)
         {
-            return await _teamDao.AddTeamMemberAsync(teamMember);
-        }
-
-        public async Task<List<TeamMember>> GetTeamMembersByTeamIdAsync(int teamId)
-        {
-            return await _teamDao.GetTeamMembersByTeamIdAsync(teamId);
+            return await _teamDao.GetPlayersByTeamIdAsync(teamId);
         }
     }
 }
