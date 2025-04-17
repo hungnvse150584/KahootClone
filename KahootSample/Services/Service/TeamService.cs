@@ -6,12 +6,10 @@ using Services.RequestAndResponse.BaseResponse;
 using Services.RequestAndResponse.Enum;
 using Services.RequestAndResponse.Request.TeamRequest;
 using Services.RequestAndResponse.Response;
-using Services.RequestAndResponse.Response.TeamMemberResponses;
+using Services.RequestAndResponse.Response.PlayerResponse; // Thêm namespace cho PlayerResponse
 using Services.RequestAndResponse.Response.TeamResponse;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace Services.Service
@@ -19,11 +17,13 @@ namespace Services.Service
     public class TeamService : ITeamService
     {
         private readonly ITeamRepository _teamRepository;
+        private readonly IPlayerRepository _playerRepository; // Thêm IPlayerRepository để cập nhật Player
         private readonly IMapper _mapper;
 
-        public TeamService(ITeamRepository teamRepository, IMapper mapper)
+        public TeamService(ITeamRepository teamRepository, IPlayerRepository playerRepository, IMapper mapper)
         {
             _teamRepository = teamRepository;
+            _playerRepository = playerRepository;
             _mapper = mapper;
         }
 
@@ -37,7 +37,7 @@ namespace Services.Service
                 // Thêm vào cơ sở dữ liệu
                 var createdTeam = await _teamRepository.AddAsync(team);
 
-                // Ánh xạ từ entity sang response (TotalScore sẽ được tính động)
+                // Ánh xạ từ entity sang response
                 var response = _mapper.Map<TeamResponse>(createdTeam);
 
                 return new BaseResponse<TeamResponse>("Team created successfully", StatusCodeEnum.Created_201, response);
@@ -66,7 +66,7 @@ namespace Services.Service
                 // Cập nhật vào cơ sở dữ liệu
                 var updatedTeam = await _teamRepository.UpdateAsync(team);
 
-                // Ánh xạ sang response (TotalScore sẽ được tính động)
+                // Ánh xạ sang response
                 var response = _mapper.Map<TeamResponse>(updatedTeam);
 
                 return new BaseResponse<TeamResponse>("Team updated successfully", StatusCodeEnum.OK_200, response);
@@ -134,7 +134,7 @@ namespace Services.Service
             }
         }
 
-        public async Task<BaseResponse<TeamMemberResponse>> AddTeamMemberAsync(int teamId, int playerId)
+        public async Task<BaseResponse<PlayerResponse>> AddPlayerToTeamAsync(int teamId, int playerId)
         {
             try
             {
@@ -142,43 +142,54 @@ namespace Services.Service
                 var team = await _teamRepository.GetByIdAsync(teamId);
                 if (team == null)
                 {
-                    return new BaseResponse<TeamMemberResponse>("Team not found", StatusCodeEnum.NotFound_404, null);
+                    return new BaseResponse<PlayerResponse>("Team not found", StatusCodeEnum.NotFound_404, null);
                 }
 
-                var teamMember = new TeamMember
+                // Kiểm tra người chơi có tồn tại
+                var player = await _playerRepository.GetByIdAsync(playerId);
+                if (player == null)
                 {
-                    TeamId = teamId,
-                    PlayerId = playerId,
-                    Score = 0
-                };
+                    return new BaseResponse<PlayerResponse>("Player not found", StatusCodeEnum.NotFound_404, null);
+                }
 
-                var createdTeamMember = await _teamRepository.AddTeamMemberAsync(teamMember);
-                var response = _mapper.Map<TeamMemberResponse>(createdTeamMember);
+                // Kiểm tra xem người chơi đã ở trong đội nào chưa
+                if (player.TeamId.HasValue && player.TeamId != teamId)
+                {
+                    return new BaseResponse<PlayerResponse>("Player is already in another team", StatusCodeEnum.BadRequest_400, null);
+                }
 
-                return new BaseResponse<TeamMemberResponse>("Team member added successfully", StatusCodeEnum.Created_201, response);
+                // Cập nhật TeamId cho người chơi
+                player.TeamId = teamId;
+                await _playerRepository.UpdateAsync(player);
+
+                // Ánh xạ sang PlayerResponse
+                var response = _mapper.Map<PlayerResponse>(player);
+
+                return new BaseResponse<PlayerResponse>("Player added to team successfully", StatusCodeEnum.OK_200, response);
             }
             catch (Exception ex)
             {
-                return new BaseResponse<TeamMemberResponse>($"An error occurred: {ex.Message}", StatusCodeEnum.InternalServerError_500, null);
+                return new BaseResponse<PlayerResponse>($"An error occurred: {ex.Message}", StatusCodeEnum.InternalServerError_500, null);
             }
         }
 
-        public async Task<BaseResponse<IEnumerable<TeamMemberResponse>>> GetTeamMembersByTeamIdAsync(int teamId)
+        public async Task<BaseResponse<IEnumerable<PlayerResponse>>> GetPlayersByTeamIdAsync(int teamId)
         {
             try
             {
-                var teamMembers = await _teamRepository.GetTeamMembersByTeamIdAsync(teamId);
-                if (teamMembers == null || !teamMembers.Any())
+                var players = await _teamRepository.GetPlayersByTeamIdAsync(teamId);
+                if (players == null || !players.Any())
                 {
-                    return new BaseResponse<IEnumerable<TeamMemberResponse>>("No team members found", StatusCodeEnum.NotFound_404, null);
+                    return new BaseResponse<IEnumerable<PlayerResponse>>("No players found in this team", StatusCodeEnum.NotFound_404, null);
                 }
 
-                var response = _mapper.Map<IEnumerable<TeamMemberResponse>>(teamMembers);
-                return new BaseResponse<IEnumerable<TeamMemberResponse>>("Successfully retrieved team members", StatusCodeEnum.OK_200, response);
+                var response = _mapper.Map<IEnumerable<PlayerResponse>>(players);
+                return new BaseResponse<IEnumerable<PlayerResponse>>("Successfully retrieved players", StatusCodeEnum.OK_200, response);
             }
             catch (Exception ex)
             {
-                return new BaseResponse<IEnumerable<TeamMemberResponse>>($"An error occurred: {ex.Message}", StatusCodeEnum.InternalServerError_500, null);
+                return new BaseResponse<IEnumerable<PlayerResponse>>($"An error occurred: {ex.Message}", StatusCodeEnum.InternalServerError_500, null);
             }
         }
-    }}
+    }
+}

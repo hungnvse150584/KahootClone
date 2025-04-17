@@ -21,7 +21,7 @@ namespace DAO
 
             services.AddScoped<GameSession>();
 
-            services.AddScoped<Answer>();
+            //services.AddScoped<Answer>();
 
             services.AddScoped<Team>();
 
@@ -32,8 +32,6 @@ namespace DAO
             services.AddScoped<Question>();
 
             services.AddScoped<Score>();
-
-            services.AddScoped<TeamMember>();
 
             services.AddScoped<Response>();
             return services;

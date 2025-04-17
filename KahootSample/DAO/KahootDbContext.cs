@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using BOs.Model;
 using Microsoft.Extensions.Configuration;
+using System.IO;
 
 namespace DAO
 {
@@ -8,16 +9,17 @@ namespace DAO
     {
         public KahootDbContext() : base() { }
         public KahootDbContext(DbContextOptions<KahootDbContext> options) : base(options) { }
+
         public DbSet<User> Users { get; set; }
         public DbSet<Quiz> Quizzes { get; set; }
         public DbSet<Question> Questions { get; set; }
-        public DbSet<Answer> Answers { get; set; }
         public DbSet<GameSession> GameSessions { get; set; }
-        public DbSet<Team> Teams { get; set; }
-        public DbSet<TeamMember> TeamMembers { get; set; }
+        public DbSet<QuestionInGame> QuestionsInGame { get; set; }
         public DbSet<Player> Players { get; set; }
+        public DbSet<Team> Teams { get; set; }
         public DbSet<Response> Responses { get; set; }
         public DbSet<Score> Scores { get; set; }
+        public DbSet<TeamResultInGame> TeamResults { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -26,15 +28,24 @@ namespace DAO
                 .HasIndex(u => u.Username)
                 .IsUnique();
 
-            // Cấu hình Role với giá trị mặc định
             modelBuilder.Entity<User>()
                 .Property(u => u.Role)
-                .HasDefaultValue(UserRoles.Player); // Giá trị mặc định là Player (2)
+                .HasDefaultValue(UserRoles.Player);
 
             // GameSession
             modelBuilder.Entity<GameSession>()
-                .HasIndex(q => q.Pin)
+                .HasIndex(gs => gs.Pin)
                 .IsUnique();
+
+            modelBuilder.Entity<GameSession>()
+                .Property(gs => gs.LoadingInGame)
+                .HasDefaultValue(false);
+
+            modelBuilder.Entity<GameSession>()
+                .HasOne(gs => gs.Quiz)
+                .WithMany(q => q.GameSessions)
+                .HasForeignKey(gs => gs.QuizId)
+                .OnDelete(DeleteBehavior.Restrict);
 
             modelBuilder.Entity<Quiz>()
                 .HasOne(q => q.CreatedByUser)
@@ -49,39 +60,18 @@ namespace DAO
                 .HasForeignKey(q => q.QuizId)
                 .OnDelete(DeleteBehavior.Cascade);
 
-            // Answers
-            modelBuilder.Entity<Answer>()
-                .HasOne(a => a.Question)
-                .WithMany(q => q.Answers)
-                .HasForeignKey(a => a.QuestionId)
+            // QuestionInGame
+            modelBuilder.Entity<QuestionInGame>()
+                .HasOne(qig => qig.Session)
+                .WithMany(gs => gs.QuestionsInGame)
+                .HasForeignKey(qig => qig.SessionId)
                 .OnDelete(DeleteBehavior.Cascade);
 
-            // GameSessions
-            modelBuilder.Entity<GameSession>()
-                .HasOne(gs => gs.Quiz)
-                .WithMany(q => q.GameSessions)
-                .HasForeignKey(gs => gs.QuizId)
+            modelBuilder.Entity<QuestionInGame>()
+                .HasOne(qig => qig.Question)
+                .WithMany(q => q.QuestionsInGame)
+                .HasForeignKey(qig => qig.QuestionId)
                 .OnDelete(DeleteBehavior.Restrict);
-
-            // Teams
-            modelBuilder.Entity<Team>()
-                .HasOne(t => t.Session)
-                .WithMany(gs => gs.Teams)
-                .HasForeignKey(t => t.SessionId)
-                .OnDelete(DeleteBehavior.Cascade);
-
-            // TeamMembers
-            modelBuilder.Entity<TeamMember>()
-                .HasOne(tm => tm.Team)
-                .WithMany(t => t.TeamMembers)
-                .HasForeignKey(tm => tm.TeamId)
-                .OnDelete(DeleteBehavior.NoAction);
-
-            modelBuilder.Entity<TeamMember>()
-                .HasOne(tm => tm.Player)
-                .WithMany(p => p.TeamMembers)
-                .HasForeignKey(tm => tm.PlayerId)
-                .OnDelete(DeleteBehavior.NoAction);
 
             // Players
             modelBuilder.Entity<Player>()
@@ -97,6 +87,20 @@ namespace DAO
                 .IsRequired(false)
                 .OnDelete(DeleteBehavior.Restrict);
 
+            modelBuilder.Entity<Player>()
+                .HasOne(p => p.Team)
+                .WithMany(t => t.Players)
+                .HasForeignKey(p => p.TeamId)
+                .IsRequired(false)
+                .OnDelete(DeleteBehavior.NoAction); // Sửa từ SetNull thành NoAction
+
+            // Teams
+            modelBuilder.Entity<Team>()
+                .HasOne(t => t.Session)
+                .WithMany(gs => gs.Teams)
+                .HasForeignKey(t => t.SessionId)
+                .OnDelete(DeleteBehavior.Cascade);
+
             // Responses
             modelBuilder.Entity<Response>()
                 .HasOne(r => r.Player)
@@ -105,15 +109,34 @@ namespace DAO
                 .OnDelete(DeleteBehavior.Cascade);
 
             modelBuilder.Entity<Response>()
-                .HasOne(r => r.Question)
-                .WithMany(q => q.Responses)
-                .HasForeignKey(r => r.QuestionId)
+                .HasOne(r => r.QuestionInGame)
+                .WithMany(qig => qig.Responses)
+                .HasForeignKey(r => r.QuestionInGameId)
                 .OnDelete(DeleteBehavior.Restrict);
 
-            modelBuilder.Entity<Response>()
-                .HasOne(r => r.Answer)
-                .WithMany(a => a.Responses)
-                .HasForeignKey(r => r.AnswerId)
+            // TeamResultInGame
+            modelBuilder.Entity<TeamResultInGame>()
+                .HasOne(tr => tr.QuestionInGame)
+                .WithMany(qig => qig.TeamResults)
+                .HasForeignKey(tr => tr.QuestionInGameId)
+                .OnDelete(DeleteBehavior.NoAction);
+
+            modelBuilder.Entity<TeamResultInGame>()
+                .HasOne(tr => tr.Player)
+                .WithMany(p => p.TeamResults)
+                .HasForeignKey(tr => tr.PlayerId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<TeamResultInGame>()
+                .HasOne(tr => tr.Session)
+                .WithMany(gs => gs.TeamResultsInGame)
+                .HasForeignKey(tr => tr.SessionId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<TeamResultInGame>()
+                .HasOne(tr => tr.Team)
+                .WithMany(t => t.TeamResults)
+                .HasForeignKey(tr => tr.TeamId)
                 .OnDelete(DeleteBehavior.Restrict);
 
             // Scores
@@ -121,20 +144,13 @@ namespace DAO
                 .HasOne(s => s.Player)
                 .WithMany(p => p.Scores)
                 .HasForeignKey(s => s.PlayerId)
-                .OnDelete(DeleteBehavior.NoAction);
+                .OnDelete(DeleteBehavior.Restrict);
 
             modelBuilder.Entity<Score>()
                 .HasOne(s => s.Session)
                 .WithMany(gs => gs.Scores)
                 .HasForeignKey(s => s.SessionId)
                 .OnDelete(DeleteBehavior.Cascade);
-
-            // Seed dữ liệu mẫu cho Users (bao gồm Role)
-            modelBuilder.Entity<User>().HasData(
-                new User { UserId = 1, Username = "admin", Password = "hashedpassword", Email = "admin@example.com", CreatedAt = DateTime.UtcNow, Role = UserRoles.Admin },
-                new User { UserId = 2, Username = "teacher1", Password = "hashedpassword", Email = "teacher1@example.com", CreatedAt = DateTime.UtcNow, Role = UserRoles.Host },
-                new User { UserId = 3, Username = "student1", Password = "hashedpassword", Email = "student1@example.com", CreatedAt = DateTime.UtcNow, Role = UserRoles.Player }
-            );
         }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)

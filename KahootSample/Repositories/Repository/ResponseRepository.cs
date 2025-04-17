@@ -1,6 +1,5 @@
 ﻿using BOs.Model;
 using DAO;
-using DAOs;
 using Repositories.BaseRepository;
 using Repositories.IRepository;
 using System.Collections.Generic;
@@ -22,9 +21,9 @@ namespace Repositories.Repository
             return await _responseDao.GetResponsesByPlayerIdAsync(playerId);
         }
 
-        public async Task<List<Response>> GetResponsesByQuestionIdAsync(int questionId)
+        public async Task<List<Response>> GetResponsesByQuestionInGameIdAsync(int questionInGameId)
         {
-            return await _responseDao.GetResponsesByQuestionIdAsync(questionId);
+            return await _responseDao.GetResponsesByQuestionInGameIdAsync(questionInGameId);
         }
     }
 }

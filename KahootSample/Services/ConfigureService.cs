@@ -24,14 +24,13 @@ namespace Services
 
             services.AddScoped<IUserService, UserService>();
 
-            services.AddScoped<IAnswerService, AnswerService>();
+   
             services.AddScoped<IQuizService, QuizService>();
 
             services.AddScoped<IGameSessionService, GameSessionService>();
 
             services.AddScoped<IResponseService, ResponseService>();
 
-            services.AddScoped<ITeamMemberService, TeamMemberService>();
 
 
             services.AddScoped<IPlayerService, PlayerService>();

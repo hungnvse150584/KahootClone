@@ -24,7 +24,6 @@ namespace Repositories
             services.AddScoped<IQuestionRepository, QuestionRepository>();
 
             services.AddScoped<IUserRepository, UserRepository>();
-            services.AddScoped<IAnswerRepository, AnswerRepository>();
 
             services.AddScoped<IQuizRepository, QuizRepository>();
 
@@ -32,7 +31,7 @@ namespace Repositories
 
             services.AddScoped<IResponseRepository, ResponseRepository>();
 
-            services.AddScoped<ITeamMemberRepository, TeamMemberRepository>();
+ 
 
 
             services.AddScoped<IPlayerRepository, PlayerRepository>();
@@ -47,7 +46,7 @@ namespace Repositories
 
             services.AddScoped<UserDAO>();
 
-            services.AddScoped<AnswerDAO>();
+          
 
             services.AddScoped<ScoreDAO>();
             services.AddScoped<QuizDAO>();
@@ -56,7 +55,6 @@ namespace Repositories
 
             services.AddScoped<ResponseDAO>();
 
-            services.AddScoped<TeamMemberDAO>();
 
             services.AddScoped<PlayerDAO>();
             return services;

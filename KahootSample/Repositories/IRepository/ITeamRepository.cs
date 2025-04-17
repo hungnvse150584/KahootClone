@@ -11,7 +11,6 @@ namespace Repositories.IRepository
     public interface ITeamRepository : IBaseRepository<Team>
     {
         Task<List<Team>> GetTeamsBySessionIdAsync(int sessionId);
-        Task<TeamMember> AddTeamMemberAsync(TeamMember teamMember);
-        Task<List<TeamMember>> GetTeamMembersByTeamIdAsync(int teamId);
+        Task<List<Player>> GetPlayersByTeamIdAsync(int teamId);
     }
 }

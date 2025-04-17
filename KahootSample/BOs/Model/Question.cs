@@ -2,9 +2,6 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace BOs.Model
 {
@@ -20,13 +17,19 @@ namespace BOs.Model
 
         public int TimeLimit { get; set; }
 
-        public int Order { get; set; }
+        public string ImageUrl { get; set; }
+        public string Option1 { get; set; }
+        public string Option2 { get; set; }
+        public string Option3 { get; set; }
+        public string Option4 { get; set; }
+        public int CorrectOption { get; set; }
+        public int OrderIndex { get; set; }
+        public DateTime CreatedTime { get; set; }
 
         // Quan hệ
         [ForeignKey("QuizId")]
         public Quiz Quiz { get; set; }
 
-        public ICollection<Answer> Answers { get; set; } = new List<Answer>();
-        public ICollection<Response> Responses { get; set; } = new List<Response>();
+        public ICollection<QuestionInGame> QuestionsInGame { get; set; } = new List<QuestionInGame>();
     }
 }
