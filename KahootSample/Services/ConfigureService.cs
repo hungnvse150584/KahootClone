@@ -36,7 +36,6 @@ namespace Services
             services.AddScoped<IPlayerService, PlayerService>();
 
 
-            services.AddScoped<IScoreService, ScoreService>();
 
             services.AddScoped<IQuestionInGameService, QuestionInGameService>();
 

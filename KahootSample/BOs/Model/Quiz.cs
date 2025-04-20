@@ -12,13 +12,11 @@ namespace BOs.Model
     {
         [Key]
         public int QuizId { get; set; }
-
-        [Required, MaxLength(100)]
-        public string Title { get; set; }
-
         public int CreatedBy { get; set; }
-
-        public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+        public string Title { get; set; }
+        public string Description { get; set; }
+        public DateTime CreatedTime { get; set; }
+        public string Status { get; set; } // Thêm Status
 
         // Quan hệ
         [ForeignKey("CreatedBy")]
