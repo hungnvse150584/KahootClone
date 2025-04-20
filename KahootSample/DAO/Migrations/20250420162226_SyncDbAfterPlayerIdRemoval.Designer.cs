@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DAO.Migrations
 {
     [DbContext(typeof(KahootDbContext))]
-    [Migration("20250420084259_UpdateSchema")]
-    partial class UpdateSchema
+    [Migration("20250420162226_SyncDbAfterPlayerIdRemoval")]
+    partial class SyncDbAfterPlayerIdRemoval
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
