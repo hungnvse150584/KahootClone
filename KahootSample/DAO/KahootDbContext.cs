@@ -18,7 +18,6 @@ namespace DAO
         public DbSet<Player> Players { get; set; }
         public DbSet<Team> Teams { get; set; }
         public DbSet<Response> Responses { get; set; }
-        public DbSet<Score> Scores { get; set; }
         public DbSet<TeamResultInGame> TeamResults { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -92,7 +91,7 @@ namespace DAO
                 .WithMany(t => t.Players)
                 .HasForeignKey(p => p.TeamId)
                 .IsRequired(false)
-                .OnDelete(DeleteBehavior.NoAction); // Sửa từ SetNull thành NoAction
+                .OnDelete(DeleteBehavior.NoAction);
 
             // Teams
             modelBuilder.Entity<Team>()
@@ -122,12 +121,6 @@ namespace DAO
                 .OnDelete(DeleteBehavior.NoAction);
 
             modelBuilder.Entity<TeamResultInGame>()
-                .HasOne(tr => tr.Player)
-                .WithMany(p => p.TeamResults)
-                .HasForeignKey(tr => tr.PlayerId)
-                .OnDelete(DeleteBehavior.Restrict);
-
-            modelBuilder.Entity<TeamResultInGame>()
                 .HasOne(tr => tr.Session)
                 .WithMany(gs => gs.TeamResultsInGame)
                 .HasForeignKey(tr => tr.SessionId)
@@ -138,19 +131,6 @@ namespace DAO
                 .WithMany(t => t.TeamResults)
                 .HasForeignKey(tr => tr.TeamId)
                 .OnDelete(DeleteBehavior.Restrict);
-
-            // Scores
-            modelBuilder.Entity<Score>()
-                .HasOne(s => s.Player)
-                .WithMany(p => p.Scores)
-                .HasForeignKey(s => s.PlayerId)
-                .OnDelete(DeleteBehavior.Restrict);
-
-            modelBuilder.Entity<Score>()
-                .HasOne(s => s.Session)
-                .WithMany(gs => gs.Scores)
-                .HasForeignKey(s => s.SessionId)
-                .OnDelete(DeleteBehavior.Cascade);
         }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)

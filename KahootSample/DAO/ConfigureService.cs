@@ -31,7 +31,7 @@ namespace DAO
 
             services.AddScoped<Question>();
 
-            services.AddScoped<Score>();
+  
 
             services.AddScoped<Response>();
             return services;

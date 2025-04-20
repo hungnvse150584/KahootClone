@@ -52,8 +52,7 @@ namespace Services.Service
 
                 // Cập nhật thông tin
                 gameSession.QuizId = request.QuizId;
-                gameSession.StartedAt = request.StartedAt;
-                gameSession.EndedAt = request.EndedAt;
+                gameSession.StartedAt = (DateTime)request.StartedAt;
                 gameSession.Status = request.Status;
                 gameSession.Pin = request.Pin;
                 gameSession.EnableSpeedBonus = request.EnableSpeedBonus;

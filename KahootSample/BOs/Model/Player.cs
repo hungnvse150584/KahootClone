@@ -20,11 +20,13 @@ namespace BOs.Model
         // Quan hệ
         [ForeignKey("SessionId")]
         public GameSession Session { get; set; }
+
         [ForeignKey("UserId")]
         public User User { get; set; }
+
         [ForeignKey("TeamId")]
         public Team Team { get; set; }
-        public ICollection<Score> Scores { get; set; } = new List<Score>();
+
         public ICollection<Response> Responses { get; set; } = new List<Response>();
         public ICollection<TeamResultInGame> TeamResults { get; set; } = new List<TeamResultInGame>();
     }

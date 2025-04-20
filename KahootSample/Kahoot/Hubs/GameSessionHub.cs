@@ -2,7 +2,7 @@
 using Services.IService;
 using Services.RequestAndResponse.Enum;
 using Services.RequestAndResponse.Request.ResponseRequest;
-using Services.RequestAndResponse.Request.ScoreRequest;
+
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
@@ -13,18 +13,18 @@ namespace Kahoot.Hubs
         private readonly IGameSessionService _gameSessionService;
         private readonly IQuestionService _questionService;
         private readonly IResponseService _responseService;
-        private readonly IScoreService _scoreService;
+
 
         public GameSessionHub(
             IGameSessionService gameSessionService,
             IQuestionService questionService,
-            IResponseService responseService,
-            IScoreService scoreService)
+            IResponseService responseService
+           )
         {
             _gameSessionService = gameSessionService;
             _questionService = questionService;
             _responseService = responseService;
-            _scoreService = scoreService;
+        
         }
 
         // Người chơi tham gia phiên chơi
@@ -83,35 +83,35 @@ namespace Kahoot.Hubs
             await _responseService.CreateResponseAsync(responseRequest);
 
             // Cập nhật điểm số của người chơi
-            var existingScore = (await _scoreService.GetScoresByPlayerIdAsync(playerId)).Data?.FirstOrDefault(s => s.SessionId == sessionId);
-            if (existingScore != null)
-            {
-                existingScore.TotalPoints += score;
-                await _scoreService.UpdateScoreAsync(new UpdateScoreRequest { ScoreId = existingScore.ScoreId, TotalPoints = existingScore.TotalPoints });
-            }
-            else
-            {
-                await _scoreService.CreateScoreAsync(new CreateScoreRequest
-                {
-                    SessionId = sessionId,
-                    PlayerId = playerId,
-                    TotalPoints = score
-                });
-            }
+            //var existingScore = (await _scoreService.GetScoresByPlayerIdAsync(playerId)).Data?.FirstOrDefault(s => s.SessionId == sessionId);
+            //if (existingScore != null)
+            //{
+            //    existingScore.TotalPoints += score;
+            //    await _scoreService.UpdateScoreAsync(new UpdateScoreRequest { ScoreId = existingScore.ScoreId, TotalPoints = existingScore.TotalPoints });
+            //}
+            //else
+            //{
+            //    await _scoreService.CreateScoreAsync(new CreateScoreRequest
+            //    {
+            //        SessionId = sessionId,
+            //        PlayerId = playerId,
+            //        TotalPoints = score
+            //    });
+            //}
 
             // Cập nhật bảng xếp hạng
-            await UpdateLeaderboard(sessionId);
+            //await UpdateLeaderboard(sessionId);
         }
 
         // Cập nhật bảng xếp hạng
-        private async Task UpdateLeaderboard(int sessionId)
-        {
-            var scores = await _scoreService.GetScoresBySessionIdAsync(sessionId);
-            if (scores.StatusCode == StatusCodeEnum.OK_200 && scores.Data != null)
-            {
-                await Clients.Group(sessionId.ToString()).SendAsync("LeaderboardUpdated", scores.Data);
-            }
-        }
+        //private async Task UpdateLeaderboard(int sessionId)
+        //{
+        //    var scores = await _scoreService.GetScoresBySessionIdAsync(sessionId);
+        //    if (scores.StatusCode == StatusCodeEnum.OK_200 && scores.Data != null)
+        //    {
+        //        await Clients.Group(sessionId.ToString()).SendAsync("LeaderboardUpdated", scores.Data);
+        //    }
+        //}
 
         // Khi người chơi rời khỏi phiên
         public override async Task OnDisconnectedAsync(Exception exception)
