@@ -24,7 +24,7 @@ namespace DAO
                 .Include(p => p.Session)
                 .Include(p => p.Team)
                 .Include(p => p.Responses)
-                .Include(p => p.Scores)
+             
                 .Include(p => p.TeamResults)
                 .FirstOrDefaultAsync(p => p.PlayerId == playerId);
 
@@ -41,7 +41,7 @@ namespace DAO
                 .Include(p => p.User)
                 .Include(p => p.Team)
                 .Include(p => p.Responses)
-                .Include(p => p.Scores)
+          
                 .Include(p => p.TeamResults)
                 .ToListAsync();
         }
@@ -63,7 +63,7 @@ namespace DAO
                 .Include(p => p.User)
                 .Include(p => p.Team)
                 .Include(p => p.Responses)
-                .Include(p => p.Scores)
+        
                 .Include(p => p.TeamResults)
                 .ToListAsync();
         }

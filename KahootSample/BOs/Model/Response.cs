@@ -9,14 +9,13 @@ namespace BOs.Model
     {
         [Key]
         public int ResponseId { get; set; }
-
         public int PlayerId { get; set; }
         public int QuestionInGameId { get; set; }
         public int SelectedOption { get; set; }
         public int ResponseTime { get; set; }
         public int Score { get; set; }
         public int Streak { get; set; }
-        public int TotalMembers { get; set; }
+        public int Rank { get; set; } 
 
         // Quan hệ
         [ForeignKey("PlayerId")]

@@ -2,7 +2,6 @@
 using BOs.Model;
 
 using Services.RequestAndResponse.Request.QuestionRequest;
-using Services.RequestAndResponse.Request.ScoreRequest;
 using Services.RequestAndResponse.Request.GameSessionRequest;
 using Services.RequestAndResponse.Request.QuestionRequest;
 using Services.RequestAndResponse.Request.ResponseRequest;
@@ -18,7 +17,6 @@ using System.Text;
 using System.Threading.Tasks;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 using Services.RequestAndResponse.Response.QuestionResponses;
-using Services.RequestAndResponse.Response.ScoreResponse;
 using Services.RequestAndResponse.Response.TeamResponse;
 using Services.RequestAndResponse.PlayerRequest;
 using Services.RequestAndResponse.Response.PlayerResponse;
@@ -59,10 +57,7 @@ namespace Services.Mapping
 
           
 
-            //Score mappings
-            CreateMap<CreateScoreRequest, Score>();
-            CreateMap<UpdateScoreRequest, Score>();
-            CreateMap<Score, ScoreResponse>();
+   
             CreateMap<CreateQuestionRequest, Question>().ReverseMap();
 
             CreateMap<UpdateQuestionRequest, Question>().ReverseMap(); 

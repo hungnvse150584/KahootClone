@@ -15,6 +15,8 @@ namespace BOs.Model
         public int SessionId { get; set; }
         public int QuestionId { get; set; }
         public int OrderIndex { get; set; }
+        public DateTime CreatedTime { get; set; } // Thêm CreatedTime
+        public int TotalMembers { get; set; } // Thêm TotalMembers
 
         // Quan hệ
         [ForeignKey("SessionId")]
@@ -24,6 +26,6 @@ namespace BOs.Model
         public Question Question { get; set; }
 
         public ICollection<Response> Responses { get; set; } = new List<Response>();
-        public ICollection<TeamResultInGame> TeamResults { get; set; } = new List<TeamResultInGame>(); // Đã có
+        public ICollection<TeamResultInGame> TeamResults { get; set; } = new List<TeamResultInGame>();
     }
 }

@@ -25,7 +25,7 @@ namespace DAOs
                 .Include(gs => gs.Quiz)
                 .Include(gs => gs.Players)
                 .Include(gs => gs.Teams)
-                .Include(gs => gs.Scores)
+             
                 .FirstOrDefaultAsync(gs => gs.SessionId == id);
 
             if (gameSession == null)
@@ -44,7 +44,7 @@ namespace DAOs
                 .Include(gs => gs.Quiz)
                 .Include(gs => gs.Players)
                 .Include(gs => gs.Teams)
-                .Include(gs => gs.Scores)
+               
                 .ToListAsync();
         }
     }

@@ -49,7 +49,7 @@ namespace DAO
                 .Include(p => p.Session)
                 .Include(p => p.Team)
                 .Include(p => p.Responses)
-                .Include(p => p.Scores)
+            
                 .Include(p => p.TeamResults)
                 .ToListAsync();
         }
