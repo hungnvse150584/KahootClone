@@ -28,6 +28,6 @@ namespace BOs.Model
         public Team Team { get; set; }
 
         public ICollection<Response> Responses { get; set; } = new List<Response>();
-        public ICollection<TeamResultInGame> TeamResults { get; set; } = new List<TeamResultInGame>();
+     
     }
 }

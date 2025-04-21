@@ -50,7 +50,7 @@ namespace DAO
                 .Include(p => p.Team)
                 .Include(p => p.Responses)
             
-                .Include(p => p.TeamResults)
+                
                 .ToListAsync();
         }
     }
