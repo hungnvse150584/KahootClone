@@ -6,12 +6,12 @@ using System.Threading.Tasks;
 
 namespace Services.RequestAndResponse.Request.QuestionInGameRequest
 {
-    public class CreateQuestionInGameRequest
+    public class SubmitResponseRequest
     {
         public int SessionId { get; set; }
-        public int QuestionId { get; set; }
-        public int OrderIndex { get; set; }
-        public DateTime CreatedTime { get; set; }
-        public int TotalMembers { get; set; }
+        public int PlayerId { get; set; }
+        public int AnswerId { get; set; }
+        public int QuestionInGameId { get; set; }
+        public int ResponseTime { get; set; }
     }
 }

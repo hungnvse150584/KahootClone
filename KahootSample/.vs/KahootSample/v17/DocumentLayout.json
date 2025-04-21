@@ -1,8 +1,12 @@
 {
   "Version": 1,
-  "WorkspaceRootPath": "D:\\FPT\\KahootClone\\KahootSample\\",
+  "WorkspaceRootPath": "D:\\FU\\SWP391\\KahootSample\\",
   "Documents": [
     {
+<<<<<<< HEAD
+      "AbsoluteMoniker": "D:0:0:{452B7F39-93D1-46AA-8803-A4AC14FFD997}|Kahoot\\Kahoot.csproj|d:\\fu\\swp391\\kahootsample\\kahoot\\controllers\\questioningamecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{452B7F39-93D1-46AA-8803-A4AC14FFD997}|Kahoot\\Kahoot.csproj|solutionrelative:kahoot\\controllers\\questioningamecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+=======
       "AbsoluteMoniker": "D:0:0:{B92D791A-926E-472F-A615-B5BB43EE10E6}|DAO\\DAO.csproj|d:\\fpt\\kahootclone\\kahootsample\\dao\\migrations\\appdbcontextmodelsnapshot.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{B92D791A-926E-472F-A615-B5BB43EE10E6}|DAO\\DAO.csproj|solutionrelative:dao\\migrations\\appdbcontextmodelsnapshot.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
@@ -280,6 +284,7 @@
     {
       "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|D:\\FPT\\KahootClone\\KahootSample\\Services\\RequestAndResponse\\Response\\ScoreResponse.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:Services\\RequestAndResponse\\Response\\ScoreResponse.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+>>>>>>> main
     }
   ],
   "DocumentGroupContainers": [
@@ -314,6 +319,17 @@
             {
               "$type": "Document",
               "DocumentIndex": 0,
+<<<<<<< HEAD
+              "Title": "QuestionInGameController.cs",
+              "DocumentMoniker": "D:\\FU\\SWP391\\KahootSample\\Kahoot\\Controllers\\QuestionInGameController.cs",
+              "RelativeDocumentMoniker": "Kahoot\\Controllers\\QuestionInGameController.cs",
+              "ToolTip": "D:\\FU\\SWP391\\KahootSample\\Kahoot\\Controllers\\QuestionInGameController.cs",
+              "RelativeToolTip": "Kahoot\\Controllers\\QuestionInGameController.cs",
+              "ViewState": "AgIAAAMAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-04-21T00:08:02.653Z",
+              "EditorCaption": ""
+=======
               "Title": "AppDbContextModelSnapshot.cs",
               "DocumentMoniker": "D:\\FPT\\KahootClone\\KahootSample\\DAO\\Migrations\\AppDbContextModelSnapshot.cs",
               "RelativeDocumentMoniker": "DAO\\Migrations\\AppDbContextModelSnapshot.cs",
@@ -1159,6 +1175,7 @@
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000758|",
               "WhenOpened": "2025-04-15T11:58:06.72Z"
+>>>>>>> main
             }
           ]
         },

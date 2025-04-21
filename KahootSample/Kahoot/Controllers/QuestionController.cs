@@ -4,6 +4,7 @@ using Services.RequestAndResponse.BaseResponse;
 using Services.RequestAndResponse.Enum;
 using Services.RequestAndResponse.Request.QuestionRequest;
 using Services.RequestAndResponse.Response.QuestionResponses;
+using Services.RequestAndResponse.Response.ResponseResponses;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -54,17 +55,16 @@ namespace Kahoot.Controllers
             var result = await _questionService.UpdateQuestionAsync(request);
             return StatusCode((int)result.StatusCode, result);
         }
+
         [HttpGet]
-        [Route("GetQuestions")]
+        [Route("GetAllQuestions")]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<BaseResponse<QuestionResponse>> GetQuestions()
+        public async Task<ActionResult<BaseResponse<IEnumerable<QuestionResponse>>>> GetAllQuestions()
         {
-            var result = await _questionService.GetQuestionsAsync();
-            return result;
-
+            var result = await _questionService.GetAllQuestionsAsync();
+            return StatusCode((int)result.StatusCode, result);
         }
 
         [HttpGet]
@@ -115,6 +115,40 @@ namespace Kahoot.Controllers
             }
 
             var result = await _questionService.DeleteQuestionAsync(questionId);
+            return StatusCode((int)result.StatusCode, result);
+        }
+
+        [HttpGet]
+        [Route("GetResponsesByQuestionInGameId/{questionInGameId}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<ActionResult<BaseResponse<IEnumerable<ResponseResponse>>>> GetResponsesByQuestionInGameId(int questionInGameId)
+        {
+            if (questionInGameId <= 0)
+            {
+                return BadRequest(new BaseResponse<IEnumerable<ResponseResponse>>("Invalid QuestionInGame ID.", StatusCodeEnum.BadRequest_400, null));
+            }
+
+            var result = await _questionService.GetResponsesByQuestionInGameIdAsync(questionInGameId);
+            return StatusCode((int)result.StatusCode, result);
+        }
+
+        [HttpGet]
+        [Route("GetLastResponseByPlayerIdAndQuizId/{playerId}/{quizId}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<ActionResult<BaseResponse<ResponseResponse>>> GetLastResponseByPlayerIdAndQuizId(int playerId, int quizId)
+        {
+            if (playerId <= 0 || quizId <= 0)
+            {
+                return BadRequest(new BaseResponse<ResponseResponse>("Invalid Player ID or Quiz ID.", StatusCodeEnum.BadRequest_400, null));
+            }
+
+            var result = await _questionService.GetLastResponseByPlayerIdAndQuizIdAsync(playerId, quizId);
             return StatusCode((int)result.StatusCode, result);
         }
     }

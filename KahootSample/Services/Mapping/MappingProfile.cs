@@ -53,20 +53,20 @@ namespace Services.Mapping
             //Question mappings
             CreateMap<CreateQuestionRequest, Question>();
             CreateMap<UpdateQuestionRequest, Question>(); 
-            CreateMap<Question, QuestionResponse>(); 
+            CreateMap<Question, QuestionResponse>();
+            CreateMap<Response, ResponseResponse>();
 
-          
-
-   
             CreateMap<CreateQuestionRequest, Question>().ReverseMap();
 
             CreateMap<UpdateQuestionRequest, Question>().ReverseMap(); 
             CreateMap<Question, QuestionResponse>().ReverseMap();
+            CreateMap<Response, ResponseResponse>().ReverseMap();
 
             //QuestionInGame mappings
             CreateMap<CreateQuestionInGameRequest, QuestionInGame>();
             CreateMap<UpdateQuestionInGameRequest, QuestionInGame>();
             CreateMap<QuestionInGame, QuestionInGameResponse>();
+            CreateMap<Response, ResponseResponse>();
         }
     }
 }
