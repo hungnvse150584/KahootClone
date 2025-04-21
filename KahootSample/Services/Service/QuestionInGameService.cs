@@ -5,67 +5,168 @@ using System.Text;
 using System.Threading.Tasks;
 using AutoMapper;
 using BOs.Model;
+using DAO;
 using Repositories.IRepository;
 using Services.IService;
 using Services.RequestAndResponse.BaseResponse;
 using Services.RequestAndResponse.Enum;
 using Services.RequestAndResponse.Request.QuestionInGameRequest;
 using Services.RequestAndResponse.Response.QuestionInGameResponse;
+using Services.RequestAndResponse.Response.ResponseResponses;
+using static System.Formats.Asn1.AsnWriter;
 
 namespace Services.Service
 {
     public class QuestionInGameService : IQuestionInGameService
     {
-        private readonly IQuestionInGameRepository _repo;
+        private readonly IQuestionInGameRepository _questionInGameRepository;
+        private readonly IResponseRepository _responseRepository;
         private readonly IMapper _mapper;
 
-        public QuestionInGameService(IQuestionInGameRepository repo, IMapper mapper)
+        public QuestionInGameService(IQuestionInGameRepository questionInGameRepository, IResponseRepository responseRepository, IMapper mapper)
         {
-            _repo = repo;
+            _questionInGameRepository = questionInGameRepository;
+            _responseRepository = responseRepository;
             _mapper = mapper;
         }
 
-        public async Task<BaseResponse<QuestionInGameResponse>> CreateAsync(CreateQuestionInGameRequest request)
+        public async Task<BaseResponse<QuestionInGameResponse>> CreateQuestionInGameAsync(CreateQuestionInGameRequest request)
         {
-            var entity = _mapper.Map<QuestionInGame>(request);
-            var created = await _repo.AddAsync(entity);
-            return new BaseResponse<QuestionInGameResponse>("Created", StatusCodeEnum.Created_201, _mapper.Map<QuestionInGameResponse>(created));
+            try
+            {
+                var questionInGame = _mapper.Map<QuestionInGame>(request);
+                var created = await _questionInGameRepository.AddQuestionInGameAsync(questionInGame);
+                var response = _mapper.Map<QuestionInGameResponse>(created);
+
+                return new BaseResponse<QuestionInGameResponse>("QuestionInGame created successfully", StatusCodeEnum.Created_201, response);
+            }
+            catch (Exception ex)
+            {
+                return new BaseResponse<QuestionInGameResponse>($"An error occurred: {ex.Message}", StatusCodeEnum.InternalServerError_500, null);
+            }
         }
 
-        public async Task<BaseResponse<QuestionInGameResponse>> UpdateAsync(UpdateQuestionInGameRequest request)
+        public async Task<BaseResponse<QuestionInGameResponse>> UpdateQuestionInGameAsync(UpdateQuestionInGameRequest request)
         {
-            var existing = await _repo.GetByIdAsync(request.QuestionInGameId);
-            if (existing == null)
-                return new BaseResponse<QuestionInGameResponse>("Not found", StatusCodeEnum.NotFound_404, null);
+            try
+            {
+                var existing = await _questionInGameRepository.GetQuestionInGameByIdAsync(request.QuestionInGameId);
+                if (existing == null)
+                {
+                    return new BaseResponse<QuestionInGameResponse>("QuestionInGame not found", StatusCodeEnum.NotFound_404, null);
+                }
 
-            _mapper.Map(request, existing);
-            var updated = await _repo.UpdateAsync(existing);
-            return new BaseResponse<QuestionInGameResponse>("Updated", StatusCodeEnum.OK_200, _mapper.Map<QuestionInGameResponse>(updated));
+                // Update fields
+                existing.SessionId = request.SessionId;
+                existing.QuestionId = request.QuestionId;
+                existing.OrderIndex = request.OrderIndex;
+                existing.CreatedTime = request.CreatedTime;
+                existing.TotalMembers = request.TotalMembers;
+
+                var updated = await _questionInGameRepository.UpdateQuestionInGameAsync(existing);
+                var response = _mapper.Map<QuestionInGameResponse>(updated);
+
+                return new BaseResponse<QuestionInGameResponse>("QuestionInGame updated successfully", StatusCodeEnum.OK_200, response);
+            }
+            catch (Exception ex)
+            {
+                return new BaseResponse<QuestionInGameResponse>($"An error occurred: {ex.Message}", StatusCodeEnum.InternalServerError_500, null);
+            }
         }
 
-        public async Task<BaseResponse<QuestionInGameResponse>> GetByIdAsync(int id)
+        public async Task<BaseResponse<QuestionInGameResponse>> GetQuestionInGameByIdAsync(int questionInGameId)
         {
-            var data = await _repo.GetByIdAsync(id);
-            if (data == null)
-                return new BaseResponse<QuestionInGameResponse>("Not found", StatusCodeEnum.NotFound_404, null);
+            try
+            {
+                var questionInGame = await _questionInGameRepository.GetQuestionInGameByIdAsync(questionInGameId);
+                if (questionInGame == null)
+                {
+                    return new BaseResponse<QuestionInGameResponse>("QuestionInGame not found", StatusCodeEnum.NotFound_404, null);
+                }
 
-            return new BaseResponse<QuestionInGameResponse>("Success", StatusCodeEnum.OK_200, _mapper.Map<QuestionInGameResponse>(data));
+                var response = _mapper.Map<QuestionInGameResponse>(questionInGame);
+                return new BaseResponse<QuestionInGameResponse>("Successfully retrieved QuestionInGame", StatusCodeEnum.OK_200, response);
+            }
+            catch (Exception ex)
+            {
+                return new BaseResponse<QuestionInGameResponse>($"An error occurred: {ex.Message}", StatusCodeEnum.InternalServerError_500, null);
+            }
         }
 
-        public async Task<BaseResponse<IEnumerable<QuestionInGameResponse>>> GetBySessionIdAsync(int sessionId)
+        public async Task<BaseResponse<IEnumerable<QuestionInGameResponse>>> GetQuestionsInGameBySessionIdAsync(int sessionId)
         {
-            var data = await _repo.GetBySessionIdAsync(sessionId);
-            return new BaseResponse<IEnumerable<QuestionInGameResponse>>("Success", StatusCodeEnum.OK_200, _mapper.Map<IEnumerable<QuestionInGameResponse>>(data));
+            try
+            {
+                var questionsInGame = await _questionInGameRepository.GetBySessionIdAsync(sessionId);
+                if (questionsInGame == null || !questionsInGame.Any())
+                {
+                    return new BaseResponse<IEnumerable<QuestionInGameResponse>>("No QuestionsInGame found for this session", StatusCodeEnum.NotFound_404, null);
+                }
+
+                var response = _mapper.Map<IEnumerable<QuestionInGameResponse>>(questionsInGame);
+                return new BaseResponse<IEnumerable<QuestionInGameResponse>>("Successfully retrieved QuestionsInGame", StatusCodeEnum.OK_200, response);
+            }
+            catch (Exception ex)
+            {
+                return new BaseResponse<IEnumerable<QuestionInGameResponse>>($"An error occurred: {ex.Message}", StatusCodeEnum.InternalServerError_500, null);
+            }
         }
 
-        public async Task<BaseResponse<string>> DeleteAsync(int id)
+        public async Task<BaseResponse<string>> DeleteQuestionInGameAsync(int questionInGameId)
         {
-            var existing = await _repo.GetByIdAsync(id);
-            if (existing == null)
-                return new BaseResponse<string>("Not found", StatusCodeEnum.NotFound_404, null);
+            try
+            {
+                var questionInGame = await _questionInGameRepository.GetQuestionInGameByIdAsync(questionInGameId);
+                if (questionInGame == null)
+                {
+                    return new BaseResponse<string>("QuestionInGame not found", StatusCodeEnum.NotFound_404, null);
+                }
 
-            await _repo.DeleteAsync(existing);
-            return new BaseResponse<string>("Deleted", StatusCodeEnum.OK_200, null);
+                await _questionInGameRepository.DeleteQuestionInGameAsync(questionInGame);
+                return new BaseResponse<string>("QuestionInGame deleted successfully", StatusCodeEnum.OK_200, "Deleted");
+            }
+            catch (Exception ex)
+            {
+                return new BaseResponse<string>($"An error occurred: {ex.Message}", StatusCodeEnum.InternalServerError_500, null);
+            }
+        }
+
+        public async Task<BaseResponse<IEnumerable<ResponseResponse>>> GetResponsesByQuestionInGameIdAsync(int questionInGameId)
+        {
+            try
+            {
+                var responses = await _responseRepository.GetResponsesByQuestionInGameIdAsync(questionInGameId);
+                if (responses == null || !responses.Any())
+                {
+                    return new BaseResponse<IEnumerable<ResponseResponse>>("No responses found for this QuestionInGame", StatusCodeEnum.NotFound_404, null);
+                }
+
+                var responseDtos = _mapper.Map<IEnumerable<ResponseResponse>>(responses);
+                return new BaseResponse<IEnumerable<ResponseResponse>>("Successfully retrieved responses", StatusCodeEnum.OK_200, responseDtos);
+            }
+            catch (Exception ex)
+            {
+                return new BaseResponse<IEnumerable<ResponseResponse>>($"An error occurred: {ex.Message}", StatusCodeEnum.InternalServerError_500, null);
+            }
+        }
+
+        public async Task<BaseResponse<ResponseResponse>> GetLastResponseByPlayerIdAndSessionIdAsync(int playerId, int sessionId)
+        {
+            try
+            {
+                var response = await _questionInGameRepository.GetLastResponseByPlayerIdAndSessionIdAsync(playerId, sessionId);
+                if (response == null)
+                {
+                    return new BaseResponse<ResponseResponse>("No response found for this player and session", StatusCodeEnum.NotFound_404, null);
+                }
+
+                var responseDto = _mapper.Map<ResponseResponse>(response);
+                return new BaseResponse<ResponseResponse>("Successfully retrieved last response", StatusCodeEnum.OK_200, responseDto);
+            }
+            catch (Exception ex)
+            {
+                return new BaseResponse<ResponseResponse>($"An error occurred: {ex.Message}", StatusCodeEnum.InternalServerError_500, null);
+            }
         }
     }
 }

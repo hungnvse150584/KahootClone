@@ -16,9 +16,14 @@ namespace Repositories.Repository
             _questionDao = questionDao;
         }
 
-        public async Task<List<Question>> GetByQuizIdAsync(int quizId)
+        public async Task<Question> GetQuestionByIdAsync(int questionId)
         {
-            return await _questionDao.GetByQuizIdAsync(quizId);
+            return await _questionDao.GetQuestionByIdAsync(questionId);
+        }
+
+        public async Task<List<Question>> GetQuestionsByQuizIdAsync(int quizId)
+        {
+            return await _questionDao.GetQuestionsByQuizIdAsync(quizId);
         }
 
         public async Task<Question> AddQuestionAsync(Question question)
@@ -34,6 +39,11 @@ namespace Repositories.Repository
         public async Task DeleteQuestionAsync(Question question)
         {
             await _questionDao.DeleteQuestionAsync(question);
+        }
+
+        public async Task<Response> GetLastResponseByPlayerIdAndQuizIdAsync(int playerId, int quizId)
+        {
+            return await _questionDao.GetLastResponseByPlayerIdAndQuizIdAsync(playerId, quizId);
         }
     }
 }

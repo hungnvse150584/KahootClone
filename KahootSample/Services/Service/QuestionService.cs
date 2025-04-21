@@ -28,7 +28,6 @@ namespace Services.Service
             _mapper = mapper;
         }
 
-
         public async Task<BaseResponse<QuestionResponse>> CreateQuestionAsync(CreateQuestionRequest request)
         {
             try
@@ -49,17 +48,24 @@ namespace Services.Service
         {
             try
             {
-                var existing = await _questionRepository.GetByIdAsync(request.QuestionId);
+                var existing = await _questionRepository.GetQuestionByIdAsync(request.QuestionId);
                 if (existing == null)
                 {
                     return new BaseResponse<QuestionResponse>("Question not found", StatusCodeEnum.NotFound_404, null);
                 }
 
-                // Cập nhật thông tin
+                // Update fields
                 existing.Text = request.Text;
                 existing.TimeLimit = request.TimeLimit;
-                existing.OrderIndex = request.OrderIndex; // Sửa từ Order thành OrderIndex
+                existing.ImageUrl = request.ImageUrl;
+                existing.Option1 = request.Option1;
+                existing.Option2 = request.Option2;
+                existing.Option3 = request.Option3;
+                existing.Option4 = request.Option4;
+                existing.CorrectOption = request.CorrectOption;
+                existing.OrderIndex = request.OrderIndex;
                 existing.QuizId = request.QuizId;
+                existing.Status = request.Status;
 
                 var updated = await _questionRepository.UpdateQuestionAsync(existing);
                 var response = _mapper.Map<QuestionResponse>(updated);
@@ -71,28 +77,31 @@ namespace Services.Service
                 return new BaseResponse<QuestionResponse>($"An error occurred: {ex.Message}", StatusCodeEnum.InternalServerError_500, null);
             }
         }
-        public async Task<BaseResponse<QuestionResponse>> GetQuestionsAsync()
+
+        public async Task<BaseResponse<IEnumerable<QuestionResponse>>> GetAllQuestionsAsync()
         {
             try
             {
                 var questions = await _questionRepository.GetAllAsync();
-                if (questions == null)
+                if (questions == null || !questions.Any())
                 {
-                    return new BaseResponse<QuestionResponse>("Questions List not found", StatusCodeEnum.NotFound_404, null);
+                    return new BaseResponse<IEnumerable<QuestionResponse>>("No questions found", StatusCodeEnum.NotFound_404, null);
                 }
-                var response = _mapper.Map<QuestionResponse>(questions);
-                return new BaseResponse<QuestionResponse>("Successfully retrieved questions list", StatusCodeEnum.OK_200, response);
+
+                var response = _mapper.Map<IEnumerable<QuestionResponse>>(questions);
+                return new BaseResponse<IEnumerable<QuestionResponse>>("Successfully retrieved questions list", StatusCodeEnum.OK_200, response);
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
-                return new BaseResponse<QuestionResponse>($"An error occured: {ex.Message}", StatusCodeEnum.InternalServerError_500, null);
+                return new BaseResponse<IEnumerable<QuestionResponse>>($"An error occurred: {ex.Message}", StatusCodeEnum.InternalServerError_500, null);
             }
         }
+
         public async Task<BaseResponse<QuestionResponse>> GetQuestionByIdAsync(int questionId)
         {
             try
             {
-                var question = await _questionRepository.GetByIdAsync(questionId);
+                var question = await _questionRepository.GetQuestionByIdAsync(questionId);
                 if (question == null)
                 {
                     return new BaseResponse<QuestionResponse>("Question not found", StatusCodeEnum.NotFound_404, null);
@@ -111,9 +120,13 @@ namespace Services.Service
         {
             try
             {
-                var questions = await _questionRepository.GetByQuizIdAsync(quizId);
-                var response = _mapper.Map<IEnumerable<QuestionResponse>>(questions);
+                var questions = await _questionRepository.GetQuestionsByQuizIdAsync(quizId);
+                if (questions == null || !questions.Any())
+                {
+                    return new BaseResponse<IEnumerable<QuestionResponse>>("No questions found for this quiz", StatusCodeEnum.NotFound_404, null);
+                }
 
+                var response = _mapper.Map<IEnumerable<QuestionResponse>>(questions);
                 return new BaseResponse<IEnumerable<QuestionResponse>>("Successfully retrieved questions", StatusCodeEnum.OK_200, response);
             }
             catch (Exception ex)
@@ -126,7 +139,7 @@ namespace Services.Service
         {
             try
             {
-                var question = await _questionRepository.GetByIdAsync(questionId);
+                var question = await _questionRepository.GetQuestionByIdAsync(questionId);
                 if (question == null)
                 {
                     return new BaseResponse<string>("Question not found", StatusCodeEnum.NotFound_404, null);
@@ -148,15 +161,34 @@ namespace Services.Service
                 var responses = await _responseRepository.GetResponsesByQuestionInGameIdAsync(questionInGameId);
                 if (responses == null || !responses.Any())
                 {
-                    return new BaseResponse<IEnumerable<ResponseResponse>>("No Responses found for this question in game", StatusCodeEnum.NotFound_404, null);
+                    return new BaseResponse<IEnumerable<ResponseResponse>>("No responses found for this question in game", StatusCodeEnum.NotFound_404, null);
                 }
 
                 var responseDtos = _mapper.Map<IEnumerable<ResponseResponse>>(responses);
-                return new BaseResponse<IEnumerable<ResponseResponse>>("Successfully retrieved Responses", StatusCodeEnum.OK_200, responseDtos);
+                return new BaseResponse<IEnumerable<ResponseResponse>>("Successfully retrieved responses", StatusCodeEnum.OK_200, responseDtos);
             }
             catch (Exception ex)
             {
                 return new BaseResponse<IEnumerable<ResponseResponse>>($"An error occurred: {ex.Message}", StatusCodeEnum.InternalServerError_500, null);
+            }
+        }
+
+        public async Task<BaseResponse<ResponseResponse>> GetLastResponseByPlayerIdAndQuizIdAsync(int playerId, int quizId)
+        {
+            try
+            {
+                var response = await _questionRepository.GetLastResponseByPlayerIdAndQuizIdAsync(playerId, quizId);
+                if (response == null)
+                {
+                    return new BaseResponse<ResponseResponse>("No response found for this player and quiz", StatusCodeEnum.NotFound_404, null);
+                }
+
+                var responseDto = _mapper.Map<ResponseResponse>(response);
+                return new BaseResponse<ResponseResponse>("Successfully retrieved last response", StatusCodeEnum.OK_200, responseDto);
+            }
+            catch (Exception ex)
+            {
+                return new BaseResponse<ResponseResponse>($"An error occurred: {ex.Message}", StatusCodeEnum.InternalServerError_500, null);
             }
         }
     }

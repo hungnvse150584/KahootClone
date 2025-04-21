@@ -12,5 +12,7 @@ namespace Services.RequestAndResponse.Request.QuestionInGameRequest
         public int SessionId { get; set; }
         public int QuestionId { get; set; }
         public int OrderIndex { get; set; }
+        public DateTime CreatedTime { get; set; }
+        public int TotalMembers { get; set; }
     }
 }

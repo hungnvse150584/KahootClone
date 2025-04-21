@@ -7,9 +7,11 @@ namespace Repositories.IRepository
 {
     public interface IQuestionRepository : IBaseRepository<Question>
     {
-        Task<List<Question>> GetByQuizIdAsync(int quizId);
+        Task<Question> GetQuestionByIdAsync(int questionId);
+        Task<List<Question>> GetQuestionsByQuizIdAsync(int quizId);
         Task<Question> AddQuestionAsync(Question question);
         Task<Question> UpdateQuestionAsync(Question question);
         Task DeleteQuestionAsync(Question question);
+        Task<Response> GetLastResponseByPlayerIdAndQuizIdAsync(int playerId, int quizId);
     }
 }

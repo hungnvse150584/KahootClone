@@ -19,13 +19,14 @@ namespace Repositories.Repository
             _questionInGameDao = questionInGameDao;
         }
 
-        public async Task<List<QuestionInGame>> GetBySessionIdAsync(int sessionId)
-        {
-            return await _questionInGameDao.GetQuestionsBySessionIdAsync(sessionId);
-        }
         public async Task<QuestionInGame> GetQuestionInGameByIdAsync(int questionInGameId)
         {
-            return await _questionInGameDao.GetByIdAsync(questionInGameId);
+            return await _questionInGameDao.GetQuestionInGameByIdAsync(questionInGameId);
+        }
+
+        public async Task<List<QuestionInGame>> GetBySessionIdAsync(int sessionId)
+        {
+            return await _questionInGameDao.GetQuestionsInGameBySessionIdAsync(sessionId);
         }
 
         public async Task<QuestionInGame> AddQuestionInGameAsync(QuestionInGame questionInGame)
@@ -41,6 +42,11 @@ namespace Repositories.Repository
         public async Task DeleteQuestionInGameAsync(QuestionInGame questionInGame)
         {
             await _questionInGameDao.DeleteQuestionInGameAsync(questionInGame);
+        }
+
+        public async Task<Response> GetLastResponseByPlayerIdAndSessionIdAsync(int playerId, int sessionId)
+        {
+            return await _questionInGameDao.GetLastResponseByPlayerIdAndSessionIdAsync(playerId, sessionId);
         }
     }
 }

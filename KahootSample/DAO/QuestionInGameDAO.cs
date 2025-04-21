@@ -18,25 +18,28 @@ namespace DAO
             _context = context;
         }
 
-        public async Task<QuestionInGame> GetByIdAsync(int id)
+        public async Task<QuestionInGame> GetQuestionInGameByIdAsync(int questionInGameId)
         {
             var questionInGame = await _context.QuestionsInGame
-                .Include(q => q.Question)
                 .Include(q => q.Session)
+                .Include(q => q.Question)
                 .Include(q => q.Responses)
                 .Include(q => q.TeamResults)
-                .FirstOrDefaultAsync(q => q.QuestionInGameId == id);
+                .FirstOrDefaultAsync(q => q.QuestionInGameId == questionInGameId);
 
             if (questionInGame == null)
-                throw new ArgumentNullException($"QuestionInGame with id {id} not found");
+            {
+                throw new ArgumentNullException($"QuestionInGame with id {questionInGameId} not found");
+            }
 
             return questionInGame;
         }
 
-        public async Task<List<QuestionInGame>> GetQuestionsBySessionIdAsync(int sessionId)
+        public async Task<List<QuestionInGame>> GetQuestionsInGameBySessionIdAsync(int sessionId)
         {
             return await _context.QuestionsInGame
                 .Where(q => q.SessionId == sessionId)
+                .Include(q => q.Session)
                 .Include(q => q.Question)
                 .Include(q => q.Responses)
                 .Include(q => q.TeamResults)
@@ -46,6 +49,11 @@ namespace DAO
 
         public async Task<QuestionInGame> AddQuestionInGameAsync(QuestionInGame questionInGame)
         {
+            if (questionInGame == null)
+            {
+                throw new ArgumentNullException(nameof(questionInGame));
+            }
+
             await _context.QuestionsInGame.AddAsync(questionInGame);
             await _context.SaveChangesAsync();
             return questionInGame;
@@ -53,6 +61,11 @@ namespace DAO
 
         public async Task<QuestionInGame> UpdateQuestionInGameAsync(QuestionInGame questionInGame)
         {
+            if (questionInGame == null)
+            {
+                throw new ArgumentNullException(nameof(questionInGame));
+            }
+
             _context.QuestionsInGame.Update(questionInGame);
             await _context.SaveChangesAsync();
             return questionInGame;
@@ -60,8 +73,23 @@ namespace DAO
 
         public async Task DeleteQuestionInGameAsync(QuestionInGame questionInGame)
         {
+            if (questionInGame == null)
+            {
+                throw new ArgumentNullException(nameof(questionInGame));
+            }
+
             _context.QuestionsInGame.Remove(questionInGame);
             await _context.SaveChangesAsync();
+        }
+
+        public async Task<Response> GetLastResponseByPlayerIdAndSessionIdAsync(int playerId, int sessionId)
+        {
+            var response = await _context.Responses
+                .Where(r => r.PlayerId == playerId && r.QuestionInGame.SessionId == sessionId)
+                .OrderByDescending(r => r.ResponseId)
+                .FirstOrDefaultAsync();
+
+            return response;
         }
     }
 }

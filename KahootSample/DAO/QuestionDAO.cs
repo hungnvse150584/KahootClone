@@ -17,22 +17,22 @@ namespace DAO
             _context = context;
         }
 
-        public async Task<Question> GetByIdAsync(int id)
+        public async Task<Question> GetQuestionByIdAsync(int questionId)
         {
             var question = await _context.Questions
                 .Include(q => q.Quiz)
                 .Include(q => q.QuestionsInGame)
-                .FirstOrDefaultAsync(q => q.QuestionId == id);
+                .FirstOrDefaultAsync(q => q.QuestionId == questionId);
 
             if (question == null)
             {
-                throw new ArgumentNullException($"Question with id {id} not found");
+                throw new ArgumentNullException($"Question with id {questionId} not found");
             }
 
             return question;
         }
 
-        public async Task<List<Question>> GetByQuizIdAsync(int quizId)
+        public async Task<List<Question>> GetQuestionsByQuizIdAsync(int quizId)
         {
             return await _context.Questions
                 .Where(q => q.QuizId == quizId)
@@ -68,8 +68,25 @@ namespace DAO
 
         public async Task DeleteQuestionAsync(Question question)
         {
+            if (question == null)
+            {
+                throw new ArgumentNullException(nameof(question));
+            }
+
             _context.Questions.Remove(question);
             await _context.SaveChangesAsync();
+        }
+
+        public async Task<Response> GetLastResponseByPlayerIdAndQuizIdAsync(int playerId, int quizId)
+        {
+            var response = await _context.Responses
+                .Include(r => r.QuestionInGame)
+                .ThenInclude(qig => qig.Question)
+                .Where(r => r.PlayerId == playerId && r.QuestionInGame.Question.QuizId == quizId)
+                .OrderByDescending(r => r.ResponseId)
+                .FirstOrDefaultAsync();
+
+            return response;
         }
     }
 }
