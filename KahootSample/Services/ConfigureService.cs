@@ -31,7 +31,7 @@ namespace Services
 
             services.AddScoped<IResponseService, ResponseService>();
 
-
+            services.AddScoped<ITeamResultInGameService, TeamResultInGameService>();
 
             services.AddScoped<IPlayerService, PlayerService>();
 

@@ -31,7 +31,9 @@ namespace DAO
 
             services.AddScoped<Question>();
 
-  
+            services.AddScoped<QuestionInGame>();
+
+            services.AddScoped<TeamResultInGame>();
 
             services.AddScoped<Response>();
             return services;

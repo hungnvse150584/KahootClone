@@ -18,14 +18,12 @@ namespace DAOs
             _context = context;
         }
 
-        // Get GameSession by ID with related Quiz, Players, Teams, and Scores
         public async Task<GameSession> GetByIdAsync(int id)
         {
             var gameSession = await _context.GameSessions
                 .Include(gs => gs.Quiz)
                 .Include(gs => gs.Players)
                 .Include(gs => gs.Teams)
-             
                 .FirstOrDefaultAsync(gs => gs.SessionId == id);
 
             if (gameSession == null)
@@ -36,7 +34,6 @@ namespace DAOs
             return gameSession;
         }
 
-        // Get GameSessions by QuizId
         public async Task<List<GameSession>> GetGameSessionsByQuizIdAsync(int quizId)
         {
             return await _context.GameSessions
@@ -44,7 +41,39 @@ namespace DAOs
                 .Include(gs => gs.Quiz)
                 .Include(gs => gs.Players)
                 .Include(gs => gs.Teams)
-               
+                .ToListAsync();
+        }
+
+        public async Task<GameSession> GetGameSessionByPinAsync(string pin)
+        {
+            var gameSession = await _context.GameSessions
+                .Include(gs => gs.Quiz)
+                .Include(gs => gs.Players)
+                .Include(gs => gs.Teams)
+                .FirstOrDefaultAsync(gs => gs.Pin == pin);
+
+            if (gameSession == null)
+            {
+                throw new ArgumentNullException($"GameSession with pin {pin} not found");
+            }
+
+            return gameSession;
+        }
+
+        public async Task<List<Player>> GetPlayersInSessionAsync(int sessionId)
+        {
+            return await _context.Players
+                .Where(p => p.SessionId == sessionId)
+                .Include(p => p.User)
+                .Include(p => p.Team)
+                .ToListAsync();
+        }
+
+        public async Task<List<Team>> GetTeamsInSessionAsync(int sessionId)
+        {
+            return await _context.Teams
+                .Where(t => t.SessionId == sessionId)
+                .Include(t => t.Players)
                 .ToListAsync();
         }
     }

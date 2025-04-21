@@ -23,5 +23,20 @@ namespace Repositories.Repository
         {
             return await _gameSessionDao.GetGameSessionsByQuizIdAsync(quizId);
         }
+
+        public async Task<GameSession> GetGameSessionByPinAsync(string pin)
+        {
+            return await _gameSessionDao.GetGameSessionByPinAsync(pin);
+        }
+
+        public async Task<List<Player>> GetPlayersInSessionAsync(int sessionId)
+        {
+            return await _gameSessionDao.GetPlayersInSessionAsync(sessionId);
+        }
+
+        public async Task<List<Team>> GetTeamsInSessionAsync(int sessionId)
+        {
+            return await _gameSessionDao.GetTeamsInSessionAsync(sessionId);
+        }
     }
 }
