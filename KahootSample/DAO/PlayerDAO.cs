@@ -25,7 +25,7 @@ namespace DAO
                 .Include(p => p.Team)
                 .Include(p => p.Responses)
              
-                .Include(p => p.TeamResults)
+           
                 .FirstOrDefaultAsync(p => p.PlayerId == playerId);
 
             if (player == null)
@@ -42,7 +42,7 @@ namespace DAO
                 .Include(p => p.Team)
                 .Include(p => p.Responses)
           
-                .Include(p => p.TeamResults)
+             
                 .ToListAsync();
         }
 
@@ -64,7 +64,6 @@ namespace DAO
                 .Include(p => p.Team)
                 .Include(p => p.Responses)
         
-                .Include(p => p.TeamResults)
                 .ToListAsync();
         }
 
