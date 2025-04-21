@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.SignalR;
 using Services.IService;
 using Services.RequestAndResponse.Enum;
+using Services.RequestAndResponse.Request.GameSessionRequest;
 using Services.RequestAndResponse.Request.ResponseRequest;
 using Services.RequestAndResponse.Response.GameSessionResponses;
 using System;
@@ -24,6 +25,34 @@ namespace Kahoot.Hubs
             _responseService = responseService;
         }
 
+        // Phương thức mới để tạo GameSession
+        public async Task CreateGameSession(CreateGameSessionRequest request)
+        {
+            try
+            {
+                if (request == null)
+                {
+                    await Clients.Caller.SendAsync("Error", "Request body cannot be null");
+                    return;
+                }
+
+                var result = await _gameSessionService.CreateGameSessionAsync(request);
+                if (result.StatusCode == StatusCodeEnum.Created_201 && result.Data != null)
+                {
+                    // Gửi thông báo đến host (người gọi) bằng Clients.Caller
+                    await Clients.Caller.SendAsync("GameSessionCreated", result.Data);
+                }
+                else
+                {
+                    await Clients.Caller.SendAsync("Error", result.Message);
+                }
+            }
+            catch (Exception ex)
+            {
+                await Clients.Caller.SendAsync("Error", $"An error occurred: {ex.Message}");
+            }
+        }
+
         public async Task JoinGameSession(int sessionId, int playerId)
         {
             try
@@ -41,10 +70,8 @@ namespace Kahoot.Hubs
                     return;
                 }
 
-                // Lưu sessionId vào Context.Items
                 Context.Items["SessionId"] = sessionId.ToString();
 
-                // Thêm người chơi vào group của phiên chơi
                 await Groups.AddToGroupAsync(Context.ConnectionId, sessionId.ToString());
                 await Clients.Group(sessionId.ToString()).SendAsync("PlayerJoined", playerId);
 
@@ -229,7 +256,6 @@ namespace Kahoot.Hubs
 
         private string GetSessionIdFromConnection()
         {
-            // Lấy sessionId từ Context.Items
             if (Context.Items.TryGetValue("SessionId", out var sessionId))
             {
                 return sessionId?.ToString();
