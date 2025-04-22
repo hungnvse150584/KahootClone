@@ -22,6 +22,8 @@ using Services.RequestAndResponse.PlayerRequest;
 using Services.RequestAndResponse.Response.PlayerResponse;
 using Services.RequestAndResponse.Request.QuestionInGameRequest;
 using Services.RequestAndResponse.Response.QuestionInGameResponse;
+using Services.RequestAndResponse.Request.TeamResultRequest;
+using Services.RequestAndResponse.Response.TeamResultResponses;
 
 namespace Services.Mapping
 {
@@ -29,6 +31,10 @@ namespace Services.Mapping
     {
         public MappingProfile()
         {
+            CreateMap<CreateTeamResultRequest, TeamResultInGame>();
+            CreateMap<UpdateTeamResultRequest, TeamResultInGame>();
+            CreateMap<TeamResultInGame, TeamResultResponse>();
+              
             // Ánh xạ cho Response
             CreateMap<CreateResponseRequest, Response>().ReverseMap();
             CreateMap<UpdateResponseRequest, Response>().ReverseMap();
@@ -67,6 +73,8 @@ namespace Services.Mapping
             CreateMap<UpdateQuestionInGameRequest, QuestionInGame>();
             CreateMap<QuestionInGame, QuestionInGameResponse>();
             CreateMap<Response, ResponseResponse>();
+
+
         }
     }
 }
