@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
+using static BOs.Model.Quiz;
 
 namespace Services.RequestAndResponse.Request
 {
@@ -11,10 +12,10 @@ namespace Services.RequestAndResponse.Request
         [Required, MaxLength(100)]
         public string Title { get; set; }
 
-        [MaxLength(10)]
-        public string Pin { get; set; }
+        [MaxLength(500)]
+        public string Description { get; set; }
 
-        [MaxLength(200)]
-        public string QrCode { get; set; }
+        [RegularExpression("Active|Inactive", ErrorMessage = "Status must be 'Active' or 'Inactive'")]
+        public string Status { get; set; }
     }
 }

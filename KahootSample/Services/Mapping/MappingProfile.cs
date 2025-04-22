@@ -94,9 +94,9 @@ namespace Services.Mapping
             CreateMap<Response, ResponseResponse>();
 
             //Quizz
+            CreateMap<Quiz, QuizResponse>();
             CreateMap<CreateQuizRequest, Quiz>();
             CreateMap<UpdateQuizRequest, Quiz>();
-            CreateMap<Quiz, QuizResponse>();
             CreateMap<Response, ResponseResponse>();
 
         }
