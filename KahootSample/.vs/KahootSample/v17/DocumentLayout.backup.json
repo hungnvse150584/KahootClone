@@ -47,8 +47,7 @@
               "ViewState": "AgIAAGEAAAAAAAAAAAAAwHUAAABnAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-04-22T13:48:18.856Z",
-              "IsPinned": true,
-              "EditorCaption": ""
+              "IsPinned": true
             },
             {
               "$type": "Document",
@@ -119,8 +118,7 @@
               "RelativeToolTip": "Kahoot\\Controllers\\TeamResultInGameController.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAQAAAAqAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-04-22T15:53:52.899Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-04-22T15:53:52.899Z"
             },
             {
               "$type": "Document",
@@ -132,8 +130,7 @@
               "RelativeToolTip": "Services\\Mapping\\MappingProfile.cs",
               "ViewState": "AgIAAA8AAAAAAAAAAAAjwB8AAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-04-22T14:08:41.754Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-04-22T14:08:41.754Z"
             }
           ]
         },
