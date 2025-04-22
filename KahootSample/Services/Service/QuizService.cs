@@ -29,6 +29,7 @@ namespace Services.Service
             try
             {
                 var quiz = _mapper.Map<Quiz>(request);
+                quiz.Description = request.Description;
                 var createdQuiz = await _quizRepository.AddQuizAsync(quiz);
                 var response = _mapper.Map<QuizResponse>(createdQuiz);
 
@@ -50,8 +51,20 @@ namespace Services.Service
                     return new BaseResponse<QuizResponse>("Quiz not found", StatusCodeEnum.NotFound_404, null);
                 }
 
-                existingQuiz.Title = request.Title;    
+                if (!string.IsNullOrWhiteSpace(request.Title))
+                {
+                    existingQuiz.Title = request.Title;
+                }
 
+                if (!string.IsNullOrWhiteSpace(request.Description))
+                {
+                    existingQuiz.Description = request.Description;
+                }
+
+                if (!string.IsNullOrWhiteSpace(request.Status))
+                {
+                    existingQuiz.Status = request.Status;
+                }
                 var updatedQuiz = await _quizRepository.UpdateQuizAsync(existingQuiz);
                 var response = _mapper.Map<QuizResponse>(updatedQuiz);
 

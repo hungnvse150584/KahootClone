@@ -16,7 +16,8 @@ namespace BOs.Model
         public string Title { get; set; }
         public string Description { get; set; }
         public DateTime CreatedTime { get; set; }
-        public string Status { get; set; } // Thêm Status
+
+        public string Status { get; set; }
 
         // Quan hệ
         [ForeignKey("CreatedBy")]
@@ -24,5 +25,7 @@ namespace BOs.Model
 
         public ICollection<Question> Questions { get; set; } = new List<Question>();
         public ICollection<GameSession> GameSessions { get; set; } = new List<GameSession>();
+
+       
     }
 }
