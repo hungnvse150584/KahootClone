@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.SignalR;
 using Services.IService;
 using Services.RequestAndResponse.BaseResponse;
 using Services.RequestAndResponse.Enum;
@@ -8,7 +7,6 @@ using Services.RequestAndResponse.Response.GameSessionResponses;
 using Services.RequestAndResponse.Response.PlayerResponse;
 using Services.RequestAndResponse.Response.TeamResponse;
 using System.Threading.Tasks;
-using Kahoot.Hubs;
 
 namespace Kahoot.Controllers
 {
@@ -18,16 +16,13 @@ namespace Kahoot.Controllers
     {
         private readonly IGameSessionService _gameSessionService;
         private readonly IQuestionService _questionService;
-        private readonly IHubContext<GameSessionHub> _hubContext;
 
         public GameSessionController(
             IGameSessionService gameSessionService,
-            IQuestionService questionService,
-            IHubContext<GameSessionHub> hubContext)
+            IQuestionService questionService)
         {
             _gameSessionService = gameSessionService;
             _questionService = questionService;
-            _hubContext = hubContext;
         }
 
         [HttpPost("Start/{sessionId}")]
@@ -72,8 +67,6 @@ namespace Kahoot.Controllers
                 return StatusCode((int)updateResult.StatusCode, updateResult);
             }
 
-            await _hubContext.Clients.Group(sessionId.ToString()).SendAsync("GameStarted", sessionId);
-
             return Ok(new BaseResponse<string>("GameSession started", StatusCodeEnum.OK_200, "Started"));
         }
 
@@ -99,8 +92,6 @@ namespace Kahoot.Controllers
             {
                 return NotFound(new BaseResponse<string>("Question not found", StatusCodeEnum.NotFound_404, null));
             }
-
-            await _hubContext.Clients.Group(sessionId.ToString()).SendAsync("ReceiveQuestion", question.Data);
 
             return Ok(new BaseResponse<string>("Question sent", StatusCodeEnum.OK_200, "Sent"));
         }
@@ -163,11 +154,6 @@ namespace Kahoot.Controllers
             }
 
             var result = await _gameSessionService.UpdateGameSessionAsync(sessionId, request);
-            if (result.StatusCode == StatusCodeEnum.OK_200 && result.Data != null)
-            {
-                await _hubContext.Clients.Group(sessionId.ToString()).SendAsync("GameSessionUpdated", result.Data);
-            }
-
             return StatusCode((int)result.StatusCode, result);
         }
 
@@ -184,11 +170,6 @@ namespace Kahoot.Controllers
             }
 
             var result = await _gameSessionService.DeleteGameSessionAsync(sessionId);
-            if (result.StatusCode == StatusCodeEnum.OK_200)
-            {
-                await _hubContext.Clients.Group(sessionId.ToString()).SendAsync("GameSessionDeleted", sessionId);
-            }
-
             return StatusCode((int)result.StatusCode, result);
         }
 
@@ -241,11 +222,6 @@ namespace Kahoot.Controllers
         public async Task<ActionResult<BaseResponse<string>>> EndGameSession(int sessionId)
         {
             var result = await _gameSessionService.EndGameSessionAsync(sessionId);
-            if (result.StatusCode == StatusCodeEnum.OK_200)
-            {
-                await _hubContext.Clients.Group(sessionId.ToString()).SendAsync("GameEnded", sessionId);
-            }
-
             return StatusCode((int)result.StatusCode, result);
         }
     }
