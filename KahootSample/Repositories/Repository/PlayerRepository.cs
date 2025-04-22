@@ -40,5 +40,10 @@ namespace Repositories.Repository
         {
             return await _playerDao.RemovePlayerAsync(playerId);
         }
+
+        public async Task<Player> UpdatePlayerAsync(Player player)
+        {
+            return await _playerDao.UpdateAsync(player);
+        }
     }
 }

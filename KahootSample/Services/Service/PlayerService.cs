@@ -5,6 +5,7 @@ using Services.IService;
 using Services.RequestAndResponse.BaseResponse;
 using Services.RequestAndResponse.Enum;
 using Services.RequestAndResponse.PlayerRequest;
+using Services.RequestAndResponse.Request.PlayerRequest;
 using Services.RequestAndResponse.Response.PlayerResponse;
 using System;
 using System.Collections.Generic;
@@ -112,6 +113,38 @@ namespace Services.Service
             catch (Exception ex)
             {
                 return new BaseResponse<string>($"An error occurred: {ex.Message}", StatusCodeEnum.InternalServerError_500, null);
+            }
+        }
+        public async Task<BaseResponse<PlayerResponse>> UpdatePlayerAsync(UpdatePlayerRequest request)
+        {
+            try
+            {
+                var player = await _playerRepository.GetByIdAsync(request.PlayerId);
+                if (player == null)
+                    return new BaseResponse<PlayerResponse>("Player not found", StatusCodeEnum.NotFound_404, null);
+
+                if (player.SessionId != request.SessionId)
+                    return new BaseResponse<PlayerResponse>("Player does not belong to this session", StatusCodeEnum.BadRequest_400, null);
+
+                // Update fields if provided
+                if (!string.IsNullOrEmpty(request.Nickname))
+                    player.Nickname = request.Nickname;
+                if (request.Score.HasValue)
+                    player.Score = request.Score.Value;
+                if (request.Ranking.HasValue)
+                    player.Ranking = request.Ranking.Value;
+                if (request.UserId.HasValue)
+                    player.UserId = request.UserId.Value;
+                if (request.TeamId.HasValue)
+                    player.TeamId = request.TeamId.Value;
+
+                var updatedPlayer = await _playerRepository.UpdatePlayerAsync(player);
+                var response = _mapper.Map<PlayerResponse>(updatedPlayer);
+                return new BaseResponse<PlayerResponse>("Player updated successfully", StatusCodeEnum.OK_200, response);
+            }
+            catch (Exception ex)
+            {
+                return new BaseResponse<PlayerResponse>($"An error occurred: {ex.Message}", StatusCodeEnum.InternalServerError_500, null);
             }
         }
     }

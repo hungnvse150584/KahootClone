@@ -24,10 +24,14 @@ using Services.RequestAndResponse.Request.QuestionInGameRequest;
 using Services.RequestAndResponse.Response.QuestionInGameResponse;
 using Services.RequestAndResponse.Request.TeamResultRequest;
 using Services.RequestAndResponse.Response.TeamResultResponses;
+<<<<<<< HEAD
+using Services.RequestAndResponse.Request.PlayerRequest;
+=======
 using Services.RequestAndResponse.Response.QuizResponses;
 using Services.RequestAndResponse.Request;
 using Services.RequestAndResponse.Response.UserResponse;
 using Services.RequestAndResponse.Request.UserRequest;
+>>>>>>> main
 
 namespace Services.Mapping
 {
@@ -70,10 +74,17 @@ namespace Services.Mapping
                 .ForMember(dest => dest.CreatedAt, opt => opt.MapFrom(src => DateTime.UtcNow))
                 .ForMember(dest => dest.UpdatedAt, opt => opt.MapFrom(src => DateTime.UtcNow));
 
-           
+
             // Player mappings
-            CreateMap<CreatePlayerRequest, Player>().ReverseMap();
-            CreateMap<Player, PlayerResponse>().ReverseMap();
+            //CreateMap<CreatePlayerRequest, Player>().ReverseMap();
+            //    //.ForMember(dest => dest.SessionId, opt => opt.MapFrom(src => src.SessionId.Value)); // Handle nullable int;
+            //CreateMap<Player, PlayerResponse>().ReverseMap();
+
+            CreateMap<CreatePlayerRequest, Player>()
+                .ForMember(dest => dest.SessionId, opt => opt.MapFrom(src => src.SessionId.Value));
+            CreateMap<UpdatePlayerRequest, Player>()
+                .ForMember(dest => dest.JoinedAt, opt => opt.Ignore()); // Ignore fields not in the request
+            CreateMap<Player, PlayerResponse>();
 
             //Question mappings
             CreateMap<CreateQuestionRequest, Question>();

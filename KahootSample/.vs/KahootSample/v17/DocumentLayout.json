@@ -1,5 +1,24 @@
 {
   "Version": 1,
+<<<<<<< HEAD
+  "WorkspaceRootPath": "D:\\FU\\SWP391\\KahootSample\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{452B7F39-93D1-46AA-8803-A4AC14FFD997}|Kahoot\\Kahoot.csproj|d:\\fu\\swp391\\kahootsample\\kahoot\\hubs\\gamesessionhub.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{452B7F39-93D1-46AA-8803-A4AC14FFD997}|Kahoot\\Kahoot.csproj|solutionrelative:kahoot\\hubs\\gamesessionhub.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{FCF6F00C-019E-4E12-A667-DC60CD734FD1}|Services\\Services.csproj|d:\\fu\\swp391\\kahootsample\\services\\iservice\\iplayerservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{FCF6F00C-019E-4E12-A667-DC60CD734FD1}|Services\\Services.csproj|solutionrelative:services\\iservice\\iplayerservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{FCF6F00C-019E-4E12-A667-DC60CD734FD1}|Services\\Services.csproj|d:\\fu\\swp391\\kahootsample\\services\\mapping\\mappingprofile.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{FCF6F00C-019E-4E12-A667-DC60CD734FD1}|Services\\Services.csproj|solutionrelative:services\\mapping\\mappingprofile.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{FCF6F00C-019E-4E12-A667-DC60CD734FD1}|Services\\Services.csproj|d:\\fu\\swp391\\kahootsample\\services\\service\\playerservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{FCF6F00C-019E-4E12-A667-DC60CD734FD1}|Services\\Services.csproj|solutionrelative:services\\service\\playerservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+=======
   "WorkspaceRootPath": "D:\\SWP-BE\\KahootSample\\",
   "Documents": [
     {
@@ -37,6 +56,7 @@
     {
       "AbsoluteMoniker": "D:0:0:{452B7F39-93D1-46AA-8803-A4AC14FFD997}|Kahoot\\Kahoot.csproj|d:\\swp-be\\kahootsample\\kahoot\\controllers\\quizcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{452B7F39-93D1-46AA-8803-A4AC14FFD997}|Kahoot\\Kahoot.csproj|solutionrelative:kahoot\\controllers\\quizcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+>>>>>>> main
     }
   ],
   "DocumentGroupContainers": [
@@ -45,6 +65,64 @@
       "VerticalTabListWidth": 256,
       "DocumentGroups": [
         {
+<<<<<<< HEAD
+          "DockedWidth": 200,
+          "SelectedChildIndex": 0,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "GameSessionHub.cs",
+              "DocumentMoniker": "D:\\FU\\SWP391\\KahootSample\\Kahoot\\Hubs\\GameSessionHub.cs",
+              "RelativeDocumentMoniker": "Kahoot\\Hubs\\GameSessionHub.cs",
+              "ToolTip": "D:\\FU\\SWP391\\KahootSample\\Kahoot\\Hubs\\GameSessionHub.cs",
+              "RelativeToolTip": "Kahoot\\Hubs\\GameSessionHub.cs",
+              "ViewState": "AgIAAA4AAAAAAAAAAAAQwBkAAAAtAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-04-22T13:48:18.856Z",
+              "IsPinned": true,
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "IPlayerService.cs",
+              "DocumentMoniker": "D:\\FU\\SWP391\\KahootSample\\Services\\IService\\IPlayerService.cs",
+              "RelativeDocumentMoniker": "Services\\IService\\IPlayerService.cs",
+              "ToolTip": "D:\\FU\\SWP391\\KahootSample\\Services\\IService\\IPlayerService.cs",
+              "RelativeToolTip": "Services\\IService\\IPlayerService.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABIAAABaAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-04-22T14:25:57.712Z",
+              "IsPinned": true,
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "PlayerService.cs",
+              "DocumentMoniker": "D:\\FU\\SWP391\\KahootSample\\Services\\Service\\PlayerService.cs",
+              "RelativeDocumentMoniker": "Services\\Service\\PlayerService.cs",
+              "ToolTip": "D:\\FU\\SWP391\\KahootSample\\Services\\Service\\PlayerService.cs",
+              "RelativeToolTip": "Services\\Service\\PlayerService.cs",
+              "ViewState": "AgIAAFEAAAAAAAAAAAAQwBIAAAA9AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-04-22T14:10:05.546Z",
+              "IsPinned": true,
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "MappingProfile.cs",
+              "DocumentMoniker": "D:\\FU\\SWP391\\KahootSample\\Services\\Mapping\\MappingProfile.cs",
+              "RelativeDocumentMoniker": "Services\\Mapping\\MappingProfile.cs",
+              "ToolTip": "D:\\FU\\SWP391\\KahootSample\\Services\\Mapping\\MappingProfile.cs",
+              "RelativeToolTip": "Services\\Mapping\\MappingProfile.cs",
+              "ViewState": "AgIAACMAAAAAAAAAAAAQwEEAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-04-22T14:08:41.754Z",
+=======
           "DockedWidth": 2192,
           "SelectedChildIndex": 13,
           "Children": [
@@ -60,6 +138,7 @@
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-04-22T13:47:17.884Z",
               "IsPinned": true,
+>>>>>>> main
               "EditorCaption": ""
             },
             {
@@ -80,6 +159,9 @@
             },
             {
               "$type": "Bookmark",
+<<<<<<< HEAD
+              "Name": "ST:128:0:{75188d03-9892-4ae2-abf1-207126247ce5}"
+=======
               "Name": "ST:0:0:{1c4feeaa-4718-4aa9-859d-94ce25d182ba}"
             },
             {
@@ -184,6 +266,7 @@
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-04-22T13:15:36.376Z",
               "EditorCaption": ""
+>>>>>>> main
             }
           ]
         },
