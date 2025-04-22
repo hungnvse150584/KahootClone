@@ -24,14 +24,11 @@ using Services.RequestAndResponse.Request.QuestionInGameRequest;
 using Services.RequestAndResponse.Response.QuestionInGameResponse;
 using Services.RequestAndResponse.Request.TeamResultRequest;
 using Services.RequestAndResponse.Response.TeamResultResponses;
-<<<<<<< HEAD
 using Services.RequestAndResponse.Request.PlayerRequest;
-=======
 using Services.RequestAndResponse.Response.QuizResponses;
 using Services.RequestAndResponse.Request;
 using Services.RequestAndResponse.Response.UserResponse;
 using Services.RequestAndResponse.Request.UserRequest;
->>>>>>> main
 
 namespace Services.Mapping
 {
