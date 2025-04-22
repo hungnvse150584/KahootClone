@@ -25,6 +25,37 @@ namespace Services.Service
             _mapper = mapper;
         }
 
+        public async Task<BaseResponse<LoginResponse>> LoginAsync(LoginRequest request)
+        {
+            try
+            {
+                var user = await _userRepository.GetByUsernameAsync(request.Username);
+                if (user == null || user.Password != request.Password)
+                {
+                    return new BaseResponse<LoginResponse>("Invalid username or password", StatusCodeEnum.Unauthorized_401, null);
+                }
+
+                // Optional role-based restriction example
+                if (user.Role != UserRoles.Admin && user.Role != UserRoles.Host)
+                {
+                    return new BaseResponse<LoginResponse>("Access denied for this role", StatusCodeEnum.Forbidden_403, null);
+                }
+
+                var userResponse = _mapper.Map<UserResponse>(user);
+                var loginResponse = new LoginResponse
+                {
+                    Token = "MockJWTToken123456", // Replace with real JWT logic later
+                    User = userResponse
+                };
+
+                return new BaseResponse<LoginResponse>("Login successful", StatusCodeEnum.OK_200, loginResponse);
+            }
+            catch (Exception ex)
+            {
+                return new BaseResponse<LoginResponse>($"An error occurred: {ex.Message}", StatusCodeEnum.InternalServerError_500, null);
+            }
+        }
+
         public async Task<BaseResponse<UserResponse>> CreateUserAsync(CreateUserRequest request)
         {
             try

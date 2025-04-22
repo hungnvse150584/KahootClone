@@ -12,6 +12,7 @@ namespace Services.IService
 {
     public interface IUserService
     {
+        Task<BaseResponse<LoginResponse>> LoginAsync(LoginRequest request);
         Task<BaseResponse<UserResponse>> CreateUserAsync(CreateUserRequest request);
         Task<BaseResponse<UserResponse>> UpdateUserAsync(UpdateUserRequest request);
         Task<BaseResponse<UserResponse>> GetUserByIdAsync(int userId);
