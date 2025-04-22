@@ -1,6 +1,7 @@
 ﻿using BOs.Model;
 using Services.RequestAndResponse.BaseResponse;
 using Services.RequestAndResponse.PlayerRequest;
+using Services.RequestAndResponse.Request.PlayerRequest;
 using Services.RequestAndResponse.Response;
 using Services.RequestAndResponse.Response.PlayerResponse;
 using System.Collections.Generic;
@@ -15,5 +16,6 @@ namespace Services.IService
         Task<BaseResponse<IEnumerable<PlayerResponse>>> GetPlayersBySessionIdAsync(int sessionId);
         Task<BaseResponse<IEnumerable<PlayerResponse>>> GetPlayersByTeamIdAsync(int teamId);
         Task<BaseResponse<string>> RemovePlayerAsync(int playerId);
+        Task<BaseResponse<PlayerResponse>> UpdatePlayerAsync(UpdatePlayerRequest request);
     }
 }
