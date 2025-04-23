@@ -11,6 +11,7 @@ namespace Services.IService
 {
     public interface IPlayerService
     {
+        Task<BaseResponse<IEnumerable<PlayerResponse>>> GetAllPlayersAsync();
         Task<BaseResponse<PlayerResponse>> AddPlayerAsync(CreatePlayerRequest request);
         Task<BaseResponse<PlayerResponse>> GetPlayerByIdAsync(int playerId);
         Task<BaseResponse<IEnumerable<PlayerResponse>>> GetPlayersBySessionIdAsync(int sessionId);

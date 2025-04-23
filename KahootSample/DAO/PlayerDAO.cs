@@ -17,6 +17,16 @@ namespace DAO
             _context = context;
         }
 
+        public async Task<List<Player>> GetAllPlayersAsync()
+        {
+            return await _context.Players
+                .Include(p => p.User)
+                .Include(p => p.Session)
+                .Include(p => p.Team)
+                .Include(p => p.Responses)
+                .ToListAsync();
+        }
+
         public async Task<Player> GetByIdAsync(int playerId)
         {
             var player = await _context.Players

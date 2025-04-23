@@ -25,6 +25,22 @@ namespace Services.Service
             _mapper = mapper;
         }
 
+        public async Task<BaseResponse<IEnumerable<PlayerResponse>>> GetAllPlayersAsync()
+        {
+            try
+            {
+                var players = await _playerRepository.GetAllPlayersAsync();
+                var response = _mapper.Map<IEnumerable<PlayerResponse>>(players);
+
+                return new BaseResponse<IEnumerable<PlayerResponse>>("Successfully retrieved all players", StatusCodeEnum.OK_200, response);
+            }
+            catch (Exception ex)
+            {
+                return new BaseResponse<IEnumerable<PlayerResponse>>($"An error occurred: {ex.Message}", StatusCodeEnum.InternalServerError_500, null);
+            }
+        }
+
+
         public async Task<BaseResponse<PlayerResponse>> AddPlayerAsync(CreatePlayerRequest request)
         {
             try
