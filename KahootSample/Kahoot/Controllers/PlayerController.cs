@@ -18,6 +18,23 @@ namespace Kahoot.Controllers
             _playerService = playerService;
         }
 
+        [HttpGet]
+        [Route("GetAllPlayers")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<ActionResult<BaseResponse<IEnumerable<PlayerResponse>>>> GetAllPlayers()
+        {
+            try
+            {
+                var result = await _playerService.GetAllPlayersAsync();
+                return StatusCode((int)result.StatusCode, result);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new BaseResponse<IEnumerable<PlayerResponse>>($"Something went wrong! Error: {ex.Message}", StatusCodeEnum.InternalServerError_500, null));
+            }
+        }
+
         [HttpPost]
         [Route("CreatePlayer")]
         [ProducesResponseType(StatusCodes.Status201Created)]
