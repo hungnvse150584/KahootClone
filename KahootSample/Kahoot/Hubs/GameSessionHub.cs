@@ -10,6 +10,7 @@ using System;
 using System.Threading.Tasks;
 using System.Linq;
 using Services.RequestAndResponse.PlayerRequest;
+using Services.RequestAndResponse.Request.PlayerRequest;
 
 namespace Kahoot.Hubs
 {
@@ -192,6 +193,157 @@ namespace Kahoot.Hubs
             }
         }
         // Other methods (CreateGameSession, JoinGameSession, etc.) remain unchanged
+        //Response
+        public async Task SubmitResponse(int playerId, int questionInGameId, int selectedOption)
+        {
+            try
+            {
+                var questionInGame = await _questionInGameService.GetQuestionInGameByIdAsync(questionInGameId);
+                if (questionInGame.StatusCode != StatusCodeEnum.OK_200 || questionInGame.Data == null)
+                {
+                    await Clients.Caller.SendAsync("Error", "QuestionInGame not found");
+                    return;
+                }
+
+                var question = await _questionService.GetQuestionByIdAsync(questionInGame.Data.QuestionId);
+                if (question.StatusCode != StatusCodeEnum.OK_200 || question.Data == null)
+                {
+                    await Clients.Caller.SendAsync("Error", "Question not found");
+                    return;
+                }
+
+                // Calculate score and correctness
+                bool isCorrect = selectedOption == question.Data.CorrectOption;
+                int score = isCorrect ? 100 : 0; // Simplified scoring logic
+
+                var responseRequest = new CreateResponseRequest
+                {
+                    PlayerId = playerId,
+                    QuestionInGameId = questionInGameId,
+                    SelectedOption = selectedOption,
+                    ResponseTime = 0, // You might calculate this on the client side
+                    Score = score,
+                    Streak = 0, // Update streak logic as needed
+                    Rank = 0 // Update rank logic as needed
+                };
+
+                var responseResult = await _responseService.CreateResponseAsync(responseRequest);
+                if (responseResult.StatusCode != StatusCodeEnum.Created_201 || responseResult.Data == null)
+                {
+                    await Clients.Caller.SendAsync("Error", responseResult.Message);
+                    return;
+                }
+
+                // Update player's score
+                var player = await _playerService.GetPlayerByIdAsync(playerId);
+                if (player.StatusCode != StatusCodeEnum.OK_200 || player.Data == null)
+                {
+                    await Clients.Caller.SendAsync("Error", "Player not found");
+                    return;
+                }
+
+                var updatePlayerRequest = new UpdatePlayerRequest
+                {
+                    PlayerId = playerId,
+                    SessionId = player.Data.SessionId,
+                    Score = (player.Data.Score ?? 0) + score
+                };
+                var updatePlayerResult = await _playerService.UpdatePlayerAsync(updatePlayerRequest);
+                if (updatePlayerResult.StatusCode != StatusCodeEnum.OK_200)
+                {
+                    await Clients.Caller.SendAsync("Error", updatePlayerResult.Message);
+                    return;
+                }
+
+                // Notify the player of their response result
+                await Clients.Caller.SendAsync("ResponseSubmitted", new
+                {
+                    IsCorrect = isCorrect,
+                    Score = score,
+                    TotalScore = updatePlayerResult.Data.Score
+                });
+
+                // Notify the host of the new response
+                await Clients.Group(player.Data.SessionId.ToString()).SendAsync("PlayerResponded", new
+                {
+                    PlayerId = playerId,
+                    QuestionInGameId = questionInGameId,
+                    SelectedOption = selectedOption
+                });
+            }
+            catch (Exception ex)
+            {
+                await Clients.Caller.SendAsync("Error", $"An error occurred: {ex.Message}");
+            }
+        }
+        //Question
+        public async Task NextQuestion(int sessionId, int currentOrderIndex)
+        {
+            try
+            {
+                var questionsInGame = await _questionInGameService.GetQuestionsInGameBySessionIdAsync(sessionId);
+                if (questionsInGame.StatusCode != StatusCodeEnum.OK_200 || questionsInGame.Data == null)
+                {
+                    await Clients.Caller.SendAsync("Error", "No questions found for this session");
+                    return;
+                }
+
+                var nextQuestion = questionsInGame.Data.FirstOrDefault(q => q.OrderIndex == currentOrderIndex + 1);
+                if (nextQuestion == null)
+                {
+                    await Clients.Caller.SendAsync("Error", "No more questions available");
+                    return;
+                }
+
+                var question = await _questionService.GetQuestionByIdAsync(nextQuestion.QuestionId);
+                if (question.StatusCode != StatusCodeEnum.OK_200 || question.Data == null)
+                {
+                    await Clients.Caller.SendAsync("Error", "Question not found");
+                    return;
+                }
+
+                await Clients.Group(sessionId.ToString()).SendAsync("ReceiveQuestion", question.Data);
+            }
+            catch (Exception ex)
+            {
+                await Clients.Caller.SendAsync("Error", $"An error occurred: {ex.Message}");
+            }
+        }
+        public async Task PreviousQuestion(int sessionId, int currentOrderIndex)
+        {
+            try
+            {
+                var questionsInGame = await _questionInGameService.GetQuestionsInGameBySessionIdAsync(sessionId);
+                if (questionsInGame.StatusCode != StatusCodeEnum.OK_200 || questionsInGame.Data == null)
+                {
+                    await Clients.Caller.SendAsync("Error", "No questions found for this session");
+                    return;
+                }
+
+                var previousQuestion = questionsInGame.Data.FirstOrDefault(q => q.OrderIndex == currentOrderIndex - 1);
+                if (previousQuestion == null)
+                {
+                    await Clients.Caller.SendAsync("Error", "No previous question available");
+                    return;
+                }
+
+                var question = await _questionService.GetQuestionByIdAsync(previousQuestion.QuestionId);
+                if (question.StatusCode != StatusCodeEnum.OK_200 || question.Data == null)
+                {
+                    await Clients.Caller.SendAsync("Error", "Question not found");
+                    return;
+                }
+
+                await Clients.Group(sessionId.ToString()).SendAsync("ReceiveQuestion", question.Data);
+            }
+            catch (Exception ex)
+            {
+                await Clients.Caller.SendAsync("Error", $"An error occurred: {ex.Message}");
+            }
+        }
+
+        //QuestionInGame
+
 
     }
 }

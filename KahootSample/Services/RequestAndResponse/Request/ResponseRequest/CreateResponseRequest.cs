@@ -27,5 +27,7 @@ namespace Services.RequestAndResponse.Request.ResponseRequest
 
         [Range(0, int.MaxValue, ErrorMessage = "Streak must be a non-negative number")]
         public int Streak { get; set; }
+
+        public int Rank { get; set; }
     }
 }
