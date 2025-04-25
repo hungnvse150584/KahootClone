@@ -7,7 +7,7 @@ using Services.RequestAndResponse.Response.TeamResultResponses;
 
 namespace Kahoot.Controllers
 {
-    [Route("api/team-result")]
+    [Route("api/team-results")]
     [ApiController]
     public class TeamResultInGameController : ControllerBase
     {
@@ -18,47 +18,60 @@ namespace Kahoot.Controllers
             _teamResultService = teamResultService;
         }
 
-      
-        [HttpGet("GetById/{id}")]
+        [HttpGet("{id}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<ActionResult<BaseResponse<TeamResultResponse>>> GetTeamResultById(int id)
         {
             var result = await _teamResultService.GetTeamResultByIdAsync(id);
             return StatusCode((int)result.StatusCode, result);
         }
 
-       
-        [HttpGet("GetBySessionId/{sessionId}")]
+        [HttpGet("session/{sessionId}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<ActionResult<BaseResponse<IEnumerable<TeamResultResponse>>>> GetTeamResultsBySessionId(int sessionId)
         {
             var result = await _teamResultService.GetTeamResultsBySessionIdAsync(sessionId);
             return StatusCode((int)result.StatusCode, result);
         }
 
-      
-        [HttpGet("GetByTeamId/{teamId}")]
+        [HttpGet("team/{teamId}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<ActionResult<BaseResponse<IEnumerable<TeamResultResponse>>>> GetTeamResultsByTeamId(int teamId)
         {
             var result = await _teamResultService.GetTeamResultsByTeamIdAsync(teamId);
             return StatusCode((int)result.StatusCode, result);
         }
 
-      
-        [HttpPost("Create")]
+        [HttpPost]
+        [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<ActionResult<BaseResponse<TeamResultResponse>>> CreateTeamResult([FromBody] CreateTeamResultRequest request)
         {
             var result = await _teamResultService.CreateTeamResultAsync(request);
             return StatusCode((int)result.StatusCode, result);
         }
 
-      
         [HttpPut("Update")]
+        [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<ActionResult<BaseResponse<TeamResultResponse>>> UpdateTeamResult([FromBody] UpdateTeamResultRequest request)
         {
             var result = await _teamResultService.UpdateTeamResultAsync(request);
             return StatusCode((int)result.StatusCode, result);
         }
 
-        [HttpDelete("Delete/{id}")]
+        [HttpDelete("{id}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<ActionResult<BaseResponse<string>>> DeleteTeamResult(int id)
         {
             var result = await _teamResultService.DeleteTeamResultAsync(id);
