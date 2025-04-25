@@ -7,7 +7,7 @@ using Services.RequestAndResponse.Response.PlayerResponse;
 
 namespace Kahoot.Controllers
 {
-    [Route("api/player")]
+    [Route("api/players")]
     [ApiController]
     public class PlayerController : ControllerBase
     {
@@ -19,8 +19,9 @@ namespace Kahoot.Controllers
         }
 
         [HttpGet]
-        [Route("GetAllPlayers")]
         [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<ActionResult<BaseResponse<IEnumerable<PlayerResponse>>>> GetAllPlayers()
         {
@@ -35,10 +36,64 @@ namespace Kahoot.Controllers
             }
         }
 
-        [HttpPost]
-        [Route("CreatePlayer")]
-        [ProducesResponseType(StatusCodes.Status201Created)]
+        [HttpGet("{playerId}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<ActionResult<BaseResponse<PlayerResponse>>> GetPlayerById(int playerId)
+        {
+            try
+            {
+                var result = await _playerService.GetPlayerByIdAsync(playerId);
+                return StatusCode((int)result.StatusCode, result);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new BaseResponse<PlayerResponse>($"Something went wrong! Error: {ex.Message}", StatusCodeEnum.InternalServerError_500, null));
+            }
+        }
+
+        [HttpGet("/api/sessions/{sessionId}/players")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<ActionResult<BaseResponse<IEnumerable<PlayerResponse>>>> GetPlayersBySessionId(int sessionId)
+        {
+            try
+            {
+                var result = await _playerService.GetPlayersBySessionIdAsync(sessionId);
+                return StatusCode((int)result.StatusCode, result);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new BaseResponse<IEnumerable<PlayerResponse>>($"Something went wrong! Error: {ex.Message}", StatusCodeEnum.InternalServerError_500, null));
+            }
+        }
+
+        [HttpGet("/api/teams/{teamId}/players")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<ActionResult<BaseResponse<IEnumerable<PlayerResponse>>>> GetPlayersByTeamId(int teamId)
+        {
+            try
+            {
+                var result = await _playerService.GetPlayersByTeamIdAsync(teamId);
+                return StatusCode((int)result.StatusCode, result);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new BaseResponse<IEnumerable<PlayerResponse>>($"Something went wrong! Error: {ex.Message}", StatusCodeEnum.InternalServerError_500, null));
+            }
+        }
+
+        [HttpPost]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<ActionResult<BaseResponse<PlayerResponse>>> CreatePlayer([FromBody] CreatePlayerRequest request)
         {
@@ -59,61 +114,9 @@ namespace Kahoot.Controllers
             }
         }
 
-        [HttpGet]
-        [Route("GetPlayer/{playerId}")]
+        [HttpDelete("{playerId}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
-        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<ActionResult<BaseResponse<PlayerResponse>>> GetPlayerById(int playerId)
-        {
-            try
-            {
-                var result = await _playerService.GetPlayerByIdAsync(playerId);
-                return StatusCode((int)result.StatusCode, result);
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, new BaseResponse<PlayerResponse>($"Something went wrong! Error: {ex.Message}", StatusCodeEnum.InternalServerError_500, null));
-            }
-        }
-
-        [HttpGet]
-        [Route("GetPlayersBySession/{sessionId}")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<ActionResult<BaseResponse<IEnumerable<PlayerResponse>>>> GetPlayersBySessionId(int sessionId)
-        {
-            try
-            {
-                var result = await _playerService.GetPlayersBySessionIdAsync(sessionId);
-                return StatusCode((int)result.StatusCode, result);
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, new BaseResponse<IEnumerable<PlayerResponse>>($"Something went wrong! Error: {ex.Message}", StatusCodeEnum.InternalServerError_500, null));
-            }
-        }
-
-        [HttpGet]
-        [Route("GetPlayersByTeam/{teamId}")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<ActionResult<BaseResponse<IEnumerable<PlayerResponse>>>> GetPlayersByTeamId(int teamId)
-        {
-            try
-            {
-                var result = await _playerService.GetPlayersByTeamIdAsync(teamId);
-                return StatusCode((int)result.StatusCode, result);
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, new BaseResponse<IEnumerable<PlayerResponse>>($"Something went wrong! Error: {ex.Message}", StatusCodeEnum.InternalServerError_500, null));
-            }
-        }
-
-        [HttpDelete]
-        [Route("DeletePlayer/{playerId}")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<ActionResult<BaseResponse<string>>> DeletePlayer(int playerId)
