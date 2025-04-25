@@ -9,9 +9,12 @@ using Services;
 using Services.IService;
 using Services.Mapping;
 using Services.Service;
+//using StackExchange.Redis;
+
 
 var builder = WebApplication.CreateBuilder(args);
-
+//Register Redis Service
+//builder.Services.AddSingleton<RedisCacheService>();
 // Add services to the container.
 
 builder.Services.AddControllers();
@@ -94,5 +97,12 @@ app.UseEndpoints(endpoints =>
     endpoints.MapControllers();
     endpoints.MapHub<GameSessionHub>("/gameSessionHub"); // Đăng ký SignalR Hub với endpoint /gameSessionHub
 });
+
+// Đăng ký Redis
+//builder.Services.AddSingleton<IConnectionMultiplexer>(sp =>
+//{
+//    var configuration = builder.Configuration.GetSection("Redis:ConnectionString").Value;
+//    return ConnectionMultiplexer.Connect(configuration);
+//});
 
 app.Run();
