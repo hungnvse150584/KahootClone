@@ -68,7 +68,7 @@ namespace Kahoot.Controllers
             return StatusCode((int)result.StatusCode, result);
         }
 
-        [HttpGet("game-sessions/{sessionId}/questions-in-game")]
+        [HttpGet("/api/game-sessions/{sessionId}/questions-in-game")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -101,7 +101,6 @@ namespace Kahoot.Controllers
         }
 
         [HttpGet("{questionInGameId}/responses")]
-        [Route("GetResponsesByQuestionInGameId/{questionInGameId}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -117,8 +116,7 @@ namespace Kahoot.Controllers
             return StatusCode((int)result.StatusCode, result);
         }
 
-        [HttpGet("game-sessions/{sessionId}/players/{playerId}/last-response")]
-        [Route("GetLastResponseByPlayerIdAndSessionId/{playerId}/{sessionId}")]
+        [HttpGet("/api/game-sessions/{sessionId}/players/{playerId}/last-response")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
