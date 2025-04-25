@@ -35,11 +35,11 @@ namespace Services.Service
                     return new BaseResponse<LoginResponse>("Invalid username or password", StatusCodeEnum.Unauthorized_401, null);
                 }
 
-                // Optional role-based restriction example
-                if (user.Role != UserRoles.Admin && user.Role != UserRoles.Host)
-                {
-                    return new BaseResponse<LoginResponse>("Access denied for this role", StatusCodeEnum.Forbidden_403, null);
-                }
+                //// Optional role-based restriction example
+                //if (user.Role != UserRoles.Admin && user.Role != UserRoles.Host)
+                //{
+                //    return new BaseResponse<LoginResponse>("Access denied for this role", StatusCodeEnum.Forbidden_403, null);
+                //}
 
                 var userResponse = _mapper.Map<UserResponse>(user);
                 var loginResponse = new LoginResponse
@@ -60,7 +60,20 @@ namespace Services.Service
         {
             try
             {
+                var existingEmailUser = await _userRepository.GetByEmailAsync(request.Email);
+                if (existingEmailUser != null)
+                {
+                    return new BaseResponse<UserResponse>("Email is already taken.", StatusCodeEnum.BadRequest_400, null);
+                }
+
+                var existingUsernameUser = await _userRepository.GetByUsernameAsync(request.Username);
+                if (existingUsernameUser != null)
+                {
+                    return new BaseResponse<UserResponse>("Username is already taken.", StatusCodeEnum.BadRequest_400, null);
+                }
+
                 var user = _mapper.Map<User>(request);
+                user.Role = request.Role ?? UserRoles.Host;
                 var createdUser = await _userRepository.AddAsync(user);
                 var response = _mapper.Map<UserResponse>(createdUser);
 
@@ -82,9 +95,38 @@ namespace Services.Service
                     return new BaseResponse<UserResponse>("User not found", StatusCodeEnum.NotFound_404, null);
                 }
 
-                user.Username = request.Username;
-                user.Password = request.Password;
-                user.Email = request.Email;
+                if (!string.IsNullOrWhiteSpace(request.Username) && request.Username != user.Username)
+                {
+                    var existingUsernameUser = await _userRepository.GetByUsernameAsync(request.Username);
+                    if (existingUsernameUser != null && existingUsernameUser.UserId != user.UserId)
+                    {
+                        return new BaseResponse<UserResponse>("Username is already taken.", StatusCodeEnum.BadRequest_400, null);
+                    }
+                    user.Username = request.Username;
+                }
+
+                // Email check and update
+                if (!string.IsNullOrWhiteSpace(request.Email) && request.Email != user.Email)
+                {
+                    var existingEmailUser = await _userRepository.GetByEmailAsync(request.Email);
+                    if (existingEmailUser != null && existingEmailUser.UserId != user.UserId)
+                    {
+                        return new BaseResponse<UserResponse>("Email is already taken.", StatusCodeEnum.BadRequest_400, null);
+                    }
+                    user.Email = request.Email;
+                }
+
+                // Password update
+                if (!string.IsNullOrWhiteSpace(request.Password))
+                {
+                    user.Password = request.Password;
+                }
+
+                // Role update (optional)
+                if (request.Role.HasValue)
+                {
+                    user.Role = request.Role.Value;
+                }
 
                 var updatedUser = await _userRepository.UpdateAsync(user);
                 var response = _mapper.Map<UserResponse>(updatedUser);
