@@ -16,6 +16,11 @@ namespace Repositories.Repository
             _playerDao = playerDao;
         }
 
+        public async Task<List<Player>> GetAllPlayersAsync()
+        {
+            return await _playerDao.GetAllPlayersAsync();
+        }
+
         public async Task<Player> GetByIdAsync(int playerId)
         {
             return await _playerDao.GetByIdAsync(playerId);

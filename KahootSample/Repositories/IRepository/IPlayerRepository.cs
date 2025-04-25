@@ -10,6 +10,7 @@ namespace Repositories.IRepository
 {
     public interface IPlayerRepository : IBaseRepository<Player>
     {
+        Task<List<Player>> GetAllPlayersAsync();
         Task<Player> GetByIdAsync(int playerId);
         Task<List<Player>> GetPlayersBySessionIdAsync(int sessionId);
         Task<Player> AddPlayerAsync(Player player);

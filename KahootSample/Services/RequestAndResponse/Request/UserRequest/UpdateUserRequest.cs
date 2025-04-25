@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
+using BOs.Model;
 
 namespace Services.RequestAndResponse.Request.UserRequest
 {
@@ -8,13 +9,15 @@ namespace Services.RequestAndResponse.Request.UserRequest
         [Key]
         public int UserId { get; set; }
 
-        [Required, MaxLength(50)]
+        [MaxLength(50)]
         public string Username { get; set; }
 
-        [Required, MaxLength(256)]
+        [MaxLength(256)]
         public string Password { get; set; }
 
-        [Required, MaxLength(100)]
+        [MaxLength(100)]
         public string Email { get; set; }
+
+        public UserRoles? Role { get; set; } // Add this line
     }
 }

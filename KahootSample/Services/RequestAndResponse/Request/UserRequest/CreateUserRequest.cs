@@ -1,5 +1,7 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
+using BOs.Model;
 
 namespace Services.RequestAndResponse.Request.UserRequest
 {
@@ -13,5 +15,8 @@ namespace Services.RequestAndResponse.Request.UserRequest
 
         [Required, MaxLength(100)]
         public string Email { get; set; }
+        [JsonIgnore]
+        public UserRoles? Role { get; set; } // Default value
+
     }
 }
