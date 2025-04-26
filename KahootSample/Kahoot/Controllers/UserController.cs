@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace Kahoot.Controllers
 {
-    [Route("api/user")]
+    [Route("api/users")]
     [ApiController]
     public class UserController : ControllerBase
     {
@@ -21,8 +21,7 @@ namespace Kahoot.Controllers
             _userService = userService;
         }
 
-        [HttpPost]
-        [Route("Login")]
+        [HttpPost("login")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
@@ -36,7 +35,6 @@ namespace Kahoot.Controllers
         }
 
         [HttpPost]
-        [Route("CreateUser")]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
@@ -52,8 +50,7 @@ namespace Kahoot.Controllers
             return StatusCode((int)result.StatusCode, result);
         }
 
-        [HttpPut]
-        [Route("UpdateUser/{userId}")]
+        [HttpPut("{userId}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -74,8 +71,7 @@ namespace Kahoot.Controllers
             return StatusCode((int)result.StatusCode, result);
         }
 
-        [HttpGet]
-        [Route("GetUserById/{userId}")]
+        [HttpGet("{userId}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -89,8 +85,7 @@ namespace Kahoot.Controllers
             return StatusCode((int)result.StatusCode, result);
         }
 
-        [HttpGet]
-        [Route("GetUserByUsername")]
+        [HttpGet("by-username")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -104,8 +99,7 @@ namespace Kahoot.Controllers
             return StatusCode((int)result.StatusCode, result);
         }
 
-        [HttpGet]
-        [Route("GetUserByEmail")]
+        [HttpGet("by-email")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -120,7 +114,6 @@ namespace Kahoot.Controllers
         }
 
         [HttpGet]
-        [Route("GetAllUsers")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
@@ -130,8 +123,7 @@ namespace Kahoot.Controllers
             return StatusCode((int)result.StatusCode, result);
         }
 
-        [HttpDelete]
-        [Route("DeleteUser/{userId}")]
+        [HttpDelete("{userId}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]

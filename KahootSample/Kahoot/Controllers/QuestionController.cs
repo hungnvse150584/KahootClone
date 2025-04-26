@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace Kahoot.Controllers
 {
-    [Route("api/question")]
+    [Route("api/questions")]
     [ApiController]
     public class QuestionController : ControllerBase
     {
@@ -22,7 +22,6 @@ namespace Kahoot.Controllers
         }
 
         [HttpPost]
-        [Route("CreateQuestion")]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
@@ -37,8 +36,7 @@ namespace Kahoot.Controllers
             return StatusCode((int)result.StatusCode, result);
         }
 
-        [HttpPut]
-        [Route("UpdateQuestion/{questionId}")]
+        [HttpPut("{questionId}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -57,7 +55,6 @@ namespace Kahoot.Controllers
         }
 
         [HttpGet]
-        [Route("GetAllQuestions")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
@@ -67,8 +64,7 @@ namespace Kahoot.Controllers
             return StatusCode((int)result.StatusCode, result);
         }
 
-        [HttpGet]
-        [Route("GetQuestionById/{questionId}")]
+        [HttpGet("{questionId}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -84,8 +80,7 @@ namespace Kahoot.Controllers
             return StatusCode((int)result.StatusCode, result);
         }
 
-        [HttpGet]
-        [Route("GetQuestionsByQuizId/{quizId}")]
+        [HttpGet("/quizzes/{quizId}/questions")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -101,8 +96,7 @@ namespace Kahoot.Controllers
             return StatusCode((int)result.StatusCode, result);
         }
 
-        [HttpDelete]
-        [Route("DeleteQuestion/{questionId}")]
+        [HttpDelete("{questionId}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -118,8 +112,7 @@ namespace Kahoot.Controllers
             return StatusCode((int)result.StatusCode, result);
         }
 
-        [HttpGet]
-        [Route("GetResponsesByQuestionInGameId/{questionInGameId}")]
+        [HttpGet("questions-in-game/{questionInGameId}/responses")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -135,8 +128,7 @@ namespace Kahoot.Controllers
             return StatusCode((int)result.StatusCode, result);
         }
 
-        [HttpGet]
-        [Route("GetLastResponseByPlayerIdAndQuizId/{playerId}/{quizId}")]
+        [HttpGet("/players/{playerId}/quizzes/{quizId}/last-response")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
