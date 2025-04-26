@@ -9,7 +9,8 @@ using Services;
 using Services.IService;
 using Services.Mapping;
 using Services.Service;
-//using StackExchange.Redis;
+
+using StackExchange.Redis;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -28,6 +29,7 @@ builder.Services.AddDbContext<KahootDbContext>(options =>
 builder.Services.AddAutoMapper(typeof(MappingProfile));
 
 builder.Services.AddSignalR();
+builder.Services.AddSingleton<IConnectionMultiplexer>(ConnectionMultiplexer.Connect("localhost:6379,password=hungnv123,abortConnect=false"));
 
 // Configure Services using extension methods
 builder.Services.ConfigureDataAccessObjectService(builder.Configuration);
@@ -72,6 +74,7 @@ builder.Services.AddCors(options =>
                .AllowCredentials();
     });
 });
+
 builder.Services.AddControllers().AddNewtonsoftJson(options =>
 {
     options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore;

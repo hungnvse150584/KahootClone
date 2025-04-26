@@ -6,11 +6,14 @@ using Services.RequestAndResponse.Request.QuestionInGameRequest;
 using Services.RequestAndResponse.Request.ResponseRequest;
 using Services.RequestAndResponse.Response.GameSessionResponses;
 using Services.RequestAndResponse.Response;
-using System;
-using System.Threading.Tasks;
-using System.Linq;
 using Services.RequestAndResponse.PlayerRequest;
 using Services.RequestAndResponse.Request.PlayerRequest;
+using StackExchange.Redis;
+using System;
+using System.Text.Json;
+using System.Threading.Tasks;
+using System.Linq;
+using System.Collections.Generic;
 
 namespace Kahoot.Hubs
 {
@@ -21,19 +24,30 @@ namespace Kahoot.Hubs
         private readonly IResponseService _responseService;
         private readonly IQuestionInGameService _questionInGameService;
         private readonly IPlayerService _playerService;
+        private readonly ConnectionMultiplexer _redis;
+        private readonly IDatabase _redisDb;
 
         public GameSessionHub(
             IGameSessionService gameSessionService,
             IQuestionService questionService,
             IResponseService responseService,
             IQuestionInGameService questionInGameService,
-            IPlayerService playerService)
+            IPlayerService playerService,
+            IConnectionMultiplexer redis)
         {
             _gameSessionService = gameSessionService;
             _questionService = questionService;
             _responseService = responseService;
             _questionInGameService = questionInGameService;
             _playerService = playerService;
+            _redis = (ConnectionMultiplexer)redis;
+
+            // Kiểm tra kết nối Redis
+            if (!_redis.IsConnected)
+            {
+                throw new InvalidOperationException("Cannot connect to Redis server.");
+            }
+            _redisDb = _redis.GetDatabase();
         }
 
         public async Task StartGameSession(int sessionId)
@@ -92,7 +106,7 @@ namespace Kahoot.Hubs
                 {
                     SessionId = sessionId,
                     QuestionId = q.QuestionId,
-                    OrderIndex = index + 1, 
+                    OrderIndex = index + 1,
                     Status = "Pending"
                 }).ToList();
 
@@ -106,6 +120,24 @@ namespace Kahoot.Hubs
                     }
                 }
 
+                // Lưu danh sách QuestionInGame vào Redis
+                string questionKey = $"session:{sessionId}:questions";
+                foreach (var request in createRequests)
+                {
+                    var questionJson = JsonSerializer.Serialize(request);
+                    await _redisDb.ListRightPushAsync(questionKey, questionJson);
+                }
+                await _redisDb.KeyExpireAsync(questionKey, TimeSpan.FromHours(24));
+
+                // Lưu trạng thái câu hỏi hiện tại (current question index)
+                bool indexSet = await _redisDb.StringSetAsync($"session:{sessionId}:currentQuestionIndex", "0");
+                if (!indexSet)
+                {
+                    await Clients.Caller.SendAsync("Error", "Failed to set current question index in Redis");
+                    return;
+                }
+                await _redisDb.KeyExpireAsync($"session:{sessionId}:currentQuestionIndex", TimeSpan.FromHours(24));
+
                 // Gửi thông báo GameStarted đến tất cả người chơi trong group
                 await Clients.Group(sessionId.ToString()).SendAsync("GameStarted", sessionId);
 
@@ -117,10 +149,6 @@ namespace Kahoot.Hubs
 
                 var secondQuestion = questions.Data.ElementAt(1);
                 await Clients.Group(sessionId.ToString()).SendAsync("ReceiveQuestion", secondQuestion);
-
-                // Gửi câu hỏi đầu tiên (nếu có)
-                //var firstQuestion = questions.Data.First();
-                //await Clients.Group(sessionId.ToString()).SendAsync("ReceiveQuestion", firstQuestion);
             }
             catch (Exception ex)
             {
@@ -152,8 +180,10 @@ namespace Kahoot.Hubs
                     await Clients.Caller.SendAsync("Error", "Game has already started or ended");
                     return;
                 }
-                var players = await _playerService.GetPlayersBySessionIdAsync(gameSession.SessionId);
-                int playerCount = players.Data?.Count() ?? 0; // Handle null case
+
+                // Lấy danh sách người chơi từ Redis
+                string playersKey = $"session:{gameSession.SessionId}:players";
+                var playerCount = (int)await _redisDb.ListLengthAsync(playersKey);
 
                 if (gameSession.MaxPlayers <= 0 || playerCount >= gameSession.MaxPlayers)
                 {
@@ -178,6 +208,11 @@ namespace Kahoot.Hubs
                     return;
                 }
 
+                // Lưu thông tin người chơi vào Redis
+                var playerJson = JsonSerializer.Serialize(playerResponse.Data);
+                await _redisDb.ListRightPushAsync(playersKey, playerJson);
+                await _redisDb.KeyExpireAsync(playersKey, TimeSpan.FromHours(24));
+
                 // Add the player to the SignalR group for this session
                 await Groups.AddToGroupAsync(Context.ConnectionId, gameSession.SessionId.ToString());
 
@@ -192,8 +227,7 @@ namespace Kahoot.Hubs
                 await Clients.Caller.SendAsync("Error", $"An error occurred: {ex.Message}");
             }
         }
-        // Other methods (CreateGameSession, JoinGameSession, etc.) remain unchanged
-        //Response
+
         public async Task SubmitResponse(int playerId, int questionInGameId, int selectedOption)
         {
             try
@@ -214,17 +248,17 @@ namespace Kahoot.Hubs
 
                 // Calculate score and correctness
                 bool isCorrect = selectedOption == question.Data.CorrectOption;
-                int score = isCorrect ? 100 : 0; // Simplified scoring logic
+                int score = isCorrect ? 100 : 0;
 
                 var responseRequest = new CreateResponseRequest
                 {
                     PlayerId = playerId,
                     QuestionInGameId = questionInGameId,
                     SelectedOption = selectedOption,
-                    ResponseTime = 0, // You might calculate this on the client side
+                    ResponseTime = 0,
                     Score = score,
-                    Streak = 0, // Update streak logic as needed
-                    Rank = 0 // Update rank logic as needed
+                    Streak = 0,
+                    Rank = 0
                 };
 
                 var responseResult = await _responseService.CreateResponseAsync(responseRequest);
@@ -233,6 +267,12 @@ namespace Kahoot.Hubs
                     await Clients.Caller.SendAsync("Error", responseResult.Message);
                     return;
                 }
+
+                // Lưu câu trả lời vào Redis
+                string responseKey = $"session:{questionInGame.Data.SessionId}:responses";
+                var responseJson = JsonSerializer.Serialize(responseRequest);
+                await _redisDb.ListRightPushAsync(responseKey, responseJson);
+                await _redisDb.KeyExpireAsync(responseKey, TimeSpan.FromHours(24));
 
                 // Update player's score
                 var player = await _playerService.GetPlayerByIdAsync(playerId);
@@ -276,19 +316,49 @@ namespace Kahoot.Hubs
                 await Clients.Caller.SendAsync("Error", $"An error occurred: {ex.Message}");
             }
         }
-        //Question
+
         public async Task NextQuestion(int sessionId, int currentOrderIndex)
         {
             try
             {
-                var questionsInGame = await _questionInGameService.GetQuestionsInGameBySessionIdAsync(sessionId);
-                if (questionsInGame.StatusCode != StatusCodeEnum.OK_200 || questionsInGame.Data == null)
+                string indexKey = $"session:{sessionId}:currentQuestionIndex";
+                var transaction = _redisDb.CreateTransaction();
+
+                // Kiểm tra và cập nhật currentQuestionIndex trong transaction
+                var currentIndexTask = transaction.StringGetAsync(indexKey);
+                await transaction.ExecuteAsync();
+
+                if (!currentIndexTask.Result.HasValue)
+                {
+                    await Clients.Caller.SendAsync("Error", "Current question index not found in Redis");
+                    return;
+                }
+
+                // Lấy danh sách câu hỏi từ Redis
+                string questionKey = $"session:{sessionId}:questions";
+                var questionsInGame = new List<CreateQuestionInGameRequest>();
+                var questionValues = await _redisDb.ListRangeAsync(questionKey);
+                foreach (var value in questionValues)
+                {
+                    try
+                    {
+                        var deserializedQuestion = JsonSerializer.Deserialize<CreateQuestionInGameRequest>(value);
+                        questionsInGame.Add(deserializedQuestion);
+                    }
+                    catch (JsonException ex)
+                    {
+                        await Clients.Caller.SendAsync("Error", $"Failed to deserialize question: {ex.Message}");
+                        return;
+                    }
+                }
+
+                if (!questionsInGame.Any())
                 {
                     await Clients.Caller.SendAsync("Error", "No questions found for this session");
                     return;
                 }
 
-                var nextQuestion = questionsInGame.Data.FirstOrDefault(q => q.OrderIndex == currentOrderIndex + 1);
+                var nextQuestion = questionsInGame.FirstOrDefault(q => q.OrderIndex == currentOrderIndex + 1);
                 if (nextQuestion == null)
                 {
                     await Clients.Caller.SendAsync("Error", "No more questions available");
@@ -302,6 +372,15 @@ namespace Kahoot.Hubs
                     return;
                 }
 
+                // Cập nhật currentQuestionIndex trong transaction
+                transaction.StringSetAsync(indexKey, (currentOrderIndex + 1).ToString());
+                bool committed = await transaction.ExecuteAsync();
+                if (!committed)
+                {
+                    await Clients.Caller.SendAsync("Error", "Failed to update current question index in Redis due to transaction failure");
+                    return;
+                }
+
                 await Clients.Group(sessionId.ToString()).SendAsync("ReceiveQuestion", question.Data);
             }
             catch (Exception ex)
@@ -309,18 +388,49 @@ namespace Kahoot.Hubs
                 await Clients.Caller.SendAsync("Error", $"An error occurred: {ex.Message}");
             }
         }
+
         public async Task PreviousQuestion(int sessionId, int currentOrderIndex)
         {
             try
             {
-                var questionsInGame = await _questionInGameService.GetQuestionsInGameBySessionIdAsync(sessionId);
-                if (questionsInGame.StatusCode != StatusCodeEnum.OK_200 || questionsInGame.Data == null)
+                string indexKey = $"session:{sessionId}:currentQuestionIndex";
+                var transaction = _redisDb.CreateTransaction();
+
+                // Kiểm tra và cập nhật currentQuestionIndex trong transaction
+                var currentIndexTask = transaction.StringGetAsync(indexKey);
+                await transaction.ExecuteAsync();
+
+                if (!currentIndexTask.Result.HasValue)
+                {
+                    await Clients.Caller.SendAsync("Error", "Current question index not found in Redis");
+                    return;
+                }
+
+                // Lấy danh sách câu hỏi từ Redis
+                string questionKey = $"session:{sessionId}:questions";
+                var questionsInGame = new List<CreateQuestionInGameRequest>();
+                var questionValues = await _redisDb.ListRangeAsync(questionKey);
+                foreach (var value in questionValues)
+                {
+                    try
+                    {
+                        var deserializedQuestion = JsonSerializer.Deserialize<CreateQuestionInGameRequest>(value);
+                        questionsInGame.Add(deserializedQuestion);
+                    }
+                    catch (JsonException ex)
+                    {
+                        await Clients.Caller.SendAsync("Error", $"Failed to deserialize question: {ex.Message}");
+                        return;
+                    }
+                }
+
+                if (!questionsInGame.Any())
                 {
                     await Clients.Caller.SendAsync("Error", "No questions found for this session");
                     return;
                 }
 
-                var previousQuestion = questionsInGame.Data.FirstOrDefault(q => q.OrderIndex == currentOrderIndex - 1);
+                var previousQuestion = questionsInGame.FirstOrDefault(q => q.OrderIndex == currentOrderIndex - 1);
                 if (previousQuestion == null)
                 {
                     await Clients.Caller.SendAsync("Error", "No previous question available");
@@ -334,6 +444,15 @@ namespace Kahoot.Hubs
                     return;
                 }
 
+                // Cập nhật currentQuestionIndex trong transaction
+                transaction.StringSetAsync(indexKey, (currentOrderIndex - 1).ToString());
+                bool committed = await transaction.ExecuteAsync();
+                if (!committed)
+                {
+                    await Clients.Caller.SendAsync("Error", "Failed to update current question index in Redis due to transaction failure");
+                    return;
+                }
+
                 await Clients.Group(sessionId.ToString()).SendAsync("ReceiveQuestion", question.Data);
             }
             catch (Exception ex)
@@ -342,8 +461,51 @@ namespace Kahoot.Hubs
             }
         }
 
-        //QuestionInGame
+        public async Task EndGameSession(int sessionId)
+        {
+            try
+            {
+                // Xóa dữ liệu Redis liên quan đến phiên chơi
+                await _redisDb.KeyDeleteAsync($"session:{sessionId}:questions");
+                await _redisDb.KeyDeleteAsync($"session:{sessionId}:responses");
+                await _redisDb.KeyDeleteAsync($"session:{sessionId}:players");
+                await _redisDb.KeyDeleteAsync($"session:{sessionId}:currentQuestionIndex");
 
+                // Cập nhật trạng thái GameSession
+                var sessionResponse = await _gameSessionService.GetGameSessionByIdAsync(sessionId);
+                if (sessionResponse.StatusCode != StatusCodeEnum.OK_200 || sessionResponse.Data == null)
+                {
+                    await Clients.Caller.SendAsync("Error", "GameSession not found");
+                    return;
+                }
 
+                var updateRequest = new UpdateGameSessionRequest
+                {
+                    QuizId = sessionResponse.Data.QuizId,
+                    StartedAt = sessionResponse.Data.StartedAt,
+                    Status = "Ended",
+                    Pin = sessionResponse.Data.Pin,
+                    EnableSpeedBonus = sessionResponse.Data.EnableSpeedBonus,
+                    EnableStreak = sessionResponse.Data.EnableStreak,
+                    GameMode = sessionResponse.Data.GameMode,
+                    MaxPlayers = sessionResponse.Data.MaxPlayers,
+                    AutoAdvance = sessionResponse.Data.AutoAdvance,
+                    ShowLeaderboard = sessionResponse.Data.ShowLeaderboard
+                };
+                var updateResult = await _gameSessionService.UpdateGameSessionAsync(sessionId, updateRequest);
+                if (updateResult.StatusCode != StatusCodeEnum.OK_200)
+                {
+                    await Clients.Caller.SendAsync("Error", updateResult.Message);
+                    return;
+                }
+
+                // Thông báo kết thúc phiên chơi
+                await Clients.Group(sessionId.ToString()).SendAsync("GameEnded", sessionId);
+            }
+            catch (Exception ex)
+            {
+                await Clients.Caller.SendAsync("Error", $"An error occurred: {ex.Message}");
+            }
+        }
     }
 }
