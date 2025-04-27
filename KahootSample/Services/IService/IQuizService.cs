@@ -9,6 +9,7 @@ namespace Services.IService
 {
     public interface IQuizService
     {
+        Task<BaseResponse<IEnumerable<QuizResponse>>> GetAllQuizzesAsync();
         Task<BaseResponse<QuizResponse>> CreateQuizAsync(CreateQuizRequest request);
         Task<BaseResponse<QuizResponse>> UpdateQuizAsync(UpdateQuizRequest request);
         Task<BaseResponse<QuizResponse>> GetQuizByIdAsync(int quizId);
