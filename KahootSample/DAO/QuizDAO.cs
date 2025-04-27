@@ -17,6 +17,13 @@ namespace DAO
             _context = context;
         }
 
+        public async Task<List<Quiz>> GetAllQuizzesAsync()
+        {
+            return await _context.Quizzes
+                .Include(q => q.Questions)
+                .ToListAsync();
+        }
+
         // Get quiz by ID with related questions and sessions
         public async Task<Quiz> GetByIdAsync(int id)
         {

@@ -24,6 +24,29 @@ namespace Services.Service
             _mapper = mapper;
         }
 
+        public async Task<BaseResponse<IEnumerable<QuizResponse>>> GetAllQuizzesAsync()
+        {
+            try
+            {
+                var quizzes = await _quizRepository.GetAllQuizzesAsync();
+                var response = _mapper.Map<IEnumerable<QuizResponse>>(quizzes);
+
+                return new BaseResponse<IEnumerable<QuizResponse>>(
+                    "Successfully retrieved all quizzes",
+                    StatusCodeEnum.OK_200,
+                    response
+                );
+            }
+            catch (Exception ex)
+            {
+                return new BaseResponse<IEnumerable<QuizResponse>>(
+                    $"An error occurred: {ex.Message}",
+                    StatusCodeEnum.InternalServerError_500,
+                    null
+                );
+            }
+        }
+
         public async Task<BaseResponse<QuizResponse>> CreateQuizAsync(CreateQuizRequest request)
         {
             try

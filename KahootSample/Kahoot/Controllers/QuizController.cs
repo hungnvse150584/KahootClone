@@ -20,6 +20,17 @@ namespace Kahoot.Controllers
             _quizService = quizService;
         }
 
+        // GET: /api/quizzes
+        [HttpGet]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<ActionResult<BaseResponse<IEnumerable<QuizResponse>>>> GetAllQuizzes()
+        {
+            var result = await _quizService.GetAllQuizzesAsync();
+            return StatusCode((int)result.StatusCode, result);
+        }
+
+
         // POST: /api/quizzes
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status201Created)]
