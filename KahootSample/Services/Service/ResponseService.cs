@@ -1,5 +1,7 @@
 ﻿using AutoMapper;
 using BOs.Model;
+using DAO;
+using Microsoft.EntityFrameworkCore;
 using Repositories.IRepository;
 using Services.IService;
 using Services.RequestAndResponse.BaseResponse;
@@ -17,24 +19,47 @@ namespace Services.Service
     {
         private readonly IResponseRepository _responseRepository;
         private readonly IMapper _mapper;
+        private readonly KahootDbContext _context;
 
-        public ResponseService(IResponseRepository responseRepository, IMapper mapper)
+        public ResponseService(IResponseRepository responseRepository, IMapper mapper, KahootDbContext context)
         {
             _responseRepository = responseRepository;
             _mapper = mapper;
+            _context = context;
         }
 
         public async Task<BaseResponse<ResponseResponse>> CreateResponseAsync(CreateResponseRequest request)
         {
             try
             {
+                Console.WriteLine($"Creating response for PlayerId: {request.PlayerId}, QuestionInGameId: {request.QuestionInGameId}");
+
+                // Kiểm tra PlayerId
+                var playerExists = await _context.Players.AnyAsync(p => p.PlayerId == request.PlayerId);
+                if (!playerExists)
+                {
+                    return new BaseResponse<ResponseResponse>($"Player with ID {request.PlayerId} not found", StatusCodeEnum.NotFound_404, null);
+                }
+
+                // Kiểm tra QuestionInGameId
+                var questionInGameExists = await _context.QuestionsInGame.AnyAsync(q => q.QuestionInGameId == request.QuestionInGameId);
+                if (!questionInGameExists)
+                {
+                    return new BaseResponse<ResponseResponse>($"QuestionInGame with ID {request.QuestionInGameId} not found", StatusCodeEnum.NotFound_404, null);
+                }
+
                 var response = _mapper.Map<Response>(request);
+                Console.WriteLine("Mapped request to Response entity");
+
                 var createdResponse = await _responseRepository.AddAsync(response);
+                Console.WriteLine("Response saved to database successfully");
+
                 var responseDto = _mapper.Map<ResponseResponse>(createdResponse);
                 return new BaseResponse<ResponseResponse>("Response created successfully", StatusCodeEnum.Created_201, responseDto);
             }
             catch (Exception ex)
             {
+                Console.WriteLine($"Error while creating Response: {ex.Message}\nStackTrace: {ex.StackTrace}");
                 return new BaseResponse<ResponseResponse>($"An error occurred: {ex.Message}", StatusCodeEnum.InternalServerError_500, null);
             }
         }

@@ -260,24 +260,34 @@ namespace Kahoot.Hubs
                     Streak = 0,
                     Rank = 0
                 };
+                Console.WriteLine($"Submitting response: PlayerId={playerId}, QuestionInGameId={questionInGameId}, SelectedOption={selectedOption}, Score={score}");
 
+                // Lưu vào database
                 var responseResult = await _responseService.CreateResponseAsync(responseRequest);
                 if (responseResult.StatusCode != StatusCodeEnum.Created_201 || responseResult.Data == null)
                 {
+                    Console.WriteLine($"Failed to save Response to database: {responseResult.Message}");
                     await Clients.Caller.SendAsync("Error", responseResult.Message);
                     return;
                 }
 
-                // Lưu câu trả lời vào Redis
-                string responseKey = $"session:{questionInGame.Data.SessionId}:responses";
-                var responseJson = JsonSerializer.Serialize(responseRequest);
-                await _redisDb.ListRightPushAsync(responseKey, responseJson);
-                await _redisDb.KeyExpireAsync(responseKey, TimeSpan.FromHours(24));
+                // Lưu vào Redis
+                long newResponseCount = 0;
+                try
+                {
+                    string responseKey = $"session:{questionInGame.Data.SessionId}:responses";
+                    var responseJson = JsonSerializer.Serialize(responseRequest);
+                    await _redisDb.ListRightPushAsync(responseKey, responseJson);
+                    await _redisDb.KeyExpireAsync(responseKey, TimeSpan.FromHours(24));
 
-               
-                string responseCountKey = $"session:{questionInGame.Data.SessionId}:responseCount";
-                long newResponseCount = await _redisDb.StringIncrementAsync(responseCountKey);
-                await _redisDb.KeyExpireAsync(responseCountKey, TimeSpan.FromHours(24));
+                    string responseCountKey = $"session:{questionInGame.Data.SessionId}:responseCount";
+                    newResponseCount = await _redisDb.StringIncrementAsync(responseCountKey);
+                    await _redisDb.KeyExpireAsync(responseCountKey, TimeSpan.FromHours(24));
+                }
+                catch (Exception redisEx)
+                {
+                    Console.WriteLine($"Error while saving to Redis: {redisEx.Message}");
+                }
 
                 // Update player's score
                 var player = await _playerService.GetPlayerByIdAsync(playerId);
@@ -325,6 +335,7 @@ namespace Kahoot.Hubs
             }
             catch (Exception ex)
             {
+                Console.WriteLine($"SubmitResponse error: {ex.Message}\nStackTrace: {ex.StackTrace}");
                 await Clients.Caller.SendAsync("Error", $"An error occurred: {ex.Message}");
             }
         }
