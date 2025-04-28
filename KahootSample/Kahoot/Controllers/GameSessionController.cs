@@ -272,22 +272,24 @@ namespace Kahoot.Controllers
                     new BaseResponse<IEnumerable<PlayerResponse>>($"An error occurred: {ex.Message}", StatusCodeEnum.InternalServerError_500, null));
             }
         }
-        [HttpGet("GetSubmittedPlayers/{sessionId}")]
+        [HttpGet("GetSubmittedPlayersByQuestion/{questionInGameId}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<ActionResult<BaseResponse<IEnumerable<SubmittedPlayerResponse>>>> GetSubmittedPlayers(int sessionId)
+        public async Task<ActionResult<BaseResponse<IEnumerable<SubmittedPlayerResponse>>>> GetSubmittedPlayersByQuestion(int questionInGameId)
         {
             try
             {
-                // Kiểm tra GameSession tồn tại
-                var sessionResponse = await _gameSessionService.GetGameSessionByIdAsync(sessionId);
-                if (sessionResponse.StatusCode != StatusCodeEnum.OK_200 || sessionResponse.Data == null)
+                // Kiểm tra QuestionInGame tồn tại
+                var questionInGameResponse = await _questionInGameService.GetQuestionInGameByIdAsync(questionInGameId);
+                if (questionInGameResponse.StatusCode != StatusCodeEnum.OK_200 || questionInGameResponse.Data == null)
                 {
-                    return NotFound(new BaseResponse<IEnumerable<SubmittedPlayerResponse>>("GameSession not found", StatusCodeEnum.NotFound_404, null));
+                    return NotFound(new BaseResponse<IEnumerable<SubmittedPlayerResponse>>("QuestionInGame not found", StatusCodeEnum.NotFound_404, null));
                 }
 
-                // Lấy danh sách người chơi để ánh xạ PlayerId với Nickname
+                int sessionId = questionInGameResponse.Data.SessionId;
+
+                // Lấy danh sách người chơi trong phiên chơi để ánh xạ PlayerId với Nickname
                 var playersResult = await _gameSessionService.GetPlayersInSessionAsync(sessionId);
                 if (playersResult.StatusCode != StatusCodeEnum.OK_200 || playersResult.Data == null || !playersResult.Data.Any())
                 {
@@ -303,26 +305,20 @@ namespace Kahoot.Controllers
                     return Ok(new BaseResponse<IEnumerable<SubmittedPlayerResponse>>("No submissions found for this session", StatusCodeEnum.OK_200, new List<SubmittedPlayerResponse>()));
                 }
 
-                // Ánh xạ dữ liệu từ Redis thành danh sách SubmittedPlayerResponse
+                // Ánh xạ dữ liệu từ Redis thành danh sách SubmittedPlayerResponse, chỉ lấy các câu trả lời cho questionInGameId
                 var submittedPlayers = new List<SubmittedPlayerResponse>();
                 foreach (var value in responseValues)
                 {
                     try
                     {
                         var response = JsonSerializer.Deserialize<CreateResponseRequest>(value);
-                        if (response == null || !players.ContainsKey(response.PlayerId))
+                        if (response == null || response.QuestionInGameId != questionInGameId || !players.ContainsKey(response.PlayerId))
                         {
                             continue;
                         }
 
                         // Lấy thông tin câu hỏi để kiểm tra tính đúng/sai
-                        var questionInGame = await _questionInGameService.GetQuestionInGameByIdAsync(response.QuestionInGameId);
-                        if (questionInGame.StatusCode != StatusCodeEnum.OK_200 || questionInGame.Data == null)
-                        {
-                            continue;
-                        }
-
-                        var question = await _questionService.GetQuestionByIdAsync(questionInGame.Data.QuestionId);
+                        var question = await _questionService.GetQuestionByIdAsync(questionInGameResponse.Data.QuestionId);
                         if (question.StatusCode != StatusCodeEnum.OK_200 || question.Data == null)
                         {
                             continue;
@@ -347,7 +343,7 @@ namespace Kahoot.Controllers
                     }
                 }
 
-                return Ok(new BaseResponse<IEnumerable<SubmittedPlayerResponse>>("Successfully retrieved submitted players", StatusCodeEnum.OK_200, submittedPlayers));
+                return Ok(new BaseResponse<IEnumerable<SubmittedPlayerResponse>>("Successfully retrieved submitted players for this question", StatusCodeEnum.OK_200, submittedPlayers));
             }
             catch (Exception ex)
             {
