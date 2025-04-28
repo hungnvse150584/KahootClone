@@ -19,6 +19,12 @@ namespace Repositories.Repository
             _quizDao = quizDao;
         }
 
+        public async Task<List<Quiz>> GetAllQuizzesAsync()
+        {
+            return await _quizDao.GetAllQuizzesAsync();
+        }
+
+
         public async Task<Quiz> GetByIdAsync(int id)
         {
             return await _quizDao.GetByIdAsync(id);

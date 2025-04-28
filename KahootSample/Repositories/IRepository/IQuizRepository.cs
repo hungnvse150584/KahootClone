@@ -7,6 +7,7 @@ namespace Repositories.IRepository
 {
     public interface IQuizRepository : IBaseRepository<Quiz>
     {
+        Task<List<Quiz>> GetAllQuizzesAsync();
         Task<Quiz> GetByIdAsync(int id);
         Task<List<Quiz>> GetQuizzesByUserIdAsync(int userId);
         Task<List<Quiz>> SearchQuizzesByTitleAsync(string title);
