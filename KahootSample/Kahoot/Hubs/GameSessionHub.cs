@@ -274,6 +274,11 @@ namespace Kahoot.Hubs
                 await _redisDb.ListRightPushAsync(responseKey, responseJson);
                 await _redisDb.KeyExpireAsync(responseKey, TimeSpan.FromHours(24));
 
+               
+                string responseCountKey = $"session:{questionInGame.Data.SessionId}:responseCount";
+                long newResponseCount = await _redisDb.StringIncrementAsync(responseCountKey);
+                await _redisDb.KeyExpireAsync(responseCountKey, TimeSpan.FromHours(24));
+
                 // Update player's score
                 var player = await _playerService.GetPlayerByIdAsync(playerId);
                 if (player.StatusCode != StatusCodeEnum.OK_200 || player.Data == null)
@@ -309,6 +314,42 @@ namespace Kahoot.Hubs
                     PlayerId = playerId,
                     QuestionInGameId = questionInGameId,
                     SelectedOption = selectedOption
+                });
+
+                // Notify all clients in the group about the updated response count
+                await Clients.Group(player.Data.SessionId.ToString()).SendAsync("ResponseCountUpdated", new
+                {
+                    SessionId = player.Data.SessionId,
+                    ResponseCount = newResponseCount
+                });
+            }
+            catch (Exception ex)
+            {
+                await Clients.Caller.SendAsync("Error", $"An error occurred: {ex.Message}");
+            }
+        }
+
+        public async Task GetResponseCount(int sessionId)
+        {
+            try
+            {
+                string responseCountKey = $"session:{sessionId}:responseCount";
+                var responseCount = await _redisDb.StringGetAsync(responseCountKey);
+
+                if (!responseCount.HasValue)
+                {
+                    await Clients.Caller.SendAsync("ResponseCountUpdated", new
+                    {
+                        SessionId = sessionId,
+                        ResponseCount = 0
+                    });
+                    return;
+                }
+
+                await Clients.Caller.SendAsync("ResponseCountUpdated", new
+                {
+                    SessionId = sessionId,
+                    ResponseCount = (long)responseCount
                 });
             }
             catch (Exception ex)
@@ -380,6 +421,10 @@ namespace Kahoot.Hubs
                     await Clients.Caller.SendAsync("Error", "Failed to update current question index in Redis due to transaction failure");
                     return;
                 }
+
+                // Reset response count khi chuyển sang câu hỏi mới
+                string responseCountKey = $"session:{sessionId}:responseCount";
+                await _redisDb.KeyDeleteAsync(responseCountKey);
 
                 await Clients.Group(sessionId.ToString()).SendAsync("ReceiveQuestion", question.Data);
             }
@@ -453,6 +498,10 @@ namespace Kahoot.Hubs
                     return;
                 }
 
+                // Reset response count khi quay lại câu hỏi trước
+                string responseCountKey = $"session:{sessionId}:responseCount";
+                await _redisDb.KeyDeleteAsync(responseCountKey);
+
                 await Clients.Group(sessionId.ToString()).SendAsync("ReceiveQuestion", question.Data);
             }
             catch (Exception ex)
@@ -470,6 +519,7 @@ namespace Kahoot.Hubs
                 await _redisDb.KeyDeleteAsync($"session:{sessionId}:responses");
                 await _redisDb.KeyDeleteAsync($"session:{sessionId}:players");
                 await _redisDb.KeyDeleteAsync($"session:{sessionId}:currentQuestionIndex");
+                await _redisDb.KeyDeleteAsync($"session:{sessionId}:responseCount");
 
                 // Cập nhật trạng thái GameSession
                 var sessionResponse = await _gameSessionService.GetGameSessionByIdAsync(sessionId);

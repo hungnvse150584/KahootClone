@@ -66,7 +66,7 @@ namespace Services.Service
                 var updated = await _questionInGameRepository.UpdateQuestionInGameAsync(existing);
                 var response = _mapper.Map<QuestionInGameResponse>(updated);
 
-                return new BaseResponse<QuestionInGameResponse>("QuestionInGame updated successfully", StatusCodeEnum.OK_200, response);
+                return new BaseResponse<QuestionInGameResponse>("QuestionInGame updated successfully", StatusCodeEnum.OK_200, response);    
             }
             catch (Exception ex)
             {
