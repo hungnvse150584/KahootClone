@@ -32,6 +32,30 @@ namespace Services.Service
         {
             try
             {
+                if (request.CorrectOption == 2 && string.IsNullOrEmpty(request.Option2))
+                {
+                    return new BaseResponse<QuestionResponse>(
+                        "Invalid CorrectOption: Option2 is null or empty.",
+                        StatusCodeEnum.BadRequest_400,
+                        null
+                    );
+                }
+                if (request.CorrectOption == 3 && string.IsNullOrEmpty(request.Option3))
+                {
+                    return new BaseResponse<QuestionResponse>(
+                        "Invalid CorrectOption: Option3 is null or empty.",
+                        StatusCodeEnum.BadRequest_400,
+                        null
+                    );
+                }
+                if (request.CorrectOption == 4 && string.IsNullOrEmpty(request.Option4))
+                {
+                    return new BaseResponse<QuestionResponse>(
+                        "Invalid CorrectOption: Option4 is null or empty.",
+                        StatusCodeEnum.BadRequest_400,
+                        null
+                    );
+                }
                 var question = _mapper.Map<Question>(request);
                 var created = await _questionRepository.AddQuestionAsync(question);
                 var response = _mapper.Map<QuestionResponse>(created);

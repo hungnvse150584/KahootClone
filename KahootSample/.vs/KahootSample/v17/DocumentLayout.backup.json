@@ -1,8 +1,9 @@
 {
   "Version": 1,
-  "WorkspaceRootPath": "D:\\FPT\\KahootClone\\KahootSample\\",
+  "WorkspaceRootPath": "D:\\FU\\SWP391\\KahootClone\\KahootSample\\",
   "Documents": [
     {
+<<<<<<< HEAD
       "AbsoluteMoniker": "D:0:0:{452B7F39-93D1-46AA-8803-A4AC14FFD997}|Kahoot\\Kahoot.csproj|d:\\fpt\\kahootclone\\kahootsample\\kahoot\\controllers\\gamesessioncontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{452B7F39-93D1-46AA-8803-A4AC14FFD997}|Kahoot\\Kahoot.csproj|solutionrelative:kahoot\\controllers\\gamesessioncontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
@@ -121,6 +122,22 @@
     {
       "AbsoluteMoniker": "D:0:0:{17194A67-01BC-42AA-AFFF-B210AAD39391}|Repositories\\Repositories.csproj|d:\\fpt\\kahootclone\\kahootsample\\repositories\\irepository\\iplayerrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{17194A67-01BC-42AA-AFFF-B210AAD39391}|Repositories\\Repositories.csproj|solutionrelative:repositories\\irepository\\iplayerrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+=======
+      "AbsoluteMoniker": "D:0:0:{FCF6F00C-019E-4E12-A667-DC60CD734FD1}|Services\\Services.csproj|d:\\fu\\swp391\\kahootclone\\kahootsample\\services\\service\\questionservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{FCF6F00C-019E-4E12-A667-DC60CD734FD1}|Services\\Services.csproj|solutionrelative:services\\service\\questionservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{586905F3-F392-41A1-A04D-133FC6976D69}|BOs\\BOs.csproj|d:\\fu\\swp391\\kahootclone\\kahootsample\\bos\\model\\question.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{586905F3-F392-41A1-A04D-133FC6976D69}|BOs\\BOs.csproj|solutionrelative:bos\\model\\question.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{452B7F39-93D1-46AA-8803-A4AC14FFD997}|Kahoot\\Kahoot.csproj|d:\\fu\\swp391\\kahootclone\\kahootsample\\kahoot\\controllers\\questioncontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{452B7F39-93D1-46AA-8803-A4AC14FFD997}|Kahoot\\Kahoot.csproj|solutionrelative:kahoot\\controllers\\questioncontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{452B7F39-93D1-46AA-8803-A4AC14FFD997}|Kahoot\\Kahoot.csproj|d:\\fu\\swp391\\kahootclone\\kahootsample\\kahoot\\hubs\\gamesessionhub.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{452B7F39-93D1-46AA-8803-A4AC14FFD997}|Kahoot\\Kahoot.csproj|solutionrelative:kahoot\\hubs\\gamesessionhub.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+>>>>>>> datnt
     }
   ],
   "DocumentGroupContainers": [
@@ -129,9 +146,27 @@
       "VerticalTabListWidth": 256,
       "DocumentGroups": [
         {
+<<<<<<< HEAD
           "DockedWidth": 2192,
           "SelectedChildIndex": 9,
+=======
+          "DockedWidth": 1207,
+          "SelectedChildIndex": 8,
+>>>>>>> datnt
           "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "GameSessionHub.cs",
+              "DocumentMoniker": "D:\\FU\\SWP391\\KahootClone\\KahootSample\\Kahoot\\Hubs\\GameSessionHub.cs",
+              "RelativeDocumentMoniker": "Kahoot\\Hubs\\GameSessionHub.cs",
+              "ToolTip": "D:\\FU\\SWP391\\KahootClone\\KahootSample\\Kahoot\\Hubs\\GameSessionHub.cs",
+              "RelativeToolTip": "Kahoot\\Hubs\\GameSessionHub.cs",
+              "ViewState": "AgIAAFcAAAAAAAAAAAAYwFwAAABLAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-04-24T07:48:32.693Z",
+              "IsPinned": true
+            },
             {
               "$type": "Bookmark",
               "Name": "ST:0:0:{1c4feeaa-4718-4aa9-859d-94ce25d182ba}"
@@ -154,6 +189,7 @@
             },
             {
               "$type": "Document",
+<<<<<<< HEAD
               "DocumentIndex": 2,
               "Title": "SubmittedPlayerResponse.cs",
               "DocumentMoniker": "D:\\FPT\\KahootClone\\KahootSample\\Services\\RequestAndResponse\\Response\\ResponseResponses\\SubmittedPlayerResponse.cs",
@@ -512,6 +548,42 @@
               "ViewState": "AgIAABAAAAAAAAAAAAAQwBsAAAAJAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-04-23T00:24:19.273Z"
+=======
+              "DocumentIndex": 1,
+              "Title": "Question.cs",
+              "DocumentMoniker": "D:\\FU\\SWP391\\KahootClone\\KahootSample\\BOs\\Model\\Question.cs",
+              "RelativeDocumentMoniker": "BOs\\Model\\Question.cs",
+              "ToolTip": "D:\\FU\\SWP391\\KahootClone\\KahootSample\\BOs\\Model\\Question.cs",
+              "RelativeToolTip": "BOs\\Model\\Question.cs",
+              "ViewState": "AgIAAAcAAAAAAAAAAAAqwBQAAAAgAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-04-28T16:29:25.109Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "QuestionController.cs",
+              "DocumentMoniker": "D:\\FU\\SWP391\\KahootClone\\KahootSample\\Kahoot\\Controllers\\QuestionController.cs",
+              "RelativeDocumentMoniker": "Kahoot\\Controllers\\QuestionController.cs",
+              "ToolTip": "D:\\FU\\SWP391\\KahootClone\\KahootSample\\Kahoot\\Controllers\\QuestionController.cs",
+              "RelativeToolTip": "Kahoot\\Controllers\\QuestionController.cs",
+              "ViewState": "AgIAABYAAAAAAAAAAAAQwAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-04-28T16:23:22.651Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "QuestionService.cs",
+              "DocumentMoniker": "D:\\FU\\SWP391\\KahootClone\\KahootSample\\Services\\Service\\QuestionService.cs",
+              "RelativeDocumentMoniker": "Services\\Service\\QuestionService.cs",
+              "ToolTip": "D:\\FU\\SWP391\\KahootClone\\KahootSample\\Services\\Service\\QuestionService.cs",
+              "RelativeToolTip": "Services\\Service\\QuestionService.cs",
+              "ViewState": "AgIAACgAAAAAAAAAAAAmwDMAAAARAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-04-28T16:19:35.736Z",
+              "EditorCaption": ""
+>>>>>>> datnt
             }
           ]
         },
@@ -522,6 +594,66 @@
             {
               "$type": "Bookmark",
               "Name": "ST:0:0:{eefa5220-e298-11d0-8f78-00a0c9110057}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:35:0:{e8034f19-ab72-4f06-83fd-f6832b41aa63}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:44:0:{e8034f19-ab72-4f06-83fd-f6832b41aa63}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:39:0:{e8034f19-ab72-4f06-83fd-f6832b41aa63}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:48:0:{e8034f19-ab72-4f06-83fd-f6832b41aa63}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:51:0:{d212f56b-c48a-434c-a121-1c5d80b59b9f}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:59:0:{e8034f19-ab72-4f06-83fd-f6832b41aa63}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:57:0:{e8034f19-ab72-4f06-83fd-f6832b41aa63}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{34e76e81-ee4a-11d0-ae2e-00a0c90fffc3}"
+            }
+          ]
+        },
+        {
+          "DockedWidth": 1462,
+          "SelectedChildIndex": -1,
+          "Children": [
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{d78612c7-9962-4b83-95d9-268046dad23a}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:65:0:{e8034f19-ab72-4f06-83fd-f6832b41aa63}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:66:0:{e8034f19-ab72-4f06-83fd-f6832b41aa63}"
+            }
+          ]
+        },
+        {
+          "DockedWidth": 1078,
+          "SelectedChildIndex": -1,
+          "Children": [
+            {
+              "$type": "Bookmark",
+              "Name": "ST:1:0:{d212f56b-c48a-434c-a121-1c5d80b59b9f}"
             }
           ]
         }
