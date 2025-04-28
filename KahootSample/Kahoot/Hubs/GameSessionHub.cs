@@ -369,78 +369,119 @@ namespace Kahoot.Hubs
             }
         }
 
-        public async Task NextQuestion(int sessionId, int currentOrderIndex)
+        public async Task NextQuestion(int sessionId, int questionInGameId)
         {
             try
             {
-                string indexKey = $"session:{sessionId}:currentQuestionIndex";
-                var transaction = _redisDb.CreateTransaction();
-
-                // Kiểm tra và cập nhật currentQuestionIndex trong transaction
-                var currentIndexTask = transaction.StringGetAsync(indexKey);
-                await transaction.ExecuteAsync();
-
-                if (!currentIndexTask.Result.HasValue)
+                // Kiểm tra SessionId và QuestionInGameId hợp lệ
+                if (sessionId <= 0 || questionInGameId <= 0)
                 {
-                    await Clients.Caller.SendAsync("Error", "Current question index not found in Redis");
+                    await Clients.Caller.SendAsync("Error", "Invalid SessionId or QuestionInGameId");
                     return;
                 }
 
-                // Lấy danh sách câu hỏi từ Redis
+                // Kiểm tra GameSession tồn tại
+                var sessionResponse = await _gameSessionService.GetGameSessionByIdAsync(sessionId);
+                if (sessionResponse.StatusCode != StatusCodeEnum.OK_200 || sessionResponse.Data == null)
+                {
+                    await Clients.Caller.SendAsync("Error", "GameSession not found");
+                    return;
+                }
+
+                // Kiểm tra trạng thái GameSession
+                if (sessionResponse.Data.Status != "Started")
+                {
+                    await Clients.Caller.SendAsync("Error", "GameSession is not in progress");
+                    return;
+                }
+
+                // Lấy thông tin QuestionInGame hiện tại
+                var currentQuestionInGame = await _questionInGameService.GetQuestionInGameByIdAsync(questionInGameId);
+                if (currentQuestionInGame.StatusCode != StatusCodeEnum.OK_200 || currentQuestionInGame.Data == null)
+                {
+                    await Clients.Caller.SendAsync("Error", "Current QuestionInGame not found");
+                    return;
+                }
+
+                // Đảm bảo QuestionInGame thuộc về SessionId
+                if (currentQuestionInGame.Data.SessionId != sessionId)
+                {
+                    await Clients.Caller.SendAsync("Error", "QuestionInGame does not belong to this session");
+                    return;
+                }
+
+                int currentOrderIndex = currentQuestionInGame.Data.OrderIndex;
+
+                // Lấy danh sách QuestionInGame từ Redis
                 string questionKey = $"session:{sessionId}:questions";
                 var questionsInGame = new List<CreateQuestionInGameRequest>();
                 var questionValues = await _redisDb.ListRangeAsync(questionKey);
+                if (questionValues == null || !questionValues.Any())
+                {
+                    await Clients.Caller.SendAsync("Error", "No questions found for this session in Redis");
+                    return;
+                }
+
                 foreach (var value in questionValues)
                 {
                     try
                     {
                         var deserializedQuestion = JsonSerializer.Deserialize<CreateQuestionInGameRequest>(value);
-                        questionsInGame.Add(deserializedQuestion);
+                        if (deserializedQuestion != null)
+                        {
+                            questionsInGame.Add(deserializedQuestion);
+                        }
                     }
                     catch (JsonException ex)
                     {
-                        await Clients.Caller.SendAsync("Error", $"Failed to deserialize question: {ex.Message}");
-                        return;
+                        Console.WriteLine($"Failed to deserialize question: {ex.Message}");
+                        continue;
                     }
                 }
 
                 if (!questionsInGame.Any())
                 {
-                    await Clients.Caller.SendAsync("Error", "No questions found for this session");
+                    await Clients.Caller.SendAsync("Error", "No valid questions found for this session");
                     return;
                 }
 
-                var nextQuestion = questionsInGame.FirstOrDefault(q => q.OrderIndex == currentOrderIndex + 1);
-                if (nextQuestion == null)
+                // Tìm câu hỏi tiếp theo dựa trên OrderIndex
+                var nextQuestionInGame = questionsInGame.FirstOrDefault(q => q.OrderIndex == currentOrderIndex + 1);
+                if (nextQuestionInGame == null)
                 {
-                    await Clients.Caller.SendAsync("Error", "No more questions available");
+                    // Không còn câu hỏi, kết thúc phiên chơi
+                    await EndGameSession(sessionId);
                     return;
                 }
 
-                var question = await _questionService.GetQuestionByIdAsync(nextQuestion.QuestionId);
+                // Lấy thông tin Question cho câu hỏi tiếp theo
+                var question = await _questionService.GetQuestionByIdAsync(nextQuestionInGame.QuestionId);
                 if (question.StatusCode != StatusCodeEnum.OK_200 || question.Data == null)
                 {
-                    await Clients.Caller.SendAsync("Error", "Question not found");
+                    await Clients.Caller.SendAsync("Error", "Next question not found");
                     return;
                 }
 
-                // Cập nhật currentQuestionIndex trong transaction
-                transaction.StringSetAsync(indexKey, (currentOrderIndex + 1).ToString());
-                bool committed = await transaction.ExecuteAsync();
-                if (!committed)
+                // Cập nhật currentQuestionIndex trong Redis
+                string indexKey = $"session:{sessionId}:currentQuestionIndex";
+                bool indexSet = await _redisDb.StringSetAsync(indexKey, nextQuestionInGame.OrderIndex.ToString());
+                if (!indexSet)
                 {
-                    await Clients.Caller.SendAsync("Error", "Failed to update current question index in Redis due to transaction failure");
+                    await Clients.Caller.SendAsync("Error", "Failed to update current question index in Redis");
                     return;
                 }
+                await _redisDb.KeyExpireAsync(indexKey, TimeSpan.FromHours(24));
 
                 // Reset response count khi chuyển sang câu hỏi mới
                 string responseCountKey = $"session:{sessionId}:responseCount";
                 await _redisDb.KeyDeleteAsync(responseCountKey);
 
+                // Gửi câu hỏi tiếp theo đến tất cả người chơi trong group
                 await Clients.Group(sessionId.ToString()).SendAsync("ReceiveQuestion", question.Data);
             }
             catch (Exception ex)
             {
+                Console.WriteLine($"NextQuestion error: {ex.Message}\nStackTrace: {ex.StackTrace}");
                 await Clients.Caller.SendAsync("Error", $"An error occurred: {ex.Message}");
             }
         }
