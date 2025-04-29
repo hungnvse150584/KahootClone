@@ -73,7 +73,22 @@ namespace Services.Service
                 return new BaseResponse<QuestionInGameResponse>($"An error occurred: {ex.Message}", StatusCodeEnum.InternalServerError_500, null);
             }
         }
-
+        public async Task<BaseResponse<QuestionInGame>> GetQuestionInGameBySessionIdAndQuestionIdAsync(int sessionId, int questionId)
+        {
+            try
+            {
+                var questionInGame = await _questionInGameRepository.GetQuestionInGameBySessionIdAndQuestionIdAsync(sessionId, questionId);
+                return new BaseResponse<QuestionInGame>("Success", StatusCodeEnum.OK_200, questionInGame);
+            }
+            catch (ArgumentNullException ex)
+            {
+                return new BaseResponse<QuestionInGame>(ex.Message, StatusCodeEnum.NotFound_404, null);
+            }
+            catch (Exception ex)
+            {
+                return new BaseResponse<QuestionInGame>($"Error: {ex.Message}", StatusCodeEnum.InternalServerError_500, null);
+            }
+        }
         public async Task<BaseResponse<QuestionInGameResponse>> GetQuestionInGameByIdAsync(int questionInGameId)
         {
             try

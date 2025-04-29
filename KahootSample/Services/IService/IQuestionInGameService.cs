@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using BOs.Model;
 using Services.RequestAndResponse.BaseResponse;
 using Services.RequestAndResponse.Request.QuestionInGameRequest;
 using Services.RequestAndResponse.Response.QuestionInGameResponse;
@@ -18,6 +19,7 @@ namespace Services.IService
         Task<BaseResponse<IEnumerable<QuestionInGameResponse>>> GetQuestionsInGameBySessionIdAsync(int sessionId);
         Task<BaseResponse<string>> DeleteQuestionInGameAsync(int questionInGameId);
         Task<BaseResponse<IEnumerable<ResponseResponse>>> GetResponsesByQuestionInGameIdAsync(int questionInGameId);
+        Task<BaseResponse<QuestionInGame>> GetQuestionInGameBySessionIdAndQuestionIdAsync(int sessionId, int questionId);
         Task<BaseResponse<ResponseResponse>> GetLastResponseByPlayerIdAndSessionIdAsync(int playerId, int sessionId);
     }
 }

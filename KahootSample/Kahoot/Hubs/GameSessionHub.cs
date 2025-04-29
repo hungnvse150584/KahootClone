@@ -462,6 +462,15 @@ namespace Kahoot.Hubs
                     return;
                 }
 
+                // Lấy QuestionInGameId của câu hỏi tiếp theo từ database
+                var nextQuestionInGameEntity = await _questionInGameService.GetQuestionInGameBySessionIdAndQuestionIdAsync(sessionId, nextQuestionInGame.QuestionId);
+                if (nextQuestionInGameEntity.StatusCode != StatusCodeEnum.OK_200 || nextQuestionInGameEntity.Data == null)
+                {
+                    await Clients.Caller.SendAsync("Error", "Next QuestionInGame not found in database");
+                    return;
+                }
+                int nextQuestionInGameId = nextQuestionInGameEntity.Data.QuestionInGameId;
+
                 // Cập nhật currentQuestionIndex trong Redis
                 string indexKey = $"session:{sessionId}:currentQuestionIndex";
                 bool indexSet = await _redisDb.StringSetAsync(indexKey, nextQuestionInGame.OrderIndex.ToString());
@@ -476,8 +485,12 @@ namespace Kahoot.Hubs
                 string responseCountKey = $"session:{sessionId}:responseCount";
                 await _redisDb.KeyDeleteAsync(responseCountKey);
 
-                // Gửi câu hỏi tiếp theo đến tất cả người chơi trong group
-                await Clients.Group(sessionId.ToString()).SendAsync("ReceiveQuestion", question.Data);
+                // Gửi câu hỏi tiếp theo đến tất cả người chơi trong group, bao gồm QuestionInGameId
+                await Clients.Group(sessionId.ToString()).SendAsync("ReceiveQuestion", new
+                {
+                    QuestionInGameId = nextQuestionInGameId,
+                    Question = question.Data
+                });
             }
             catch (Exception ex)
             {
