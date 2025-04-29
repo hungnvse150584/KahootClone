@@ -46,7 +46,20 @@ namespace DAO
                 .OrderBy(q => q.OrderIndex)
                 .ToListAsync();
         }
+        public async Task<QuestionInGame> GetQuestionInGameBySessionIdAndQuestionIdAsync(int sessionId, int questionId)
+        {
+            var questionInGame = await _context.QuestionsInGame
+                .Include(q => q.Session)
+                .Include(q => q.Question)
+                .FirstOrDefaultAsync(q => q.SessionId == sessionId && q.QuestionId == questionId);
 
+            if (questionInGame == null)
+            {
+                throw new ArgumentNullException($"QuestionInGame with SessionId {sessionId} and QuestionId {questionId} not found");
+            }
+
+            return questionInGame;
+        }
         public async Task<QuestionInGame> AddQuestionInGameAsync(QuestionInGame questionInGame)
         {
             if (questionInGame == null)

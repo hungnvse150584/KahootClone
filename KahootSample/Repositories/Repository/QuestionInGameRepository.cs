@@ -28,7 +28,10 @@ namespace Repositories.Repository
         {
             return await _questionInGameDao.GetQuestionsInGameBySessionIdAsync(sessionId);
         }
-
+        public async Task<QuestionInGame> GetQuestionInGameBySessionIdAndQuestionIdAsync(int sessionId, int questionId)
+        {
+            return await _questionInGameDao.GetQuestionInGameBySessionIdAndQuestionIdAsync(sessionId, questionId);
+        }
         public async Task<QuestionInGame> AddQuestionInGameAsync(QuestionInGame questionInGame)
         {
             return await _questionInGameDao.AddQuestionInGameAsync(questionInGame);

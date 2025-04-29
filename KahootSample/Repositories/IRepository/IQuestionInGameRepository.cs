@@ -15,6 +15,7 @@ namespace Repositories.IRepository
         Task<QuestionInGame> AddQuestionInGameAsync(QuestionInGame questionInGame);
         Task<QuestionInGame> UpdateQuestionInGameAsync(QuestionInGame questionInGame);
         Task DeleteQuestionInGameAsync(QuestionInGame questionInGame);
+        Task<QuestionInGame> GetQuestionInGameBySessionIdAndQuestionIdAsync(int sessionId, int questionId);
         Task<Response> GetLastResponseByPlayerIdAndSessionIdAsync(int playerId, int sessionId);
     }
 }
