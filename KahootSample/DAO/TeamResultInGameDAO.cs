@@ -59,5 +59,18 @@ namespace DAO
                 .Include(tr => tr.Team)
                 .ToListAsync();
         }
+
+        public async Task<List<(int TeamId, int TotalScore)>> GetTeamRankingsBySessionIdAsync(int sessionId)
+        {
+            var result = await _context.TeamResults
+                .Where(tr => tr.SessionId == sessionId)
+                .GroupBy(tr => tr.TeamId)
+                .Select(g => new { TeamId = g.Key, TotalScore = g.Sum(tr => tr.Score) })
+                .OrderByDescending(g => g.TotalScore)
+                .ToListAsync();
+            return result.Select(x => (x.TeamId, x.TotalScore)).ToList();
+        }
+
+
     }
 }

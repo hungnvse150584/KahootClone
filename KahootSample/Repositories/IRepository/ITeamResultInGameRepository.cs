@@ -13,5 +13,7 @@ namespace Repositories.IRepository
         Task<TeamResultInGame> GetByIdAsync(int id);
         Task<List<TeamResultInGame>> GetBySessionIdAsync(int sessionId);
         Task<List<TeamResultInGame>> GetByTeamIdAsync(int teamId);
+
+        Task<List<(int TeamId, int TotalScore)>> GetTeamRankingsBySessionIdAsync(int sessionId);
     }
 }

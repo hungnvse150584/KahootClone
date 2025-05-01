@@ -54,7 +54,8 @@ namespace Services.Mapping
             CreateMap<CreateTeamResultRequest, TeamResultInGame>();
             CreateMap<UpdateTeamResultRequest, TeamResultInGame>();
             CreateMap<TeamResultInGame, TeamResultResponse>();
-              
+            CreateMap<TeamResultInGame, TeamRankingResponse>();
+
             // Ánh xạ cho Response
             CreateMap<CreateResponseRequest, Response>().ReverseMap();
             CreateMap<UpdateResponseRequest, Response>().ReverseMap();
