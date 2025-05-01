@@ -19,12 +19,14 @@ namespace Services.Service
     {
         private readonly IQuestionRepository _questionRepository;
         private readonly IResponseRepository _responseRepository;
+        private readonly IQuestionInGameService _questionInGameService;
         private readonly IMapper _mapper;
 
-        public QuestionService(IQuestionRepository questionRepository, IResponseRepository responseRepository, IMapper mapper)
+        public QuestionService(IQuestionRepository questionRepository, IResponseRepository responseRepository, IQuestionInGameService questionInGameService, IMapper mapper)
         {
             _questionRepository = questionRepository;
             _responseRepository = responseRepository;
+            _questionInGameService = questionInGameService;
             _mapper = mapper;
         }
 
@@ -213,6 +215,88 @@ namespace Services.Service
             catch (Exception ex)
             {
                 return new BaseResponse<ResponseResponse>($"An error occurred: {ex.Message}", StatusCodeEnum.InternalServerError_500, null);
+            }
+        }
+        public async Task<BaseResponse<IEnumerable<QuestionResponse>>> SearchQuestionsAsync(int? quizId, int? sessionId, string searchTerm)
+        {
+            try
+            {
+                // Validate input: at least one of quizId or sessionId must be provided
+                if (!quizId.HasValue && !sessionId.HasValue)
+                {
+                    return new BaseResponse<IEnumerable<QuestionResponse>>(
+                        "Either QuizId or SessionId must be provided",
+                        StatusCodeEnum.BadRequest_400,
+                        null);
+                }
+
+                // Search within a session (via QuestionInGame)
+                if (sessionId.HasValue)
+                {
+                    var questionsInGameResponse = await _questionInGameService.GetQuestionsInGameBySessionIdAsync(sessionId.Value);
+                    if (questionsInGameResponse.StatusCode != StatusCodeEnum.OK_200 || questionsInGameResponse.Data == null)
+                    {
+                        return new BaseResponse<IEnumerable<QuestionResponse>>(
+                            "No questions found for this session",
+                            StatusCodeEnum.NotFound_404,
+                            null);
+                    }
+
+                    // Fetch Question details for each QuestionInGame
+                    var questionResponses = new List<QuestionResponse>();
+                    foreach (var qig in questionsInGameResponse.Data)
+                    {
+                        var question = await _questionRepository.GetQuestionByIdAsync(qig.QuestionId);
+                        if (question == null)
+                        {
+                            continue; // Skip if question not found
+                        }
+
+                        // Apply search filters
+                        if (string.IsNullOrEmpty(searchTerm) ||
+                            question.Text.Contains(searchTerm, StringComparison.OrdinalIgnoreCase) ||
+                            question.QuestionId.ToString() == searchTerm)
+                        {
+                            var questionResponse = _mapper.Map<QuestionResponse>(question);
+                            questionResponses.Add(questionResponse);
+                        }
+                    }
+
+                    return new BaseResponse<IEnumerable<QuestionResponse>>(
+                        "Successfully retrieved questions for session",
+                        StatusCodeEnum.OK_200,
+                        questionResponses);
+                }
+
+                // Search within a quiz
+                var questions = await _questionRepository.GetQuestionsByQuizIdAsync(quizId.Value);
+                if (questions == null || !questions.Any())
+                {
+                    return new BaseResponse<IEnumerable<QuestionResponse>>(
+                        "No questions found for this quiz",
+                        StatusCodeEnum.NotFound_404,
+                        null);
+                }
+
+                // Apply search filters
+                var filteredQuestions = questions
+                    .Where(q => string.IsNullOrEmpty(searchTerm) ||
+                                q.Text.Contains(searchTerm, StringComparison.OrdinalIgnoreCase) ||
+                                q.QuestionId.ToString() == searchTerm)
+                    .ToList();
+
+                var response = _mapper.Map<IEnumerable<QuestionResponse>>(filteredQuestions);
+                return new BaseResponse<IEnumerable<QuestionResponse>>(
+                    "Successfully retrieved questions for quiz",
+                    StatusCodeEnum.OK_200,
+                    response);
+            }
+            catch (Exception ex)
+            {
+                return new BaseResponse<IEnumerable<QuestionResponse>>(
+                    $"An error occurred: {ex.Message}",
+                    StatusCodeEnum.InternalServerError_500,
+                    null);
             }
         }
     }

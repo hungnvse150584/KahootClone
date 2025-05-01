@@ -143,5 +143,26 @@ namespace Kahoot.Controllers
             var result = await _questionService.GetLastResponseByPlayerIdAndQuizIdAsync(playerId, quizId);
             return StatusCode((int)result.StatusCode, result);
         }
+        [HttpGet("search")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<ActionResult<BaseResponse<IEnumerable<QuestionResponse>>>> SearchQuestions(
+        [FromQuery] int? quizId,
+        [FromQuery] int? sessionId,
+        [FromQuery] string searchTerm)
+        {
+            if (!quizId.HasValue && !sessionId.HasValue)
+            {
+                return BadRequest(new BaseResponse<IEnumerable<QuestionResponse>>(
+                    "Either QuizId or SessionId must be provided",
+                    StatusCodeEnum.BadRequest_400,
+                    null));
+            }
+
+            var result = await _questionService.SearchQuestionsAsync(quizId, sessionId, searchTerm);
+            return StatusCode((int)result.StatusCode, result);
+        }
     }
 }
