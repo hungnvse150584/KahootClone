@@ -13,5 +13,6 @@ namespace Repositories.IRepository
         Task<Question> UpdateQuestionAsync(Question question);
         Task DeleteQuestionAsync(Question question);
         Task<Response> GetLastResponseByPlayerIdAndQuizIdAsync(int playerId, int quizId);
+        Task<List<Question>> SearchQuestionsAsync(int quizId, string searchTerm);
     }
 }

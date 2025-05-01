@@ -45,5 +45,9 @@ namespace Repositories.Repository
         {
             return await _questionDao.GetLastResponseByPlayerIdAndQuizIdAsync(playerId, quizId);
         }
+        public async Task<List<Question>> SearchQuestionsAsync(int quizId, string searchTerm)
+        {
+            return await _questionDao.SearchQuestionsAsync(quizId, searchTerm);
+        }
     }
 }

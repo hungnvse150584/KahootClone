@@ -17,5 +17,6 @@ namespace Services.IService
         Task<BaseResponse<string>> DeleteQuestionAsync(int questionId);
         Task<BaseResponse<IEnumerable<ResponseResponse>>> GetResponsesByQuestionInGameIdAsync(int questionInGameId);
         Task<BaseResponse<ResponseResponse>> GetLastResponseByPlayerIdAndQuizIdAsync(int playerId, int quizId);
+        Task<BaseResponse<IEnumerable<QuestionResponse>>> SearchQuestionsAsync(int? quizId, int? sessionId, string searchTerm);
     }
 }
