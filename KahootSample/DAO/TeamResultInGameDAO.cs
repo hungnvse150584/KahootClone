@@ -60,6 +60,18 @@ namespace DAO
                 .ToListAsync();
         }
 
+        public async Task<TeamResultInGame> UpdateTeamResultAsync(TeamResultInGame teamResultInGame)
+        {
+            if (teamResultInGame == null)
+            {
+                throw new ArgumentNullException(nameof(teamResultInGame));
+            }
+
+            _context.TeamResults.Update(teamResultInGame);
+            await _context.SaveChangesAsync();
+            return teamResultInGame;
+        }
+
         public async Task<List<(int TeamId, int TotalScore)>> GetTeamRankingsBySessionIdAsync(int sessionId)
         {
             var result = await _context.TeamResults
