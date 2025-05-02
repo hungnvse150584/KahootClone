@@ -35,7 +35,7 @@ namespace Services
 
             services.AddScoped<IPlayerService, PlayerService>();
 
-
+            services.AddScoped<CloudinaryService>();
 
             services.AddScoped<IQuestionInGameService, QuestionInGameService>();
 

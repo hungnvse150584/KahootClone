@@ -21,13 +21,20 @@ namespace Services.Service
         private readonly IResponseRepository _responseRepository;
         private readonly IQuestionInGameService _questionInGameService;
         private readonly IMapper _mapper;
+        private readonly CloudinaryService _cloudinaryService;
 
-        public QuestionService(IQuestionRepository questionRepository, IResponseRepository responseRepository, IQuestionInGameService questionInGameService, IMapper mapper)
+        public QuestionService(
+            IQuestionRepository questionRepository,
+            IResponseRepository responseRepository,
+            IQuestionInGameService questionInGameService,
+            IMapper mapper,
+            CloudinaryService cloudinaryService)
         {
             _questionRepository = questionRepository;
             _responseRepository = responseRepository;
             _questionInGameService = questionInGameService;
             _mapper = mapper;
+            _cloudinaryService = cloudinaryService;
         }
 
         public async Task<BaseResponse<QuestionResponse>> CreateQuestionAsync(CreateQuestionRequest request)
@@ -58,7 +65,18 @@ namespace Services.Service
                         null
                     );
                 }
+
                 var question = _mapper.Map<Question>(request);
+                question.CreatedTime = DateTime.UtcNow; // Tự động tạo
+                question.Status = request.Status ?? "Active"; // Mặc định trạng thái nếu không có
+
+                // Xử lý upload hình ảnh nếu có
+                if (request.ImageData != null && request.ImageData.Length > 0)
+                {
+                    string fileName = $"question_{DateTime.UtcNow.Ticks}.jpg";
+                    question.ImageUrl = await _cloudinaryService.UploadImageAsync(request.ImageData, fileName);
+                }
+
                 var created = await _questionRepository.AddQuestionAsync(question);
                 var response = _mapper.Map<QuestionResponse>(created);
 
@@ -83,7 +101,6 @@ namespace Services.Service
                 // Update fields
                 existing.Text = request.Text;
                 existing.TimeLimit = request.TimeLimit;
-                existing.ImageUrl = request.ImageUrl;
                 existing.Option1 = request.Option1;
                 existing.Option2 = request.Option2;
                 existing.Option3 = request.Option3;
@@ -91,7 +108,14 @@ namespace Services.Service
                 existing.CorrectOption = request.CorrectOption;
                 existing.OrderIndex = request.OrderIndex;
                 existing.QuizId = request.QuizId;
-                existing.Status = request.Status;
+                existing.Status = request.Status ?? existing.Status;
+
+                // Xử lý upload hình ảnh mới nếu có
+                if (request.ImageData != null && request.ImageData.Length > 0)
+                {
+                    string fileName = $"question_{existing.QuestionId}_{DateTime.UtcNow.Ticks}.jpg";
+                    existing.ImageUrl = await _cloudinaryService.UploadImageAsync(request.ImageData, fileName);
+                }
 
                 var updated = await _questionRepository.UpdateQuestionAsync(existing);
                 var response = _mapper.Map<QuestionResponse>(updated);

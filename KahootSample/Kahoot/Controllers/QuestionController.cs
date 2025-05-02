@@ -22,38 +22,35 @@ namespace Kahoot.Controllers
         }
 
         [HttpPost]
-        [ProducesResponseType(StatusCodes.Status201Created)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<ActionResult<BaseResponse<QuestionResponse>>> CreateQuestion([FromBody] CreateQuestionRequest request)
+        public async Task<IActionResult> CreateQuestion([FromForm] CreateQuestionRequest request)
         {
-            if (request == null || !ModelState.IsValid)
+            // Nếu ImageData là IFormFile, chuyển thành byte[]
+            if (request.ImageFile != null)
             {
-                return BadRequest(new BaseResponse<QuestionResponse>("Invalid request data.", StatusCodeEnum.BadRequest_400, null));
+                using var ms = new MemoryStream();
+                await request.ImageFile.CopyToAsync(ms);
+                request.ImageData = ms.ToArray();
             }
 
-            var result = await _questionService.CreateQuestionAsync(request);
-            return StatusCode((int)result.StatusCode, result);
+            var response = await _questionService.CreateQuestionAsync(request);
+            return StatusCode((int)response.StatusCode, response);
         }
 
-        [HttpPut("{questionId}")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
-        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<ActionResult<BaseResponse<QuestionResponse>>> UpdateQuestion(int questionId, [FromBody] UpdateQuestionRequest request)
+        [HttpPut("{id}")]
+        public async Task<IActionResult> UpdateQuestion(int id, [FromForm] UpdateQuestionRequest request)
         {
-            if (questionId <= 0 || request == null || !ModelState.IsValid)
+            request.QuestionId = id;
+            // Nếu ImageFile là IFormFile, chuyển thành byte[]
+            if (request.ImageFile != null)
             {
-                return BadRequest(new BaseResponse<QuestionResponse>("Invalid request.", StatusCodeEnum.BadRequest_400, null));
+                using var ms = new MemoryStream();
+                await request.ImageFile.CopyToAsync(ms);
+                request.ImageData = ms.ToArray();
             }
 
-            request.QuestionId = questionId;
-
-            var result = await _questionService.UpdateQuestionAsync(request);
-            return StatusCode((int)result.StatusCode, result);
+            var response = await _questionService.UpdateQuestionAsync(request);
+            return StatusCode((int)response.StatusCode, response);
         }
-
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
