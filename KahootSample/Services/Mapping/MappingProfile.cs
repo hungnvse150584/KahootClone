@@ -85,8 +85,14 @@ namespace Services.Mapping
             CreateMap<Player, PlayerResponse>();
 
             //Question mappings
-            CreateMap<CreateQuestionRequest, Question>();
-            CreateMap<UpdateQuestionRequest, Question>(); 
+            CreateMap<CreateQuestionRequest, Question>()
+                 .ForMember(dest => dest.ImageUrl, opt => opt.Ignore())
+                 .ForMember(dest => dest.CreatedTime, opt => opt.MapFrom(src => DateTime.UtcNow))
+                 .ForMember(dest => dest.Status, opt => opt.MapFrom(src => src.Status ?? "Active"));
+
+            CreateMap<UpdateQuestionRequest, Question>()
+                .ForMember(dest => dest.ImageUrl, opt => opt.Ignore());
+
             CreateMap<Question, QuestionResponse>();
             CreateMap<Response, ResponseResponse>();
 

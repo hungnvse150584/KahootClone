@@ -1,4 +1,5 @@
-﻿using DAO;
+﻿using CloudinaryDotNet;
+using DAO;
 using Kahoot.Hubs;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
@@ -64,6 +65,9 @@ builder.Services.AddSwaggerGen(option =>
         }
     });
 });
+
+
+
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowAll", builder =>
@@ -78,6 +82,13 @@ builder.Services.AddControllers().AddNewtonsoftJson(options =>
 {
     options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore;
 });
+builder.Services.AddAuthorization();
+var cloudName = builder.Configuration["Cloudinary:CloudName"];
+var apiKey = builder.Configuration["Cloudinary:ApiKey"];
+var apiSecret = builder.Configuration["Cloudinary:ApiSecret"];
+var cloudinaryAccount = new CloudinaryDotNet.Account(cloudName, apiKey, apiSecret);
+var cloudinary = new Cloudinary(cloudinaryAccount);
+builder.Services.AddSingleton(cloudinary);
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
