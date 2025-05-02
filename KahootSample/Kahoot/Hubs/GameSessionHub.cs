@@ -14,12 +14,14 @@ using System.Text.Json;
 using System.Threading.Tasks;
 using System.Linq;
 using System.Collections.Generic;
+using Services.RequestAndResponse.Request.TeamResultRequest;
 
 namespace Kahoot.Hubs
 {
     public class GameSessionHub : Hub
     {
         private readonly IGameSessionService _gameSessionService;
+        private readonly ITeamResultInGameService _teamResultService;
         private readonly IQuestionService _questionService;
         private readonly IResponseService _responseService;
         private readonly IQuestionInGameService _questionInGameService;
@@ -29,6 +31,7 @@ namespace Kahoot.Hubs
 
         public GameSessionHub(
             IGameSessionService gameSessionService,
+            ITeamResultInGameService teamResultService,
             IQuestionService questionService,
             IResponseService responseService,
             IQuestionInGameService questionInGameService,
@@ -36,6 +39,7 @@ namespace Kahoot.Hubs
             IConnectionMultiplexer redis)
         {
             _gameSessionService = gameSessionService;
+            _teamResultService = teamResultService;
             _questionService = questionService;
             _responseService = responseService;
             _questionInGameService = questionInGameService;
@@ -310,6 +314,45 @@ namespace Kahoot.Hubs
                     return;
                 }
 
+                if (player.Data.TeamId.HasValue && player.Data.TeamId > 0)
+                {
+                    var teamId = player.Data.TeamId.Value;
+
+                    var existingTeamResults = await _teamResultService.GetTeamResultsBySessionIdAsync(player.Data.SessionId);
+                    var existingResult = existingTeamResults.Data?
+                        .FirstOrDefault(tr => tr.TeamId == teamId && tr.QuestionInGameId == questionInGameId);
+
+                    if (existingResult != null)
+                    {
+                        var updateRequest = new UpdateTeamResultRequest
+                        {
+                            TeamResultInGameId = existingResult.TeamResultInGameId,
+                            SessionId = player.Data.SessionId,
+                            QuestionInGameId = questionInGameId,
+                            TeamId = teamId,
+                            Score = existingResult.Score + score
+                        };
+                        await _teamResultService.UpdateTeamResultAsync(updateRequest);
+                    }
+                    else
+                    {
+                        var createRequest = new CreateTeamResultRequest
+                        {
+                            SessionId = player.Data.SessionId,
+                            QuestionInGameId = questionInGameId,
+                            TeamId = teamId,
+                            Score = score
+                        };
+                        await _teamResultService.CreateTeamResultAsync(createRequest);
+                    }
+
+                    var leaderboardResult = await _teamResultService.GetTeamRankingsBySessionIdAsync(player.Data.SessionId);
+                    if (leaderboardResult.StatusCode == StatusCodeEnum.OK_200 && leaderboardResult.Data != null)
+                    {
+                        await Clients.Group(player.Data.SessionId.ToString()).SendAsync("TeamLeaderboardUpdated", leaderboardResult.Data);
+                    }
+                }
+
                 // Notify the player of their response result
                 await Clients.Caller.SendAsync("ResponseSubmitted", new
                 {
@@ -338,6 +381,7 @@ namespace Kahoot.Hubs
                 Console.WriteLine($"SubmitResponse error: {ex.Message}\nStackTrace: {ex.StackTrace}");
                 await Clients.Caller.SendAsync("Error", $"An error occurred: {ex.Message}");
             }
+
         }
 
         public async Task GetResponseCount(int sessionId)
