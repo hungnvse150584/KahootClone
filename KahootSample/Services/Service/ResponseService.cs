@@ -190,5 +190,32 @@ namespace Services.Service
                 return new BaseResponse<IEnumerable<ResponseResponse>>($"An error occurred: {ex.Message}", StatusCodeEnum.InternalServerError_500, null);
             }
         }
+        public async Task<BaseResponse<IEnumerable<ResponseResponse>>> GetResponsesByPlayerIdAndSessionIdAsync(int playerId, int sessionId)
+        {
+            try
+            {
+                var responses = await _responseRepository.GetResponsesByPlayerIdAndSessionIdAsync(playerId, sessionId);
+                if (responses == null || !responses.Any())
+                {
+                    return new BaseResponse<IEnumerable<ResponseResponse>>(
+                        "No responses found for this player in the session",
+                        StatusCodeEnum.NotFound_404,
+                        null);
+                }
+
+                var responseDtos = _mapper.Map<IEnumerable<ResponseResponse>>(responses);
+                return new BaseResponse<IEnumerable<ResponseResponse>>(
+                    "Successfully retrieved responses",
+                    StatusCodeEnum.OK_200,
+                    responseDtos);
+            }
+            catch (Exception ex)
+            {
+                return new BaseResponse<IEnumerable<ResponseResponse>>(
+                    $"An error occurred: {ex.Message}",
+                    StatusCodeEnum.InternalServerError_500,
+                    null);
+            }
+        }
     }
 }

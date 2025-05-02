@@ -152,5 +152,26 @@ namespace Services.Service
                 return new BaseResponse<string>($"An error occurred: {ex.Message}", StatusCodeEnum.InternalServerError_500, null);
             }
         }
+
+        public async Task<BaseResponse<IEnumerable<TeamRankingResponse>>> GetTeamRankingsBySessionIdAsync(int sessionId)
+        {
+            try
+            {
+                var rankings = await _teamResultRepository.GetTeamRankingsBySessionIdAsync(sessionId);
+
+                var response = rankings.Select(r => new TeamRankingResponse
+                {
+                    TeamId = r.TeamId,
+                    TotalScore = r.TotalScore
+                });
+
+                return new BaseResponse<IEnumerable<TeamRankingResponse>>("Team rankings retrieved successfully", StatusCodeEnum.OK_200, response);
+            }
+            catch (Exception ex)
+            {
+                return new BaseResponse<IEnumerable<TeamRankingResponse>>($"An error occurred: {ex.Message}", StatusCodeEnum.InternalServerError_500, null);
+            }
+        }
+
     }
 }

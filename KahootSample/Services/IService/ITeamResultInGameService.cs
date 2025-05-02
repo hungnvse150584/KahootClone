@@ -17,5 +17,7 @@ namespace Services.IService
         Task<BaseResponse<TeamResultResponse>> CreateTeamResultAsync(CreateTeamResultRequest request);
         Task<BaseResponse<TeamResultResponse>> UpdateTeamResultAsync(UpdateTeamResultRequest request);
         Task<BaseResponse<string>> DeleteTeamResultAsync(int teamResultId);
+        Task<BaseResponse<IEnumerable<TeamRankingResponse>>> GetTeamRankingsBySessionIdAsync(int sessionId);
+
     }
 }

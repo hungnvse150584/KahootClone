@@ -574,7 +574,52 @@ namespace Kahoot.Hubs
                 await Clients.Caller.SendAsync("Error", $"An error occurred: {ex.Message}");
             }
         }
+        //public async Task UpdateQuestionInGameStatus(int questionInGameId, string status)
+        //{
+        //    try
+        //    {
+        //        var updateRequest = new UpdateQuestionInGameRequest
+        //        {
+        //            QuestionInGameId = questionInGameId,
+        //            Status = status
+        //        };
+        //        var updateResult = await _questionInGameService.UpdateQuestionInGameAsync(updateRequest);
+        //        if (updateResult.StatusCode != StatusCodeEnum.OK_200 || updateResult.Data == null)
+        //        {
+        //            await Clients.Caller.SendAsync("Error", updateResult.Message);
+        //            return;
+        //        }
 
+        //        var sessionId = updateResult.Data.SessionId;
+        //        await Clients.Group(sessionId.ToString()).SendAsync("QuestionInGameStatusUpdated", new
+        //        {
+        //            QuestionInGameId = questionInGameId,
+        //            Status = status
+        //        });
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        await Clients.Caller.SendAsync("Error", $"An error occurred: {ex.Message}");
+        //    }
+        //}
+        public async Task ViewSummary(int sessionId)
+        {
+            try
+            {
+                var summary = await _gameSessionService.GetSessionSummaryAsync(sessionId);
+                if (summary.StatusCode != StatusCodeEnum.OK_200 || summary.Data == null)
+                {
+                    await Clients.Caller.SendAsync("Error", summary.Message);
+                    return;
+                }
+
+                await Clients.Group(sessionId.ToString()).SendAsync("ViewSummary", summary.Data);
+            }
+            catch (Exception ex)
+            {
+                await Clients.Caller.SendAsync("Error", $"An error occurred: {ex.Message}");
+            }
+        }
         public async Task EndGameSession(int sessionId)
         {
             try

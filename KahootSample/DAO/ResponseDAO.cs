@@ -52,5 +52,12 @@ namespace DAO
                 .Include(r => r.QuestionInGame)
                 .ToListAsync();
         }
+        public async Task<List<Response>> GetResponsesByPlayerIdAndSessionIdAsync(int playerId, int sessionId)
+        {
+            return await _context.Responses
+                .Include(r => r.QuestionInGame)
+                .Where(r => r.PlayerId == playerId && r.QuestionInGame.SessionId == sessionId)
+                .ToListAsync();
+        }
     }
 }

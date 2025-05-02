@@ -33,5 +33,11 @@ namespace Repositories.Repository
         {
             return await _teamResultDao.GetByTeamIdAsync(teamId);
         }
+
+        public async Task<List<(int TeamId, int TotalScore)>> GetTeamRankingsBySessionIdAsync(int sessionId)
+        {
+            return await _teamResultDao.GetTeamRankingsBySessionIdAsync(sessionId);
+        }
+
     }
 }

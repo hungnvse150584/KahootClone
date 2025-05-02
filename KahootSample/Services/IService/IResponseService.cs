@@ -16,5 +16,6 @@ namespace Services.IService
         Task<BaseResponse<string>> DeleteResponseAsync(int responseId); // Thêm phương thức này
         Task<BaseResponse<IEnumerable<ResponseResponse>>> GetResponsesByQuestionInGameIdAsync(int questionInGameId);
         Task<BaseResponse<IEnumerable<ResponseResponse>>> GetResponsesByPlayerIdAsync(int playerId);
+        Task<BaseResponse<IEnumerable<ResponseResponse>>> GetResponsesByPlayerIdAndSessionIdAsync(int playerId, int sessionId);
     }
 }

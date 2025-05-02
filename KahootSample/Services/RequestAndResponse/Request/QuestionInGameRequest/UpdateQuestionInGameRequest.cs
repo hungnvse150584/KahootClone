@@ -14,5 +14,6 @@ namespace Services.RequestAndResponse.Request.QuestionInGameRequest
         public int OrderIndex { get; set; }
         public DateTime CreatedTime { get; set; }
         public int TotalMembers { get; set; }
+        //public string Status {  get; set; }
     }
 }

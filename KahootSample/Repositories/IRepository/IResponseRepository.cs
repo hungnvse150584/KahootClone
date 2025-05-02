@@ -9,5 +9,6 @@ namespace Repositories.IRepository
     {
         Task<List<Response>> GetResponsesByPlayerIdAsync(int playerId);
         Task<List<Response>> GetResponsesByQuestionInGameIdAsync(int questionInGameId);
+        Task<List<Response>> GetResponsesByPlayerIdAndSessionIdAsync(int playerId, int sessionId);
     }
 }

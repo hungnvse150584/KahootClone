@@ -77,5 +77,16 @@ namespace Kahoot.Controllers
             var result = await _teamResultService.DeleteTeamResultAsync(id);
             return StatusCode((int)result.StatusCode, result);
         }
+
+        [HttpGet("ranking/session/{sessionId}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<ActionResult<BaseResponse<IEnumerable<TeamRankingResponse>>>> GetTeamRankingsBySessionId(int sessionId)
+        {
+            var result = await _teamResultService.GetTeamRankingsBySessionIdAsync(sessionId);
+            return StatusCode((int)result.StatusCode, result);
+        }
+
     }
 }

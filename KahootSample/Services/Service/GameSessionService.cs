@@ -1,5 +1,7 @@
 ﻿using AutoMapper;
 using BOs.Model;
+using DAO;
+using Microsoft.EntityFrameworkCore;
 using Repositories.IRepository;
 using Services.IService;
 using Services.RequestAndResponse.BaseResponse;
@@ -7,6 +9,7 @@ using Services.RequestAndResponse.Enum;
 using Services.RequestAndResponse.Request.GameSessionRequest;
 using Services.RequestAndResponse.Response.GameSessionResponses;
 using Services.RequestAndResponse.Response.PlayerResponse;
+using Services.RequestAndResponse.Response.SummaryResponse;
 using Services.RequestAndResponse.Response.TeamResponse;
 using System;
 using System.Collections.Generic;
@@ -17,11 +20,33 @@ namespace Services.Service
     public class GameSessionService : IGameSessionService
     {
         private readonly IGameSessionRepository _gameSessionRepository;
+        private readonly IQuestionInGameService _questionInGameService;
+        private readonly IQuestionService _questionService;
+        private readonly IResponseService _responseService;
+        private readonly ITeamResultInGameService _teamResultInGameService;
+        private readonly IQuizService _quizService;
+        private readonly IPlayerService _playerService;
+        private readonly KahootDbContext _context;
         private readonly IMapper _mapper;
 
-        public GameSessionService(IGameSessionRepository gameSessionRepository, IMapper mapper)
+        public GameSessionService(IGameSessionRepository gameSessionRepository, 
+            IQuestionInGameService questionInGameService,
+            IQuestionService questionService,
+            IResponseService responseService,
+            ITeamResultInGameService teamResultInGameService,
+            IQuizService quizService,
+            IPlayerService playerService,
+            KahootDbContext context,
+            IMapper mapper)
         {
             _gameSessionRepository = gameSessionRepository;
+            _questionInGameService = questionInGameService;
+            _questionService = questionService;
+            _responseService = responseService;
+            _teamResultInGameService = teamResultInGameService;
+            _quizService = quizService;
+            _playerService = playerService;
+            _context = context; 
             _mapper = mapper;
         }
 
@@ -246,6 +271,98 @@ namespace Services.Service
             catch (Exception ex)
             {
                 return new BaseResponse<string>($"An error occurred: {ex.Message}", StatusCodeEnum.InternalServerError_500, null);
+            }
+        }
+        public async Task<BaseResponse<SummaryReportResponse>> GetSessionSummaryAsync(int sessionId)
+        {
+            try
+            {
+                // Fetch session details
+                var session = await _context.GameSessions
+                    .Include(gs => gs.Quiz)
+                    .Include(gs => gs.QuestionsInGame)
+                        .ThenInclude(qig => qig.Question)
+                    .Include(gs => gs.Players)
+                    .Include(gs => gs.Teams)
+                    .FirstOrDefaultAsync(gs => gs.SessionId == sessionId);
+                if (session == null)
+                {
+                    return new BaseResponse<SummaryReportResponse>(
+                        "Session not found",
+                        StatusCodeEnum.NotFound_404,
+                        null);
+                }
+
+                // Build the summary report
+                var report = new SummaryReportResponse
+                {
+                    SessionId = session.SessionId,
+                    StartedAt = session.StartedAt,
+                    QuizId = session.QuizId,
+                    QuizTitle = session.Quiz.Title,
+                    Duration = session.Status == "Completed" ? DateTime.UtcNow - session.StartedAt : TimeSpan.Zero, // Approximate if not completed
+                    TotalPlayers = session.Players.Count,
+                    SessionStatus = session.Status
+                };
+
+                // Populate question summaries
+                foreach (var qig in session.QuestionsInGame)
+                {
+                    var correctResponses = qig.Responses.Count(r => r.SelectedOption == qig.Question.CorrectOption);
+                    var correctAnswerRate = qig.TotalMembers > 0 ? (double)correctResponses / qig.TotalMembers * 100 : 0;
+
+                    report.Questions.Add(new QuestionSummary
+                    {
+                        QuestionInGameId = qig.QuestionInGameId,
+                        OrderIndex = qig.OrderIndex,
+                        Text = qig.Question.Text,
+                        TotalMembers = qig.TotalMembers,
+                        Status = qig.Question.Status, // Using Question.Status (adjust if QuestionInGame.Status intended)
+                        CorrectAnswerRate = correctAnswerRate
+                    });
+                }
+
+                // Populate team summaries
+                var teamResults = await _context.TeamResults
+                    .Where(tr => tr.SessionId == sessionId)
+                    .ToListAsync();
+                if (teamResults.Any())
+                {
+                    var teamSummaries = session.Teams.Select(t => new TeamSummary
+                    {
+                        TeamId = t.TeamId,
+                        TeamName = t.Name,
+                        TotalScore = t.TotalScore + teamResults.Where(tr => tr.TeamId == t.TeamId).Sum(tr => tr.Score)
+                    }).ToList();
+
+                    report.Teams = teamSummaries;
+                    report.HighestScoringTeam = teamSummaries.OrderByDescending(t => t.TotalScore).FirstOrDefault()?.TeamName;
+                }
+
+                // Populate player summaries
+                var playerSummaries = session.Players.Select(p => new PlayerSummary
+                {
+                    PlayerId = p.PlayerId,
+                    Nickname = p.Nickname,
+                    TeamId = p.TeamId,
+                    TotalScore = p.Score ?? p.Responses.Sum(r => r.Score) // Use Player.Score if set, else sum Responses
+                }).OrderByDescending(p => p.TotalScore).ToList();
+                report.Players = playerSummaries;
+
+                // Calculate average score
+                report.AverageScore = report.Players.Any() ? report.Players.Average(p => p.TotalScore) : 0;
+
+                return new BaseResponse<SummaryReportResponse>(
+                    "Successfully retrieved session summary",
+                    StatusCodeEnum.OK_200,
+                    report);
+            }
+            catch (Exception ex)
+            {
+                return new BaseResponse<SummaryReportResponse>(
+                    $"An error occurred: {ex.Message}",
+                    StatusCodeEnum.InternalServerError_500,
+                    null);
             }
         }
 
