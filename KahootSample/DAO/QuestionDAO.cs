@@ -88,5 +88,27 @@ namespace DAO
 
             return response;
         }
+        public async Task<List<Question>> SearchQuestionsAsync(int quizId, string searchTerm)
+        {
+            try
+            {
+                var query = _context.Questions
+                    .Where(q => q.QuizId == quizId);
+
+                if (!string.IsNullOrEmpty(searchTerm))
+                {
+                    query = query.Where(q => q.Text.Contains(searchTerm, StringComparison.OrdinalIgnoreCase) ||
+                                             q.QuestionId.ToString() == searchTerm);
+                }
+
+                return await query
+                    .OrderBy(q => q.OrderIndex)
+                    .ToListAsync();
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Error searching questions for Quiz ID {quizId}: {ex.Message}", ex);
+            }
+        }
     }
 }

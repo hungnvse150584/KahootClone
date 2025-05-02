@@ -7,6 +7,7 @@ using Services.RequestAndResponse.Request.ResponseRequest;
 using Services.RequestAndResponse.Response.GameSessionResponses;
 using Services.RequestAndResponse.Response.PlayerResponse;
 using Services.RequestAndResponse.Response.ResponseResponses;
+using Services.RequestAndResponse.Response.SummaryResponse;
 using Services.RequestAndResponse.Response.TeamResponse;
 using Services.Service;
 using StackExchange.Redis;
@@ -181,6 +182,24 @@ namespace Kahoot.Controllers
             }
 
             var result = await _gameSessionService.DeleteGameSessionAsync(sessionId);
+            return StatusCode((int)result.StatusCode, result);
+        }
+        [HttpGet("{sessionId}/summary")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<ActionResult<BaseResponse<SummaryReportResponse>>> GetSessionSummary(int sessionId)
+        {
+            if (sessionId <= 0)
+            {
+                return BadRequest(new BaseResponse<SummaryReportResponse>(
+                    "Invalid Session ID.",
+                    StatusCodeEnum.BadRequest_400,
+                    null));
+            }
+
+            var result = await _gameSessionService.GetSessionSummaryAsync(sessionId);
             return StatusCode((int)result.StatusCode, result);
         }
 

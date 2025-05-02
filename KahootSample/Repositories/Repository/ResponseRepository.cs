@@ -25,5 +25,9 @@ namespace Repositories.Repository
         {
             return await _responseDao.GetResponsesByQuestionInGameIdAsync(questionInGameId);
         }
+        public async Task<List<Response>> GetResponsesByPlayerIdAndSessionIdAsync(int playerId, int sessionId)
+        {
+            return await _responseDao.GetResponsesByPlayerIdAndSessionIdAsync(playerId, sessionId);
+        }
     }
 }
