@@ -34,6 +34,11 @@ namespace Repositories.Repository
             return await _teamResultDao.GetByTeamIdAsync(teamId);
         }
 
+        public async Task<TeamResultInGame> UpdateTeamResultAsync(TeamResultInGame teamResultInGame)
+        {
+            return await _teamResultDao.UpdateTeamResultAsync(teamResultInGame);
+        }
+
         public async Task<List<(int TeamId, int TotalScore)>> GetTeamRankingsBySessionIdAsync(int sessionId)
         {
             return await _teamResultDao.GetTeamRankingsBySessionIdAsync(sessionId);
