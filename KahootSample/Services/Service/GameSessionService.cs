@@ -292,7 +292,8 @@ namespace Services.Service
                         StatusCodeEnum.NotFound_404,
                         null);
                 }
-
+                //TimeSpan duration = session.Status == "Ended" ? DateTime.UtcNow - session.StartedAt : TimeSpan.Zero;
+                //string formattedDuration = FormatDuration(duration);
                 // Build the summary report
                 var report = new SummaryReportResponse
                 {
@@ -300,7 +301,7 @@ namespace Services.Service
                     StartedAt = session.StartedAt,
                     QuizId = session.QuizId,
                     QuizTitle = session.Quiz.Title,
-                    Duration = session.Status == "Completed" ? DateTime.UtcNow - session.StartedAt : TimeSpan.Zero, // Approximate if not completed
+                    //Duration = formattedDuration,
                     TotalPlayers = session.Players.Count,
                     SessionStatus = session.Status
                 };
@@ -344,7 +345,7 @@ namespace Services.Service
                 {
                     PlayerId = p.PlayerId,
                     Nickname = p.Nickname,
-                    TeamId = p.TeamId,
+                    TeamId = p.TeamId.HasValue ? p.TeamId.ToString() : "Not In Any Team",
                     TotalScore = p.Score ?? p.Responses.Sum(r => r.Score) // Use Player.Score if set, else sum Responses
                 }).OrderByDescending(p => p.TotalScore).ToList();
                 report.Players = playerSummaries;
@@ -365,7 +366,12 @@ namespace Services.Service
                     null);
             }
         }
-
+        private string FormatDuration(TimeSpan duration)
+        {
+            if (duration == TimeSpan.Zero)
+                return "Not yet completed";
+            return $"{duration.Hours:D2}:{duration.Minutes:D2}:{duration.Seconds:D2}";
+        }
         private string GenerateRandomPin()
         {
             Random random = new Random();

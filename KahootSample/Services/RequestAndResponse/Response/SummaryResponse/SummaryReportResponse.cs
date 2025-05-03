@@ -11,8 +11,8 @@ namespace Services.RequestAndResponse.Response.SummaryResponse
         public int SessionId { get; set; }
         public DateTime StartedAt { get; set; } // Changed from CreatedTime to StartedAt
         public int QuizId { get; set; }
-        public string QuizTitle { get; set; }
-        public TimeSpan Duration { get; set; }
+        public string QuizTitle { get; set; }   
+        //public string? Duration { get; set; }
         public int TotalPlayers { get; set; }
         public double AverageScore { get; set; }
         public List<QuestionSummary> Questions { get; set; } = new List<QuestionSummary>();
