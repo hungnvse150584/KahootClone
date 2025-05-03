@@ -9,7 +9,7 @@ namespace Services.RequestAndResponse.Request.QuestionRequest
         [Required]
         public string Text { get; set; }
         public int TimeLimit { get; set; }
-        public IFormFile ImageFile { get; set; }
+        public IFormFile? ImageFile { get; set; }
         public byte[]? ImageData { get; set; }
         [Required]
         public string Option1 { get; set; }
