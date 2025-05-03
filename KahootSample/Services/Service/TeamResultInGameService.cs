@@ -157,12 +157,25 @@ namespace Services.Service
         {
             try
             {
-                var rankings = await _teamResultRepository.GetTeamRankingsBySessionIdAsync(sessionId);
+                var rankings = await _teamResultRepository.GetBySessionIdAsync(sessionId);
 
-                var response = rankings.Select(r => new TeamRankingResponse
+                var grouped = rankings
+                    .GroupBy(tr => tr.Team)
+                    .Select(g => new
+                    {
+                        TeamId = g.Key.TeamId,
+                        TeamName = g.Key.Name, // đảm bảo entity Team có property Name
+                        TotalScore = g.Sum(tr => tr.Score)
+                    })
+                    .OrderByDescending(g => g.TotalScore)
+                    .ToList();
+
+                var response = grouped.Select((r, index) => new TeamRankingResponse
                 {
                     TeamId = r.TeamId,
-                    TotalScore = r.TotalScore
+                    TeamName = r.TeamName,
+                    TotalScore = r.TotalScore,
+                    Rank = index + 1
                 });
 
                 return new BaseResponse<IEnumerable<TeamRankingResponse>>("Team rankings retrieved successfully", StatusCodeEnum.OK_200, response);
