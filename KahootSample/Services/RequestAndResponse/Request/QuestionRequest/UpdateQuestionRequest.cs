@@ -5,22 +5,19 @@ namespace Services.RequestAndResponse.Request.QuestionRequest
 {
     public class UpdateQuestionRequest : IValidatableObject
     {
-        public int QuestionId { get; set; }
-        public int QuizId { get; set; }
-        [Required]
-        public string Text { get; set; }
-        public int TimeLimit { get; set; }
-        public IFormFile ImageFile { get; set; }
+        public int? QuestionId { get; set; }
+        public int? QuizId { get; set; }
+        public string? Text { get; set; }
+        public int? TimeLimit { get; set; }
+        public IFormFile? ImageFile { get; set; }
         public byte[]? ImageData { get; set; }
-        [Required]
-        public string Option1 { get; set; }
+        public string? Option1 { get; set; }
         public string? Option2 { get; set; }
         public string? Option3 { get; set; }
         public string? Option4 { get; set; }
-        [Required]
-        public int CorrectOption { get; set; }
-        public int OrderIndex { get; set; }
-        public string Status { get; set; }
+        public int? CorrectOption { get; set; }
+        public int? OrderIndex { get; set; }
+        public string? Status { get; set; }
 
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
         {
