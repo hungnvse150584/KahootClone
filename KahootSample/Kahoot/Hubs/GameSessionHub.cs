@@ -15,6 +15,7 @@ using System.Threading.Tasks;
 using System.Linq;
 using System.Collections.Generic;
 using Services.RequestAndResponse.Request.TeamResultRequest;
+using BOs.Model;
 
 namespace Kahoot.Hubs
 {
@@ -29,6 +30,7 @@ namespace Kahoot.Hubs
         private readonly ConnectionMultiplexer _redis;
         private readonly IDatabase _redisDb;
 
+        private readonly Dictionary<int, System.Timers.Timer> _sessionTimers = new Dictionary<int, System.Timers.Timer>();
         public GameSessionHub(
             IGameSessionService gameSessionService,
             ITeamResultInGameService teamResultService,
@@ -417,14 +419,12 @@ namespace Kahoot.Hubs
         {
             try
             {
-                // Kiểm tra SessionId và QuestionInGameId hợp lệ
                 if (sessionId <= 0 || questionInGameId <= 0)
                 {
                     await Clients.Caller.SendAsync("Error", "Invalid SessionId or QuestionInGameId");
                     return;
                 }
 
-                // Kiểm tra GameSession tồn tại
                 var sessionResponse = await _gameSessionService.GetGameSessionByIdAsync(sessionId);
                 if (sessionResponse.StatusCode != StatusCodeEnum.OK_200 || sessionResponse.Data == null)
                 {
@@ -432,14 +432,12 @@ namespace Kahoot.Hubs
                     return;
                 }
 
-                // Kiểm tra trạng thái GameSession
                 if (sessionResponse.Data.Status != "Started")
                 {
                     await Clients.Caller.SendAsync("Error", "GameSession is not in progress");
                     return;
                 }
 
-                // Lấy thông tin QuestionInGame hiện tại
                 var currentQuestionInGame = await _questionInGameService.GetQuestionInGameByIdAsync(questionInGameId);
                 if (currentQuestionInGame.StatusCode != StatusCodeEnum.OK_200 || currentQuestionInGame.Data == null)
                 {
@@ -447,7 +445,6 @@ namespace Kahoot.Hubs
                     return;
                 }
 
-                // Đảm bảo QuestionInGame thuộc về SessionId
                 if (currentQuestionInGame.Data.SessionId != sessionId)
                 {
                     await Clients.Caller.SendAsync("Error", "QuestionInGame does not belong to this session");
@@ -456,7 +453,6 @@ namespace Kahoot.Hubs
 
                 int currentOrderIndex = currentQuestionInGame.Data.OrderIndex;
 
-                // Lấy danh sách QuestionInGame từ Redis
                 string questionKey = $"session:{sessionId}:questions";
                 var questionsInGame = new List<CreateQuestionInGameRequest>();
                 var questionValues = await _redisDb.ListRangeAsync(questionKey);
@@ -489,16 +485,13 @@ namespace Kahoot.Hubs
                     return;
                 }
 
-                // Tìm câu hỏi tiếp theo dựa trên OrderIndex
                 var nextQuestionInGame = questionsInGame.FirstOrDefault(q => q.OrderIndex == currentOrderIndex + 1);
                 if (nextQuestionInGame == null)
                 {
-                    // Không còn câu hỏi, kết thúc phiên chơi
                     await EndGameSession(sessionId);
                     return;
                 }
 
-                // Lấy thông tin Question cho câu hỏi tiếp theo
                 var question = await _questionService.GetQuestionByIdAsync(nextQuestionInGame.QuestionId);
                 if (question.StatusCode != StatusCodeEnum.OK_200 || question.Data == null)
                 {
@@ -506,7 +499,6 @@ namespace Kahoot.Hubs
                     return;
                 }
 
-                // Lấy QuestionInGameId của câu hỏi tiếp theo từ database
                 var nextQuestionInGameEntity = await _questionInGameService.GetQuestionInGameBySessionIdAndQuestionIdAsync(sessionId, nextQuestionInGame.QuestionId);
                 if (nextQuestionInGameEntity.StatusCode != StatusCodeEnum.OK_200 || nextQuestionInGameEntity.Data == null)
                 {
@@ -515,7 +507,6 @@ namespace Kahoot.Hubs
                 }
                 int nextQuestionInGameId = nextQuestionInGameEntity.Data.QuestionInGameId;
 
-                // Cập nhật currentQuestionIndex trong Redis
                 string indexKey = $"session:{sessionId}:currentQuestionIndex";
                 bool indexSet = await _redisDb.StringSetAsync(indexKey, nextQuestionInGame.OrderIndex.ToString());
                 if (!indexSet)
@@ -525,22 +516,171 @@ namespace Kahoot.Hubs
                 }
                 await _redisDb.KeyExpireAsync(indexKey, TimeSpan.FromHours(24));
 
-                // Reset response count khi chuyển sang câu hỏi mới
                 string responseCountKey = $"session:{sessionId}:responseCount";
                 await _redisDb.KeyDeleteAsync(responseCountKey);
 
-                // Gửi câu hỏi tiếp theo đến tất cả người chơi trong group, bao gồm QuestionInGameId
+                // Gửi câu hỏi tiếp theo
                 await Clients.Group(sessionId.ToString()).SendAsync("ReceiveQuestion", new
                 {
                     QuestionInGameId = nextQuestionInGameId,
                     Question = question.Data
                 });
+
+                // Thêm timer cho câu hỏi hiện tại
+                StartQuestionTimer(sessionId, nextQuestionInGameId, question.Data.TimeLimit);
             }
             catch (Exception ex)
             {
                 Console.WriteLine($"NextQuestion error: {ex.Message}\nStackTrace: {ex.StackTrace}");
                 await Clients.Caller.SendAsync("Error", $"An error occurred: {ex.Message}");
             }
+        }
+        private void StartQuestionTimer(int sessionId, int questionInGameId, int timeLimitInSeconds)
+        {
+            // Dừng timer cũ nếu có
+            if (_sessionTimers.ContainsKey(sessionId))
+            {
+                _sessionTimers[sessionId].Stop();
+                _sessionTimers[sessionId].Dispose();
+                _sessionTimers.Remove(sessionId);
+            }
+
+            var timer = new System.Timers.Timer(timeLimitInSeconds * 1000); // Chuyển sang milliseconds
+            timer.Elapsed += async (sender, e) => await HandleTimeout(sessionId, questionInGameId);
+            timer.AutoReset = false; // Chỉ chạy một lần
+            timer.Start();
+
+            _sessionTimers[sessionId] = timer;
+        }
+        private async Task HandleTimeout(int sessionId, int questionInGameId)
+        {
+            try
+            {
+                // Lấy danh sách người chơi trong session từ Redis
+                string playersKey = $"session:{sessionId}:players";
+                var playerValues = await _redisDb.ListRangeAsync(playersKey);
+                var players = new List<Player>();
+                foreach (var value in playerValues)
+                {
+                    try
+                    {
+                        var player = JsonSerializer.Deserialize<Player>(value);
+                        if (player != null)
+                        {
+                            players.Add(player);
+                        }
+                    }
+                    catch (JsonException ex)
+                    {
+                        Console.WriteLine($"Failed to deserialize player: {ex.Message}");
+                        continue;
+                    }
+                }
+
+                // Kiểm tra xem mỗi người chơi đã trả lời chưa
+                string responseKey = $"session:{sessionId}:responses";
+                var responseValues = await _redisDb.ListRangeAsync(responseKey);
+                var respondedPlayerIds = responseValues
+                    .Select(r => JsonSerializer.Deserialize<CreateResponseRequest>(r)?.PlayerId)
+                    .Where(pid => pid.HasValue)
+                    .Select(pid => pid.Value)
+                    .ToList();
+
+                foreach (var player in players)
+                {
+                    if (!respondedPlayerIds.Contains(player.PlayerId))
+                    {
+                        // Người chơi chưa trả lời, tự động submit với selectedOption = 0
+                        await SubmitResponseForTimeout(player.PlayerId, questionInGameId, 0, sessionId);
+                    }
+                }
+
+                // Dừng timer sau khi xử lý
+                if (_sessionTimers.ContainsKey(sessionId))
+                {
+                    _sessionTimers[sessionId].Stop();
+                    _sessionTimers[sessionId].Dispose();
+                    _sessionTimers.Remove(sessionId);
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"HandleTimeout error: {ex.Message}\nStackTrace: {ex.StackTrace}");
+            }
+        }
+        private async Task SubmitResponseForTimeout(int playerId, int questionInGameId, int selectedOption, int sessionId)
+        {
+            try
+            {
+                var questionInGame = await _questionInGameService.GetQuestionInGameByIdAsync(questionInGameId);
+                if (questionInGame.StatusCode != StatusCodeEnum.OK_200 || questionInGame.Data == null)
+                {
+                    return;
+                }
+
+                var question = await _questionService.GetQuestionByIdAsync(questionInGame.Data.QuestionId);
+                if (question.StatusCode != StatusCodeEnum.OK_200 || question.Data == null)
+                {
+                    return;
+                }
+
+                bool isCorrect = selectedOption == question.Data.CorrectOption;
+                int score = isCorrect ? 100 : 0; // Gán 0 điểm nếu không trả lời (selectedOption = 0)
+
+                var responseRequest = new CreateResponseRequest
+                {
+                    PlayerId = playerId,
+                    QuestionInGameId = questionInGameId,
+                    SelectedOption = selectedOption,
+                    ResponseTime = 0,
+                    Score = score,
+                    Streak = 0,
+                    Rank = 0
+                };
+
+                var responseResult = await _responseService.CreateResponseAsync(responseRequest);
+                if (responseResult.StatusCode == StatusCodeEnum.Created_201 && responseResult.Data != null)
+                {
+                    string responseKey = $"session:{sessionId}:responses";
+                    var responseJson = JsonSerializer.Serialize(responseRequest);
+                    await _redisDb.ListRightPushAsync(responseKey, responseJson);
+                    await _redisDb.KeyExpireAsync(responseKey, TimeSpan.FromHours(24));
+
+                    string responseCountKey = $"session:{sessionId}:responseCount";
+                    long newResponseCount = await _redisDb.StringIncrementAsync(responseCountKey);
+                    await _redisDb.KeyExpireAsync(responseCountKey, TimeSpan.FromHours(24));
+
+                    var player = await _playerService.GetPlayerByIdAsync(playerId);
+                    if (player.StatusCode == StatusCodeEnum.OK_200 && player.Data != null)
+                    {
+                        var updatePlayerRequest = new UpdatePlayerRequest
+                        {
+                            PlayerId = playerId,
+                            SessionId = player.Data.SessionId,
+                            Score = (player.Data.Score ?? 0) + score
+                        };
+                        await _playerService.UpdatePlayerAsync(updatePlayerRequest);
+
+                        await Clients.Client(GetConnectionIdByPlayerId(playerId)).SendAsync("ResponseSubmitted", new
+                        {
+                            IsCorrect = isCorrect,
+                            Score = score,
+                            TotalScore = updatePlayerRequest.Score
+                        });
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"SubmitResponseForTimeout error: {ex.Message}\nStackTrace: {ex.StackTrace}");
+            }
+        }
+
+        private string GetConnectionIdByPlayerId(int playerId)
+        {
+            // Logic để ánh xạ PlayerId với ConnectionId (cần triển khai tùy thuộc vào cách bạn quản lý connection)
+            // Đây là ví dụ giả định, bạn cần triển khai thực tế
+            return Context.ConnectionId; // Placeholder
         }
 
         public async Task PreviousQuestion(int sessionId, int currentOrderIndex)
