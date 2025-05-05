@@ -282,7 +282,10 @@ namespace Services.Service
                     .Include(gs => gs.Quiz)
                     .Include(gs => gs.QuestionsInGame)
                         .ThenInclude(qig => qig.Question)
+                    .Include(gs => gs.QuestionsInGame) // Add this
+                        .ThenInclude(qig => qig.Responses) // Include Responses
                     .Include(gs => gs.Players)
+                        .ThenInclude(p => p.Team) // Include Player.Team for TeamName
                     .Include(gs => gs.Teams)
                     .FirstOrDefaultAsync(gs => gs.SessionId == sessionId);
                 if (session == null)
@@ -309,15 +312,16 @@ namespace Services.Service
                 // Populate question summaries
                 foreach (var qig in session.QuestionsInGame)
                 {
+                    var totalMembers = qig.Responses.Count;
                     var correctResponses = qig.Responses.Count(r => r.SelectedOption == qig.Question.CorrectOption);
-                    var correctAnswerRate = qig.TotalMembers > 0 ? (double)correctResponses / qig.TotalMembers * 100 : 0;
+                    var correctAnswerRate = totalMembers > 0 ? (double)correctResponses / totalMembers * 100 : 0;
 
                     report.Questions.Add(new QuestionSummary
                     {
                         QuestionInGameId = qig.QuestionInGameId,
                         OrderIndex = qig.OrderIndex,
                         Text = qig.Question.Text,
-                        TotalMembers = qig.TotalMembers,
+                        TotalMembers = totalMembers,
                         Status = qig.Question.Status, // Using Question.Status (adjust if QuestionInGame.Status intended)
                         CorrectAnswerRate = correctAnswerRate
                     });
@@ -346,6 +350,7 @@ namespace Services.Service
                     PlayerId = p.PlayerId,
                     Nickname = p.Nickname,
                     TeamId = p.TeamId.HasValue ? p.TeamId.ToString() : "Not In Any Team",
+                    TeamName = p.Team != null ? p.Team.Name : "Not In Any Team",
                     TotalScore = p.Score ?? p.Responses.Sum(r => r.Score) // Use Player.Score if set, else sum Responses
                 }).OrderByDescending(p => p.TotalScore).ToList();
                 report.Players = playerSummaries;

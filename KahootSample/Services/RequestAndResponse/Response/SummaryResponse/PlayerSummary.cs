@@ -11,6 +11,7 @@ namespace Services.RequestAndResponse.Response.SummaryResponse
         public int PlayerId { get; set; }
         public string Nickname { get; set; }
         public string TeamId { get; set; }
+        public string TeamName { get; set; }
         public int TotalScore { get; set; }
     }
 }
