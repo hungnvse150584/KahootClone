@@ -5,16 +5,11 @@ namespace Services.RequestAndResponse.Request.QuestionRequest
 {
     public class CreateQuestionRequest : IValidatableObject
     {
-<<<<<<< HEAD
-        public int QuizId { get; set; }
-        [Required]
-        public string Text { get; set; }
-        public int TimeLimit { get; set; }
-=======
+
         public int? QuizId { get; set; }
         public string? Text { get; set; }
         public int? TimeLimit { get; set; }
->>>>>>> datnt
+
         public IFormFile? ImageFile { get; set; }
         public byte[]? ImageData { get; set; }
         public string? Option1 { get; set; }

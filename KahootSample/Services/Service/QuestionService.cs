@@ -92,7 +92,7 @@ namespace Services.Service
         {
             try
             {
-                var existing = await _questionRepository.GetQuestionByIdAsync(request.QuestionId);
+                var existing = await _questionRepository.GetQuestionByIdAsync((int)request.QuestionId);
                 if (existing == null)
                 {
                     return new BaseResponse<QuestionResponse>("Question not found", StatusCodeEnum.NotFound_404, null);
