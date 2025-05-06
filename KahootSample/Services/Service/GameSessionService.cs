@@ -313,8 +313,21 @@ namespace Services.Service
                 foreach (var qig in session.QuestionsInGame)
                 {
                     var totalMembers = qig.Responses.Count;
-                    var correctResponses = qig.Responses.Count(r => r.SelectedOption == qig.Question.CorrectOption);
+                    var correctResponses = 0;
+
+                    if (!string.IsNullOrEmpty(qig.Question.CorrectOptions))
+                    {
+                        var correctOptionSet = qig.Question.CorrectOptions.Split(',').Select(int.Parse).ToHashSet();
+                        correctResponses = qig.Responses.Count(r =>
+                        {
+                            if (string.IsNullOrEmpty(r.SelectedOptions)) return false;
+                            var selectedOptionSet = r.SelectedOptions.Split(',').Select(int.Parse).ToHashSet();
+                            return selectedOptionSet.SetEquals(correctOptionSet);
+                        });
+                    }
                     var correctAnswerRate = totalMembers > 0 ? (double)correctResponses / totalMembers * 100 : 0;
+                    Console.WriteLine($"QuestionInGameId: {qig.QuestionInGameId}, TotalMembers: {totalMembers}, CorrectResponses: {correctResponses}, CorrectAnswerRate: {correctAnswerRate}");
+
 
                     report.Questions.Add(new QuestionSummary
                     {

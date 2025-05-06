@@ -16,7 +16,7 @@ namespace Services.RequestAndResponse.Request.ResponseRequest
         public int QuestionInGameId { get; set; }
 
         [Required(ErrorMessage = "SelectedOption is required")]
-        public int SelectedOption { get; set; }
+        public string SelectedOptions { get; set; }
 
         [Range(0, int.MaxValue, ErrorMessage = "ResponseTime must be a non-negative number")]
         public int ResponseTime { get; set; }

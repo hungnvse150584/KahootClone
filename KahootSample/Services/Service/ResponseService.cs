@@ -114,7 +114,7 @@ namespace Services.Service
 
                 response.PlayerId = request.PlayerId;
                 response.QuestionInGameId = request.QuestionInGameId;
-                response.SelectedOption = request.SelectedOption;
+                response.SelectedOptions = request.SelectedOptions;
                 response.ResponseTime = request.ResponseTime;
                 response.Score = request.Score;
                 response.Streak = request.Streak;

@@ -105,7 +105,7 @@ namespace Services.Service
                 existing.Option2 = request.Option2;
                 existing.Option3 = request.Option3;
                 existing.Option4 = request.Option4;
-                existing.CorrectOption = request.CorrectOption;
+                existing.CorrectOptions = request.CorrectOptions;
                 existing.OrderIndex = request.OrderIndex;
                 existing.QuizId = request.QuizId;
                 existing.Status = request.Status ?? existing.Status;

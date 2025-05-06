@@ -343,14 +343,14 @@ namespace Kahoot.Controllers
                             continue;
                         }
 
-                        bool isCorrect = response.SelectedOption == question.Data.CorrectOption;
+                        bool isCorrect = response.SelectedOptions == question.Data.CorrectOptions;
 
                         submittedPlayers.Add(new SubmittedPlayerResponse
                         {
                             PlayerId = response.PlayerId,
                             Nickname = players[response.PlayerId].Nickname,
                             QuestionInGameId = response.QuestionInGameId,
-                            SelectedOption = response.SelectedOption,
+                            SelectedOptions = response.SelectedOptions,
                             Score = response.Score,
                             IsCorrect = isCorrect
                         });

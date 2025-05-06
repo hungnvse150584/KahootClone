@@ -17,7 +17,7 @@ namespace Services.RequestAndResponse.Request.ResponseRequest
 
         [Required(ErrorMessage = "SelectedOption is required")]
         [Range(1, 4, ErrorMessage = "SelectedOption must be between 1 and 4")]
-        public int SelectedOption { get; set; } // Sửa từ AnswerId
+        public string SelectedOptions { get; set; } // Sửa từ AnswerId
 
         [Range(0, int.MaxValue, ErrorMessage = "ResponseTime must be a non-negative number")]
         public int ResponseTime { get; set; }

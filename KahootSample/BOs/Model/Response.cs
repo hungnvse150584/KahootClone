@@ -11,7 +11,7 @@ namespace BOs.Model
         public int ResponseId { get; set; }
         public int PlayerId { get; set; }
         public int QuestionInGameId { get; set; }
-        public int SelectedOption { get; set; }
+        public string SelectedOptions { get; set; }
         public int ResponseTime { get; set; }
         public int Score { get; set; }
         public int Streak { get; set; }

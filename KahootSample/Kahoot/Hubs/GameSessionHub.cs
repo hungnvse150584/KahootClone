@@ -234,10 +234,11 @@ namespace Kahoot.Hubs
             }
         }
 
-        public async Task SubmitResponse(int playerId, int questionInGameId, int selectedOption)
+        public async Task SubmitResponse(int playerId, int questionInGameId, string selectedOptions, float responseTime)
         {
             try
             {
+                // Lấy thông tin QuestionInGame
                 var questionInGame = await _questionInGameService.GetQuestionInGameByIdAsync(questionInGameId);
                 if (questionInGame.StatusCode != StatusCodeEnum.OK_200 || questionInGame.Data == null)
                 {
@@ -245,6 +246,7 @@ namespace Kahoot.Hubs
                     return;
                 }
 
+                // Lấy thông tin Question
                 var question = await _questionService.GetQuestionByIdAsync(questionInGame.Data.QuestionId);
                 if (question.StatusCode != StatusCodeEnum.OK_200 || question.Data == null)
                 {
@@ -252,23 +254,94 @@ namespace Kahoot.Hubs
                     return;
                 }
 
-                // Calculate score and correctness
-                bool isCorrect = selectedOption == question.Data.CorrectOption;
-                int score = isCorrect ? 100 : 0;
+                // Lấy thông tin GameSession để kiểm tra cấu hình
+                var session = await _gameSessionService.GetGameSessionByIdAsync(questionInGame.Data.SessionId);
+                if (session.StatusCode != StatusCodeEnum.OK_200 || session.Data == null)
+                {
+                    await Clients.Caller.SendAsync("Error", "GameSession not found");
+                    return;
+                }
 
+                // Kiểm tra và phân tích đáp án (hỗ trợ multiple-choice với partial scoring)
+                bool isCorrect = false;
+                float correctnessRatio = 0;
+                if (!string.IsNullOrEmpty(question.Data.CorrectOptions) && !string.IsNullOrEmpty(selectedOptions))
+                {
+                    try
+                    {
+                        var correctOptionSet = question.Data.CorrectOptions.Split(',').Select(int.Parse).ToHashSet();
+                        var selectedOptionSet = selectedOptions.Split(',').Select(int.Parse).ToHashSet();
+                        isCorrect = selectedOptionSet.SetEquals(correctOptionSet); // Exact match
+                        if (!isCorrect && correctOptionSet.Count > 0)
+                        {
+                            var correctSelections = selectedOptionSet.Count(option => correctOptionSet.Contains(option));
+                            correctnessRatio = (float)correctSelections / correctOptionSet.Count; // Partial correctness
+                        }
+                    }
+                    catch (Exception)
+                    {
+                        await Clients.Caller.SendAsync("Error", "Invalid selected options format");
+                        return;
+                    }
+                }
+
+                // Tính điểm cơ bản với partial scoring
+                int baseScore = isCorrect ? 100 : (int)(100 * correctnessRatio);
+                float speedBonus = 0;
+                int streakBonus = 0;
+                int streak = 0;
+
+                // Tính điểm thưởng tốc độ (SpeedBonus) nếu EnableSpeedBonus = true
+                if (baseScore > 0 && session.Data.EnableSpeedBonus && question.Data != null && question.Data.TimeLimit != null)
+                {
+                    float timeLimit = ((int?)question.Data.TimeLimit).Value;
+                    if (responseTime >= 0 && responseTime <= timeLimit)
+                    {
+                        float remainingTime = timeLimit - responseTime;
+                        speedBonus = baseScore * (remainingTime / timeLimit); // Tỷ lệ thời gian còn lại
+                    }
+                }
+
+                // Tính điểm thưởng streak nếu EnableStreak = true (chỉ tăng nếu đáp án hoàn toàn đúng)
+                if (isCorrect && session.Data.EnableStreak)
+                {
+                    // Lấy lịch sử phản hồi của người chơi để tính streak
+                    var previousResponses = await _responseService.GetResponsesByPlayerIdAsync(playerId);
+                    if (previousResponses.StatusCode == StatusCodeEnum.OK_200 && previousResponses.Data != null)
+                    {
+                        var lastResponse = previousResponses.Data
+                            .OrderByDescending(r => r.ResponseId)
+                            .FirstOrDefault();
+                        streak = lastResponse != null && lastResponse.Score == 100 ? lastResponse.Streak + 1 : 1; // Chỉ tăng streak nếu score đầy đủ
+                    }
+                    else
+                    {
+                        streak = 1; // Câu trả lời đúng đầu tiên
+                    }
+                    streakBonus = streak * 10; // Ví dụ: 10 điểm cho mỗi câu trong streak
+                }
+                else
+                {
+                    streak = 0; // Reset streak nếu không hoàn toàn đúng
+                }
+
+                // Tổng điểm
+                int totalScore = baseScore + (int)speedBonus + streakBonus;
+
+                // Tạo Response
                 var responseRequest = new CreateResponseRequest
                 {
                     PlayerId = playerId,
                     QuestionInGameId = questionInGameId,
-                    SelectedOption = selectedOption,
-                    ResponseTime = 0,
-                    Score = score,
-                    Streak = 0,
-                    Rank = 0
+                    SelectedOptions = selectedOptions,
+                    ResponseTime = (int)responseTime,
+                    Score = totalScore,
+                    Streak = streak,
+                    Rank = 0 // Sẽ cập nhật sau khi tính bảng xếp hạng
                 };
-                Console.WriteLine($"Submitting response: PlayerId={playerId}, QuestionInGameId={questionInGameId}, SelectedOption={selectedOption}, Score={score}");
+                Console.WriteLine($"Submitting response: PlayerId={playerId}, QuestionInGameId={questionInGameId}, SelectedOptions={selectedOptions}, Score={totalScore}, Streak={streak}");
 
-                // Lưu vào database
+                // Lưu Response vào database
                 var responseResult = await _responseService.CreateResponseAsync(responseRequest);
                 if (responseResult.StatusCode != StatusCodeEnum.Created_201 || responseResult.Data == null)
                 {
@@ -277,7 +350,7 @@ namespace Kahoot.Hubs
                     return;
                 }
 
-                // Lưu vào Redis
+                // Lưu Response vào Redis
                 long newResponseCount = 0;
                 try
                 {
@@ -295,7 +368,7 @@ namespace Kahoot.Hubs
                     Console.WriteLine($"Error while saving to Redis: {redisEx.Message}");
                 }
 
-                // Update player's score
+                // Cập nhật điểm của Player
                 var player = await _playerService.GetPlayerByIdAsync(playerId);
                 if (player.StatusCode != StatusCodeEnum.OK_200 || player.Data == null)
                 {
@@ -307,7 +380,7 @@ namespace Kahoot.Hubs
                 {
                     PlayerId = playerId,
                     SessionId = player.Data.SessionId,
-                    Score = (player.Data.Score ?? 0) + score
+                    Score = (player.Data.Score ?? 0) + totalScore
                 };
                 var updatePlayerResult = await _playerService.UpdatePlayerAsync(updatePlayerRequest);
                 if (updatePlayerResult.StatusCode != StatusCodeEnum.OK_200)
@@ -316,6 +389,7 @@ namespace Kahoot.Hubs
                     return;
                 }
 
+                // Cập nhật điểm của Team (nếu có)
                 if (player.Data.TeamId.HasValue && player.Data.TeamId > 0)
                 {
                     var teamId = player.Data.TeamId.Value;
@@ -332,7 +406,7 @@ namespace Kahoot.Hubs
                             SessionId = player.Data.SessionId,
                             QuestionInGameId = questionInGameId,
                             TeamId = teamId,
-                            Score = existingResult.Score + score
+                            Score = existingResult.Score + totalScore
                         };
                         await _teamResultService.UpdateTeamResultAsync(updateRequest);
                     }
@@ -343,7 +417,7 @@ namespace Kahoot.Hubs
                             SessionId = player.Data.SessionId,
                             QuestionInGameId = questionInGameId,
                             TeamId = teamId,
-                            Score = score
+                            Score = totalScore
                         };
                         await _teamResultService.CreateTeamResultAsync(createRequest);
                     }
@@ -355,23 +429,26 @@ namespace Kahoot.Hubs
                     }
                 }
 
-                // Notify the player of their response result
+                // Thông báo kết quả phản hồi cho người chơi
                 await Clients.Caller.SendAsync("ResponseSubmitted", new
                 {
                     IsCorrect = isCorrect,
-                    Score = score,
+                    Score = totalScore,
+                    SpeedBonus = (int)speedBonus,
+                    StreakBonus = streakBonus,
+                    Streak = streak,
                     TotalScore = updatePlayerResult.Data.Score
                 });
 
-                // Notify the host of the new response
+                // Thông báo cho host về phản hồi mới
                 await Clients.Group(player.Data.SessionId.ToString()).SendAsync("PlayerResponded", new
                 {
                     PlayerId = playerId,
                     QuestionInGameId = questionInGameId,
-                    SelectedOption = selectedOption
+                    SelectedOptions = selectedOptions
                 });
 
-                // Notify all clients in the group about the updated response count
+                // Thông báo số lượng phản hồi đã cập nhật
                 await Clients.Group(player.Data.SessionId.ToString()).SendAsync("ResponseCountUpdated", new
                 {
                     SessionId = player.Data.SessionId,
@@ -383,7 +460,6 @@ namespace Kahoot.Hubs
                 Console.WriteLine($"SubmitResponse error: {ex.Message}\nStackTrace: {ex.StackTrace}");
                 await Clients.Caller.SendAsync("Error", $"An error occurred: {ex.Message}");
             }
-
         }
 
         public async Task GetResponseCount(int sessionId)
@@ -591,7 +667,7 @@ namespace Kahoot.Hubs
                     if (!respondedPlayerIds.Contains(player.PlayerId))
                     {
                         // Người chơi chưa trả lời, tự động submit với selectedOption = 0
-                        await SubmitResponseForTimeout(player.PlayerId, questionInGameId, 0, sessionId);
+                        await SubmitResponseForTimeout(player.PlayerId, questionInGameId, "", sessionId);
                     }
                 }
 
@@ -608,7 +684,7 @@ namespace Kahoot.Hubs
                 Console.WriteLine($"HandleTimeout error: {ex.Message}\nStackTrace: {ex.StackTrace}");
             }
         }
-        private async Task SubmitResponseForTimeout(int playerId, int questionInGameId, int selectedOption, int sessionId)
+        private async Task SubmitResponseForTimeout(int playerId, int questionInGameId, string selectedOption, int sessionId)
         {
             try
             {
@@ -624,14 +700,14 @@ namespace Kahoot.Hubs
                     return;
                 }
 
-                bool isCorrect = selectedOption == question.Data.CorrectOption;
+                bool isCorrect = selectedOption == question.Data.CorrectOptions;
                 int score = isCorrect ? 100 : 0; // Gán 0 điểm nếu không trả lời (selectedOption = 0)
 
                 var responseRequest = new CreateResponseRequest
                 {
                     PlayerId = playerId,
                     QuestionInGameId = questionInGameId,
-                    SelectedOption = selectedOption,
+                    SelectedOptions = selectedOption,
                     ResponseTime = 0,
                     Score = score,
                     Streak = 0,

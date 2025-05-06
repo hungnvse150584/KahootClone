@@ -7,12 +7,40 @@
       "RelativeMoniker": "D:0:0:{FCF6F00C-019E-4E12-A667-DC60CD734FD1}|Services\\Services.csproj|solutionrelative:services\\service\\gamesessionservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{FCF6F00C-019E-4E12-A667-DC60CD734FD1}|Services\\Services.csproj|d:\\fu\\swp391\\kahootclone\\kahootsample\\services\\requestandresponse\\response\\summaryresponse\\playersummary.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{FCF6F00C-019E-4E12-A667-DC60CD734FD1}|Services\\Services.csproj|solutionrelative:services\\requestandresponse\\response\\summaryresponse\\playersummary.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{452B7F39-93D1-46AA-8803-A4AC14FFD997}|Kahoot\\Kahoot.csproj|d:\\fu\\swp391\\kahootclone\\kahootsample\\kahoot\\controllers\\gamesessioncontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{452B7F39-93D1-46AA-8803-A4AC14FFD997}|Kahoot\\Kahoot.csproj|solutionrelative:kahoot\\controllers\\gamesessioncontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{FCF6F00C-019E-4E12-A667-DC60CD734FD1}|Services\\Services.csproj|d:\\fu\\swp391\\kahootclone\\kahootsample\\services\\requestandresponse\\response\\summaryresponse\\questionsummary.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{FCF6F00C-019E-4E12-A667-DC60CD734FD1}|Services\\Services.csproj|solutionrelative:services\\requestandresponse\\response\\summaryresponse\\questionsummary.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{FCF6F00C-019E-4E12-A667-DC60CD734FD1}|Services\\Services.csproj|d:\\fu\\swp391\\kahootclone\\kahootsample\\services\\requestandresponse\\response\\responseresponses\\submittedplayerresponse.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{FCF6F00C-019E-4E12-A667-DC60CD734FD1}|Services\\Services.csproj|solutionrelative:services\\requestandresponse\\response\\responseresponses\\submittedplayerresponse.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{FCF6F00C-019E-4E12-A667-DC60CD734FD1}|Services\\Services.csproj|d:\\fu\\swp391\\kahootclone\\kahootsample\\services\\service\\questionservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{FCF6F00C-019E-4E12-A667-DC60CD734FD1}|Services\\Services.csproj|solutionrelative:services\\service\\questionservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{FCF6F00C-019E-4E12-A667-DC60CD734FD1}|Services\\Services.csproj|d:\\fu\\swp391\\kahootclone\\kahootsample\\services\\requestandresponse\\request\\questionrequest\\updatequestionrequest.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{FCF6F00C-019E-4E12-A667-DC60CD734FD1}|Services\\Services.csproj|solutionrelative:services\\requestandresponse\\request\\questionrequest\\updatequestionrequest.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{452B7F39-93D1-46AA-8803-A4AC14FFD997}|Kahoot\\Kahoot.csproj|d:\\fu\\swp391\\kahootclone\\kahootsample\\kahoot\\hubs\\gamesessionhub.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{452B7F39-93D1-46AA-8803-A4AC14FFD997}|Kahoot\\Kahoot.csproj|solutionrelative:kahoot\\hubs\\gamesessionhub.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{586905F3-F392-41A1-A04D-133FC6976D69}|BOs\\BOs.csproj|d:\\fu\\swp391\\kahootclone\\kahootsample\\bos\\model\\question.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{586905F3-F392-41A1-A04D-133FC6976D69}|BOs\\BOs.csproj|solutionrelative:bos\\model\\question.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{FCF6F00C-019E-4E12-A667-DC60CD734FD1}|Services\\Services.csproj|d:\\fu\\swp391\\kahootclone\\kahootsample\\services\\requestandresponse\\request\\responserequest\\createresponserequest.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{FCF6F00C-019E-4E12-A667-DC60CD734FD1}|Services\\Services.csproj|solutionrelative:services\\requestandresponse\\request\\responserequest\\createresponserequest.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{FCF6F00C-019E-4E12-A667-DC60CD734FD1}|Services\\Services.csproj|d:\\fu\\swp391\\kahootclone\\kahootsample\\services\\requestandresponse\\response\\questionresponses\\questionresponse.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{FCF6F00C-019E-4E12-A667-DC60CD734FD1}|Services\\Services.csproj|solutionrelative:services\\requestandresponse\\response\\questionresponses\\questionresponse.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{FCF6F00C-019E-4E12-A667-DC60CD734FD1}|Services\\Services.csproj|d:\\fu\\swp391\\kahootclone\\kahootsample\\services\\service\\questioningameservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{FCF6F00C-019E-4E12-A667-DC60CD734FD1}|Services\\Services.csproj|solutionrelative:services\\service\\questioningameservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -22,7 +50,7 @@
       "DocumentGroups": [
         {
           "DockedWidth": 2192,
-          "SelectedChildIndex": 5,
+          "SelectedChildIndex": 9,
           "Children": [
             {
               "$type": "Bookmark",
@@ -46,41 +74,132 @@
             },
             {
               "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "GameSessionController.cs",
+              "DocumentMoniker": "D:\\FU\\SWP391\\KahootClone\\KahootSample\\Kahoot\\Controllers\\GameSessionController.cs",
+              "RelativeDocumentMoniker": "Kahoot\\Controllers\\GameSessionController.cs",
+              "ToolTip": "D:\\FU\\SWP391\\KahootClone\\KahootSample\\Kahoot\\Controllers\\GameSessionController.cs",
+              "RelativeToolTip": "Kahoot\\Controllers\\GameSessionController.cs",
+              "ViewState": "AgIAADUBAAAAAAAAAAAhwGABAABHAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-06T16:21:12.65Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "QuestionService.cs",
+              "DocumentMoniker": "D:\\FU\\SWP391\\KahootClone\\KahootSample\\Services\\Service\\QuestionService.cs",
+              "RelativeDocumentMoniker": "Services\\Service\\QuestionService.cs",
+              "ToolTip": "D:\\FU\\SWP391\\KahootClone\\KahootSample\\Services\\Service\\QuestionService.cs",
+              "RelativeToolTip": "Services\\Service\\QuestionService.cs",
+              "ViewState": "AgIAAFwAAAAAAAAAAAAhwGsAAAAZAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-06T16:20:35.186Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "UpdateQuestionRequest.cs",
+              "DocumentMoniker": "D:\\FU\\SWP391\\KahootClone\\KahootSample\\Services\\RequestAndResponse\\Request\\QuestionRequest\\UpdateQuestionRequest.cs",
+              "RelativeDocumentMoniker": "Services\\RequestAndResponse\\Request\\QuestionRequest\\UpdateQuestionRequest.cs",
+              "ToolTip": "D:\\FU\\SWP391\\KahootClone\\KahootSample\\Services\\RequestAndResponse\\Request\\QuestionRequest\\UpdateQuestionRequest.cs",
+              "RelativeToolTip": "Services\\RequestAndResponse\\Request\\QuestionRequest\\UpdateQuestionRequest.cs",
+              "ViewState": "AgIAABgAAAAAAAAAAAAuwHMAAAANAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-06T16:06:04.073Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "GameSessionHub.cs",
+              "DocumentMoniker": "D:\\FU\\SWP391\\KahootClone\\KahootSample\\Kahoot\\Hubs\\GameSessionHub.cs",
+              "RelativeDocumentMoniker": "Kahoot\\Hubs\\GameSessionHub.cs",
+              "ToolTip": "D:\\FU\\SWP391\\KahootClone\\KahootSample\\Kahoot\\Hubs\\GameSessionHub.cs",
+              "RelativeToolTip": "Kahoot\\Hubs\\GameSessionHub.cs",
+              "ViewState": "AgIAAJQCAAAAAAAAAAAAAJ0CAABpAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-06T02:54:37.83Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
               "DocumentIndex": 0,
               "Title": "GameSessionService.cs",
               "DocumentMoniker": "D:\\FU\\SWP391\\KahootClone\\KahootSample\\Services\\Service\\GameSessionService.cs",
               "RelativeDocumentMoniker": "Services\\Service\\GameSessionService.cs",
               "ToolTip": "D:\\FU\\SWP391\\KahootClone\\KahootSample\\Services\\Service\\GameSessionService.cs",
               "RelativeToolTip": "Services\\Service\\GameSessionService.cs",
-              "ViewState": "AgIAANgAAAAAAAAAAAD4vz4BAAA2AAAAAAAAAA==",
+              "ViewState": "AgIAADcBAAAAAAAAAAAAAEUBAAAbAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-05-05T18:37:36.408Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
-              "Title": "PlayerSummary.cs",
-              "DocumentMoniker": "D:\\FU\\SWP391\\KahootClone\\KahootSample\\Services\\RequestAndResponse\\Response\\SummaryResponse\\PlayerSummary.cs",
-              "RelativeDocumentMoniker": "Services\\RequestAndResponse\\Response\\SummaryResponse\\PlayerSummary.cs",
-              "ToolTip": "D:\\FU\\SWP391\\KahootClone\\KahootSample\\Services\\RequestAndResponse\\Response\\SummaryResponse\\PlayerSummary.cs",
-              "RelativeToolTip": "Services\\RequestAndResponse\\Response\\SummaryResponse\\PlayerSummary.cs",
-              "ViewState": "AgIAAAMAAAAAAAAAAAAAAA0AAAAsAAAAAAAAAA==",
+              "DocumentIndex": 2,
+              "Title": "SubmittedPlayerResponse.cs",
+              "DocumentMoniker": "D:\\FU\\SWP391\\KahootClone\\KahootSample\\Services\\RequestAndResponse\\Response\\ResponseResponses\\SubmittedPlayerResponse.cs",
+              "RelativeDocumentMoniker": "Services\\RequestAndResponse\\Response\\ResponseResponses\\SubmittedPlayerResponse.cs",
+              "ToolTip": "D:\\FU\\SWP391\\KahootClone\\KahootSample\\Services\\RequestAndResponse\\Response\\ResponseResponses\\SubmittedPlayerResponse.cs",
+              "RelativeToolTip": "Services\\RequestAndResponse\\Response\\ResponseResponses\\SubmittedPlayerResponse.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA0AAAAzAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-05-05T18:39:31.734Z",
+              "WhenOpened": "2025-05-06T16:21:55.206Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
-              "Title": "QuestionSummary.cs",
-              "DocumentMoniker": "D:\\FU\\SWP391\\KahootClone\\KahootSample\\Services\\RequestAndResponse\\Response\\SummaryResponse\\QuestionSummary.cs",
-              "RelativeDocumentMoniker": "Services\\RequestAndResponse\\Response\\SummaryResponse\\QuestionSummary.cs",
-              "ToolTip": "D:\\FU\\SWP391\\KahootClone\\KahootSample\\Services\\RequestAndResponse\\Response\\SummaryResponse\\QuestionSummary.cs",
-              "RelativeToolTip": "Services\\RequestAndResponse\\Response\\SummaryResponse\\QuestionSummary.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "DocumentIndex": 6,
+              "Title": "Question.cs",
+              "DocumentMoniker": "D:\\FU\\SWP391\\KahootClone\\KahootSample\\BOs\\Model\\Question.cs",
+              "RelativeDocumentMoniker": "BOs\\Model\\Question.cs",
+              "ToolTip": "D:\\FU\\SWP391\\KahootClone\\KahootSample\\BOs\\Model\\Question.cs",
+              "RelativeToolTip": "BOs\\Model\\Question.cs",
+              "ViewState": "AgIAAAgAAAAAAAAAAAAAwBMAAAAlAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-05-05T18:42:29.854Z",
+              "WhenOpened": "2025-05-06T12:44:35.414Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 7,
+              "Title": "CreateResponseRequest.cs",
+              "DocumentMoniker": "D:\\FU\\SWP391\\KahootClone\\KahootSample\\Services\\RequestAndResponse\\Request\\ResponseRequest\\CreateResponseRequest.cs",
+              "RelativeDocumentMoniker": "Services\\RequestAndResponse\\Request\\ResponseRequest\\CreateResponseRequest.cs",
+              "ToolTip": "D:\\FU\\SWP391\\KahootClone\\KahootSample\\Services\\RequestAndResponse\\Request\\ResponseRequest\\CreateResponseRequest.cs",
+              "RelativeToolTip": "Services\\RequestAndResponse\\Request\\ResponseRequest\\CreateResponseRequest.cs",
+              "ViewState": "AgIAAAkAAAAAAAAAAAAAABMAAAAlAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-06T11:21:35.076Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 8,
+              "Title": "QuestionResponse.cs",
+              "DocumentMoniker": "D:\\FU\\SWP391\\KahootClone\\KahootSample\\Services\\RequestAndResponse\\Response\\QuestionResponses\\QuestionResponse.cs",
+              "RelativeDocumentMoniker": "Services\\RequestAndResponse\\Response\\QuestionResponses\\QuestionResponse.cs",
+              "ToolTip": "D:\\FU\\SWP391\\KahootClone\\KahootSample\\Services\\RequestAndResponse\\Response\\QuestionResponses\\QuestionResponse.cs",
+              "RelativeToolTip": "Services\\RequestAndResponse\\Response\\QuestionResponses\\QuestionResponse.cs",
+              "ViewState": "AgIAAAIAAAAAAAAAAAAxwA0AAAAkAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-06T15:36:48.482Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 9,
+              "Title": "QuestionInGameService.cs",
+              "DocumentMoniker": "D:\\FU\\SWP391\\KahootClone\\KahootSample\\Services\\Service\\QuestionInGameService.cs",
+              "RelativeDocumentMoniker": "Services\\Service\\QuestionInGameService.cs",
+              "ToolTip": "D:\\FU\\SWP391\\KahootClone\\KahootSample\\Services\\Service\\QuestionInGameService.cs",
+              "RelativeToolTip": "Services\\Service\\QuestionInGameService.cs",
+              "ViewState": "AgIAAC0AAAAAAAAAAAAYwCQAAAAQAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-06T07:43:06.461Z",
               "EditorCaption": ""
             }
           ]
