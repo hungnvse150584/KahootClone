@@ -12,6 +12,7 @@ namespace Services.RequestAndResponse.Response.SummaryResponse
         public int OrderIndex { get; set; }
         public string Text { get; set; }
         public int TotalMembers { get; set; }
+        public string CorrectOptions { get; set; }
         public string Status { get; set; } // From Question
         public double CorrectAnswerRate { get; set; }
     }

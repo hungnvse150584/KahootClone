@@ -15,6 +15,7 @@ namespace Services.RequestAndResponse.Response.SummaryResponse
         //public string? Duration { get; set; }
         public int TotalPlayers { get; set; }
         public double AverageScore { get; set; }
+        public double HighestPlayerScore { get; set; }
         public List<QuestionSummary> Questions { get; set; } = new List<QuestionSummary>();
         public List<TeamSummary> Teams { get; set; } = new List<TeamSummary>();
         public List<PlayerSummary> Players { get; set; } = new List<PlayerSummary>();

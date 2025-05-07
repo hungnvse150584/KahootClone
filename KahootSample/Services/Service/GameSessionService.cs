@@ -282,12 +282,13 @@ namespace Services.Service
                     .Include(gs => gs.Quiz)
                     .Include(gs => gs.QuestionsInGame)
                         .ThenInclude(qig => qig.Question)
-                    .Include(gs => gs.QuestionsInGame) // Add this
-                        .ThenInclude(qig => qig.Responses) // Include Responses
+                    .Include(gs => gs.QuestionsInGame)
+                        .ThenInclude(qig => qig.Responses)
                     .Include(gs => gs.Players)
-                        .ThenInclude(p => p.Team) // Include Player.Team for TeamName
+                        .ThenInclude(p => p.Team)
                     .Include(gs => gs.Teams)
                     .FirstOrDefaultAsync(gs => gs.SessionId == sessionId);
+
                 if (session == null)
                 {
                     return new BaseResponse<SummaryReportResponse>(
@@ -295,8 +296,7 @@ namespace Services.Service
                         StatusCodeEnum.NotFound_404,
                         null);
                 }
-                //TimeSpan duration = session.Status == "Ended" ? DateTime.UtcNow - session.StartedAt : TimeSpan.Zero;
-                //string formattedDuration = FormatDuration(duration);
+
                 // Build the summary report
                 var report = new SummaryReportResponse
                 {
@@ -304,7 +304,6 @@ namespace Services.Service
                     StartedAt = session.StartedAt,
                     QuizId = session.QuizId,
                     QuizTitle = session.Quiz.Title,
-                    //Duration = formattedDuration,
                     TotalPlayers = session.Players.Count,
                     SessionStatus = session.Status
                 };
@@ -326,16 +325,15 @@ namespace Services.Service
                         });
                     }
                     var correctAnswerRate = totalMembers > 0 ? (double)correctResponses / totalMembers * 100 : 0;
-                    Console.WriteLine($"QuestionInGameId: {qig.QuestionInGameId}, TotalMembers: {totalMembers}, CorrectResponses: {correctResponses}, CorrectAnswerRate: {correctAnswerRate}");
-
 
                     report.Questions.Add(new QuestionSummary
                     {
                         QuestionInGameId = qig.QuestionInGameId,
                         OrderIndex = qig.OrderIndex,
                         Text = qig.Question.Text,
+                        CorrectOptions = qig.Question.CorrectOptions, // Thêm đáp án đúng
                         TotalMembers = totalMembers,
-                        Status = qig.Question.Status, // Using Question.Status (adjust if QuestionInGame.Status intended)
+                        Status = qig.Question.Status,
                         CorrectAnswerRate = correctAnswerRate
                     });
                 }
@@ -364,12 +362,12 @@ namespace Services.Service
                     Nickname = p.Nickname,
                     TeamId = p.TeamId.HasValue ? p.TeamId.ToString() : "Not In Any Team",
                     TeamName = p.Team != null ? p.Team.Name : "Not In Any Team",
-                    TotalScore = p.Score ?? p.Responses.Sum(r => r.Score) // Use Player.Score if set, else sum Responses
+                    TotalScore = p.Score ?? p.Responses.Sum(r => r.Score)
                 }).OrderByDescending(p => p.TotalScore).ToList();
-                report.Players = playerSummaries;
 
-                // Calculate average score
+                report.Players = playerSummaries;
                 report.AverageScore = report.Players.Any() ? report.Players.Average(p => p.TotalScore) : 0;
+                report.HighestPlayerScore = report.Players.Any() ? report.Players.Max(p => p.TotalScore) : 0; // Tính điểm số cao nhất
 
                 return new BaseResponse<SummaryReportResponse>(
                     "Successfully retrieved session summary",
