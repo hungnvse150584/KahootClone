@@ -20,6 +20,7 @@ namespace Services.RequestAndResponse.Response.SummaryResponse
         public List<TeamSummary> Teams { get; set; } = new List<TeamSummary>();
         public List<PlayerSummary> Players { get; set; } = new List<PlayerSummary>();
         public string HighestScoringTeam { get; set; }
+        public string TopPlayerNickname { get; set; }
         public string SessionStatus { get; set; } // Added to reflect GameSession.Status
     }
 }
