@@ -366,6 +366,8 @@ namespace Services.Service
                 }).OrderByDescending(p => p.TotalScore).ToList();
 
                 report.Players = playerSummaries;
+                var topPlayer = playerSummaries.OrderByDescending(p => p.TotalScore).FirstOrDefault();
+                report.TopPlayerNickname = topPlayer?.Nickname;
                 report.AverageScore = report.Players.Any() ? report.Players.Average(p => p.TotalScore) : 0;
                 report.HighestPlayerScore = report.Players.Any() ? report.Players.Max(p => p.TotalScore) : 0; // Tính điểm số cao nhất
 
